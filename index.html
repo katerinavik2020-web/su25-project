@@ -149,8 +149,8 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
  </div></div>
 
 <script>
-
 let isInside = false;
+
 function toggleView() {
   const viewer = document.querySelector('#insideViewer');
   const btn = document.querySelector('#viewToggleButton');
@@ -158,29 +158,76 @@ function toggleView() {
   if (!isInside) {
     // --- ВХОД ВНУТРЬ ---
     isInside = true;
-    viewer.autoRotate = false; 
-    viewer.setAttribute('field-of-view', '130deg'); 
-    viewer.setAttribute('camera-target', '-0.1m 0.90m -1.45m'); 
-    viewer.setAttribute('camera-orbit', '180deg 90deg 0.1m'); 
-    viewer.setAttribute('min-camera-orbit', 'auto auto 0m');     
-    viewer.setAttribute('max-camera-orbit', 'auto auto 0.2m');     
-    viewer.exposure = 2.0;        
+    viewer.autoRotate = false;
+    
+    // Принудительно задаем параметры кабины
+    viewer.fieldOfView = "130deg";
+    viewer.cameraTarget = "-0.1m 0.90m -1.45m";
+    viewer.cameraOrbit = "180deg 90deg 0.1m";
+    
+    // Ставим лимиты, чтобы не "вылететь" случайно
+    viewer.minCameraOrbit = "auto auto 0m";
+    viewer.maxCameraOrbit = "auto auto 0.2m";
+    
+    viewer.exposure = 2.0;
     btn.innerHTML = "Выйти из самолета";
-    btn.style.background = "#ff4757"; 
+    btn.style.background = "#ff4757";
 
   } else {
-   // --- ВЫХОД НАРУЖУ (ПОЛНАЯ ПЕРЕЗАГРУЗКА МОДЕЛИ) ---
-    isInside = false;    
-    // Показываем стандартный индикатор загрузки самого viewer
-    viewer.dismissPoster();     
-    // Перезаписываем весь HTML внутри контейнера, чтобы уничтожить старые настройки
-    const container = viewer.parentNode;
-    const oldHTML = viewer.outerHTML;    
-    container.innerHTML = oldHTML; // Модель "родится" заново       
+    // --- ВЫХОД НАРУЖУ (БЕЗОПАСНЫЙ СБРОС) ---
+    isInside = false;
+    
+    // Снимаем лимиты кабины
+    viewer.minCameraOrbit = "auto auto auto";
+    viewer.maxCameraOrbit = "auto auto auto";
+    
+    // Устанавливаем стартовые параметры (как в HTML)
+    // 0deg 75deg 35m — это носом к нам, на расстоянии 35 метров
+    viewer.cameraOrbit = "0deg 75deg 35m"; 
+    viewer.cameraTarget = "0m 0m 0m";
+    viewer.fieldOfView = "30deg";
+    
+    viewer.exposure = 1.3;
+    viewer.autoRotate = true;
+    
+    // Команда принудительного перехода
+    if (typeof viewer.jumpCameraToGoal === 'function') {
+        viewer.jumpCameraToGoal();
+    }
+    
     btn.innerHTML = "Заглянуть внутрь";
-    btn.style.background = ""; 
+    btn.style.background = "";
   }
 }
+
+function closeModelViewer2() {
+  const modal = document.getElementById('modelModal2');
+  const viewer = document.getElementById('insideViewer');
+  const btn = document.getElementById('viewToggleButton');
+
+  if (modal) modal.style.display = 'none';
+  isInside = false;
+
+  if (viewer) {
+    // Сброс всего при закрытии
+    viewer.minCameraOrbit = "auto auto auto";
+    viewer.maxCameraOrbit = "auto auto auto";
+    viewer.cameraOrbit = "0deg 75deg 35m";
+    viewer.cameraTarget = "0m 0m 0m";
+    viewer.fieldOfView = "30deg";
+    viewer.autoRotate = true;
+    
+    if (typeof viewer.jumpCameraToGoal === 'function') {
+        viewer.jumpCameraToGoal();
+    }
+  }
+
+  if (btn) {
+    btn.innerHTML = "Заглянуть внутрь";
+    btn.style.background = "";
+  }
+}
+
 </script>
 
   <div class="modal" id="modelModal3"><div class="modal-content" style="max-width:90%;max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column;">
