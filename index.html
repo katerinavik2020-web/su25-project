@@ -126,8 +126,7 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
  <div class="modal" id="modelModal2"><div class="modal-content" style="max-width:90%;max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column;">
 <model-viewer
         src="model_yak40.glb"
-        min-camera-orbit="auto auto 2m"
-        max-camera-orbit="auto auto 10m"
+        id="insideViewer"
         skybox-image="cloud_layers_1k.hdr"   
         environment-image="neutral"
         exposure="1.3"
@@ -137,7 +136,21 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         camera-controls
         shadow-intensity="1">
       </model-viewer>
- <div class='modal-btn' onclick='closeModelViewer2()'style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div></div></div>
+  <div class="modal-btn" onclick="goInside()" 
+         style="position: absolute; bottom: 30px; right: 250px; z-index: 10; cursor: pointer; ">
+      Заглянуть внутрь  </div>      
+ <div class="modal-btn" 
+     onclick="closeModelViewer2()" 
+     style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
+  Закрыть  </div>
+ </div></div>
+<script>
+function goInside() {
+  const viewer = document.querySelector('#insideViewer'); 
+  viewer.minCameraOrbit = "auto auto 2m"; 
+  viewer.maxCameraOrbit = "auto auto 10m"; 
+}
+</script> 
   <div class="modal" id="modelModal3"><div class="modal-content" style="max-width:90%;max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column;">
 <model-viewer
         src="model_su33.glb"
