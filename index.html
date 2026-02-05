@@ -156,12 +156,11 @@ function toggleView() {
   
   if (!isInside) {
     // --- ВХОДИМ ВНУТРЬ ---
-    viewer.maxCameraOrbit = "auto auto 0.2m"; 
+    viewer.maxCameraOrbit = "auto auto 0.4m"; 
     viewer.minCameraOrbit = "auto auto 0m";     
     
-    //---viewer.cameraTarget = "0.0m 0.80m -1.25m"; 
-    viewer.cameraTarget = "0.2m 0.65m -1.40m"; 
-    viewer.cameraOrbit = "180deg 90deg 0.1m";     
+    viewer.cameraTarget = "0.0m 0.80m -1.25m"; 
+    viewer.cameraOrbit = "180deg 90deg 0.2m";     
     
     viewer.fieldOfView = "120deg"; 
     viewer.exposure = 2.0;        
@@ -177,7 +176,7 @@ function toggleView() {
      viewer.cameraTarget = "0m 0m 0m";     
     // 2. Снимаем все ограничения зума, которые мы ставили для кабины
     viewer.maxCameraOrbit = "auto auto auto";
-    viewer.minCameraOrbit = "auto auto 5m"; // Возвращаем минимальную дистанцию снаружи     
+    viewer.minCameraOrbit = "auto auto 2m"; // Возвращаем минимальную дистанцию снаружи     
     // 3. Возвращаем угол обзора и положение камеры
     viewer.fieldOfView = "30deg";
     viewer.cameraOrbit = "172.2deg 73.44deg 30.15m";
