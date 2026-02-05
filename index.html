@@ -155,17 +155,12 @@ function toggleView() {
   const btn = document.querySelector('#viewToggleButton');
   
   if (!isInside) {
-    // --- ПРОВАЛИВАЕМСЯ В КАБИНУ ---
-    viewer.minCameraOrbit = "auto auto 0m"; 
-    
-    // Используем точные координаты из вашего Hotspot (data-position)
-    viewer.cameraTarget = "0.0m 1.10m -1.25m"; 
-    
-    // Подлетаем вплотную. 0.1m — это взгляд "в притык" к приборам
-    viewer.cameraOrbit = "180deg 90deg 0.1m"; 
-    
-    viewer.fieldOfView = "60deg"; // Увеличиваем угол обзора внутри (как в жизни)
-    viewer.exposure = 2.0;        // В кабине должно быть светло
+    viewer.maxCameraOrbit = "auto auto 0.5m"; 
+    viewer.minCameraOrbit = "auto auto 0m";     
+     viewer.cameraTarget = "0.0m 1.10m -1.25m"; 
+    viewer.cameraOrbit = "180deg 90deg 0.35m";     
+    viewer.fieldOfView = "60deg"; 
+    viewer.exposure = 2.0;        
     viewer.autoRotate = false;
     
     btn.innerHTML = "Выйти из самолета";
@@ -173,14 +168,11 @@ function toggleView() {
     isInside = true;
 
   } else {
-    // --- ВОЗВРАЩАЕМСЯ К ВИДУ ИЗ ЕДИТОРА ---
-    // Устанавливаем параметры точно как в вашем коде выше
+   
     viewer.cameraOrbit = "172.2deg 73.44deg 30.15m";
     viewer.fieldOfView = "30deg";
-    viewer.cameraTarget = "0m 0m 0m"; // Сброс центра на середину самолета
-    
-    viewer.jumpCameraToGoal(); // Мгновенно возвращаем ракурс
-    
+    viewer.cameraTarget = "0m 0m 0m"; // Сброс центра на середину самолета     
+    viewer.jumpCameraToGoal(); // Мгновенно возвращаем ракурс     
     viewer.minCameraOrbit = "auto auto 2m";
     viewer.exposure = 1.3;
     viewer.autoRotate = true;
