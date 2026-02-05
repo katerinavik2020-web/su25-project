@@ -12,8 +12,8 @@ display: none;
 
 /* Делаем 3D плеер на весь браузер */
 model-viewer {
-height: 100vh;
-width: 100vw;
+height: 100%;
+width: 100%;
 }
 
 a {
@@ -31,3 +31,4 @@ a:active {
     color: #00ff00; /* Цвет активной ссылки (при нажатии) */
 
 }
+
