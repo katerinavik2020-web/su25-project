@@ -110,35 +110,45 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
 </section>
 <footer>© 2026 Виртуальный музей самолётов МАИ · Учебный проект</footer>
 <div class="modal" id="infoModal"><div class="modal-content" id="modalContent"></div></div>
-<div class="modal" id="modelModal"><div class="modal-content" style="max-width:90%;max-height:90%">
+<div class="modal" id="modelModal"><div class="modal-content" style="max-width:90%;max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column;">
 <model-viewer
         src="model_su25.glb"
+        skybox-image="nebo2.jpg"   
+        environment-image="neutral"
+        exposure="1.3"
+        shadow-intensity="0.5"
+        shadow-softness="1" 
         auto-rotate
         camera-controls
         shadow-intensity="1">
       </model-viewer>
- <div class='modal-btn' onclick='closeModelViewer()'>Закрыть</div></div></div>
- <div class="modal" id="modelModal2"><div class="modal-content" style="max-width:90%;max-height:90%">
+ <div class='modal-btn' onclick='closeModelViewer()'style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div></div></div>
+ <div class="modal" id="modelModal2"><div class="modal-content" style="max-width:90%;max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column;">
 <model-viewer
         src="model_yak40.glb"
         skybox-image="cloud_layers_1k.hdr"   
         environment-image="neutral"
         exposure="1.3"
         shadow-intensity="0.5"
-        shadow-softness="1"  
+        shadow-softness="1" 
         auto-rotate
         camera-controls
         shadow-intensity="1">
       </model-viewer>
- <div class='modal-btn' onclick='closeModelViewer2()'>Закрыть</div></div></div>
-  <div class="modal" id="modelModal3"><div class="modal-content" style="max-width:90%;max-height:90%">
+ <div class='modal-btn' onclick='closeModelViewer2()'style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div></div></div>
+  <div class="modal" id="modelModal3"><div class="modal-content" style="max-width:90%;max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column;">
 <model-viewer
         src="model_su33.glb"
+        skybox-image="nebo1.jpg"   
+        environment-image="neutral"
+        exposure="1.3"
+        shadow-intensity="0.5"
+        shadow-softness="1" 
         auto-rotate
         camera-controls
         shadow-intensity="1">
       </model-viewer>
- <div class='modal-btn' onclick='closeModelViewer3()'>Закрыть</div></div></div> 
+ <div class='modal-btn' onclick='closeModelViewer3()style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;"'>Закрыть</div></div></div> 
 <script>
 const data={
   yak40:{
