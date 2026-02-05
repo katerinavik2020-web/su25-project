@@ -155,9 +155,10 @@ function toggleView() {
   const btn = document.querySelector('#viewToggleButton');
   
   if (!isInside) {    
-    viewer.cameraOrbit = "0deg 90deg 0.1m";     
-    viewer.minCameraOrbit = "auto auto 2m"; 
-    viewer.maxCameraOrbit = "auto auto 10m";    
+  viewer.minCameraOrbit = "auto auto 0m"; 
+  viewer.cameraTarget = "0.59m 0.86m -1.13m";  
+  viewer.cameraOrbit = "0deg 90deg 0.1m";
+  viewer.exposure = 2.5; 
     btn.innerHTML = "Вернуться назад";
     btn.style.background = "#ff4757"; 
     isInside = true;
