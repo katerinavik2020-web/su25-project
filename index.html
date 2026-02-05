@@ -199,35 +199,6 @@ function toggleView() {
     btn.style.background = "";
   }
 }
-
-function closeModelViewer2() {
-  const modal = document.getElementById('modelModal2');
-  const viewer = document.getElementById('insideViewer');
-  const btn = document.getElementById('viewToggleButton');
-
-  if (modal) modal.style.display = 'none';
-  isInside = false;
-
-  if (viewer) {
-    // Сброс всего при закрытии
-    viewer.minCameraOrbit = "auto auto auto";
-    viewer.maxCameraOrbit = "auto auto auto";
-    viewer.cameraOrbit = "0deg 75deg 35m";
-    viewer.cameraTarget = "0m 0m 0m";
-    viewer.fieldOfView = "30deg";
-    viewer.autoRotate = true;
-    
-    if (typeof viewer.jumpCameraToGoal === 'function') {
-        viewer.jumpCameraToGoal();
-    }
-  }
-
-  if (btn) {
-    btn.innerHTML = "Заглянуть внутрь";
-    btn.style.background = "";
-  }
-}
-
 </script>
 
   <div class="modal" id="modelModal3"><div class="modal-content" style="max-width:90%;max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column;">
