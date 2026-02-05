@@ -131,6 +131,7 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         id="insideViewer"
         skybox-image="cloud_layers_1k.hdr"   
         environment-image="neutral"
+        camera-orbit="0deg 75deg 35m" 
         exposure="1.3"
         shadow-intensity="0.5"
         shadow-softness="1" 
@@ -168,18 +169,18 @@ function toggleView() {
     btn.style.background = "#ff4757"; 
 
   } else {
-    // --- ВЫХОД НАРУЖУ ---
-    isInside = false;
-    viewer.setAttribute('max-camera-orbit', 'auto auto auto');
-    viewer.setAttribute('min-camera-orbit', 'auto auto auto');
-    viewer.setAttribute('camera-target', '0m 0m 0m');     
-    viewer.setAttribute('camera-orbit', '172.2deg 73.44deg 30m'); 
-    viewer.setAttribute('field-of-view', '30deg'); 
-    //--viewer.setAttribute('camera-target', 'auto auto auto'); 
-    //viewer.setAttribute('camera-orbit', 'auto auto auto'); 
-    ///viewer.setAttribute('field-of-view', 'auto');     
+   // --- ВЫХОД НАРУЖУ (ПОЛНАЯ ПЕРЕЗАГРУЗКА МОДЕЛИ) ---
+    isInside = false;    
+    viewer.removeAttribute('camera-orbit');
+    viewer.removeAttribute('camera-target');
+    viewer.removeAttribute('field-of-view');    
+    // 2. ХИТРОСТЬ: Перезагружаем файл модели, чтобы сбросить центр и масштаб
+    const currentSrc = viewer.src;
+    viewer.src = ''; 
+    setTimeout(() => { viewer.src = currentSrc; }, 10); 
     viewer.exposure = 1.3;
     viewer.autoRotate = true;    
+    
     btn.innerHTML = "Заглянуть внутрь";
     btn.style.background = ""; 
   }
