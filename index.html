@@ -158,7 +158,7 @@ function toggleView() {
     viewer.maxCameraOrbit = "auto auto 0.1m"; 
     viewer.minCameraOrbit = "auto auto 0m";     
      viewer.cameraTarget = "0.0m 0.95m -1.25m"; 
-    viewer.cameraOrbit = "180deg 90deg 0.30m";     
+    viewer.cameraOrbit = "180deg 90deg 0.20m";     
     viewer.fieldOfView = "70deg"; 
     viewer.exposure = 2.0;        
     viewer.autoRotate = false;
@@ -173,7 +173,7 @@ function toggleView() {
     viewer.fieldOfView = "30deg";
     viewer.cameraTarget = "0m 0m 0m"; // Сброс центра на середину самолета     
     viewer.jumpCameraToGoal(); // Мгновенно возвращаем ракурс     
-    viewer.minCameraOrbit = "auto auto 2m";
+    viewer.minCameraOrbit = "auto auto auto";
     viewer.exposure = 1.3;
     viewer.autoRotate = true;
     
