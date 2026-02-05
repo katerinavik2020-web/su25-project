@@ -155,11 +155,11 @@ function toggleView() {
   const btn = document.querySelector('#viewToggleButton');
   
   if (!isInside) {
-    viewer.maxCameraOrbit = "auto auto 0.5m"; 
+    viewer.maxCameraOrbit = "auto auto 0.1m"; 
     viewer.minCameraOrbit = "auto auto 0m";     
-     viewer.cameraTarget = "0.0m 1.10m -1.25m"; 
-    viewer.cameraOrbit = "180deg 90deg 0.35m";     
-    viewer.fieldOfView = "60deg"; 
+     viewer.cameraTarget = "0.0m 0.95m -1.25m"; 
+    viewer.cameraOrbit = "180deg 90deg 0.30m";     
+    viewer.fieldOfView = "70deg"; 
     viewer.exposure = 2.0;        
     viewer.autoRotate = false;
     
