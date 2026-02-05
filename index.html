@@ -277,17 +277,14 @@ function closeModelViewer2() {
   const viewer = document.getElementById('insideViewer');
   const modal = document.getElementById('modelModal2');
   const btn = document.getElementById('viewToggleButton');
-  if (modal) {
-    modal.style.display = 'none';
-  }
+  if (modal) modal.style.display = 'none';
   isInside = false;
   if (viewer) {
     viewer.setAttribute('max-camera-orbit', 'auto auto auto');
     viewer.setAttribute('min-camera-orbit', 'auto auto auto');
-    viewer.setAttribute('camera-orbit', '172.2deg 73.44deg 30m');
-    viewer.setAttribute('camera-target', '0m 0m 0m');
-    viewer.setAttribute('field-of-view', '30deg');
-    
+    viewer.setAttribute('camera-target', 'auto auto auto');
+    viewer.setAttribute('camera-orbit', 'auto auto auto');
+    viewer.setAttribute('field-of-view', 'auto');
     viewer.exposure = 1.3;
     viewer.autoRotate = true;
   }
