@@ -148,7 +148,7 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
  </div></div>
 
 <script>
-let isInside = false;
+et isInside = false;
 
 function toggleView() {
   const viewer = document.querySelector('#insideViewer');
@@ -156,25 +156,31 @@ function toggleView() {
   
   if (!isInside) {
     // --- ВХОДИМ ВНУТРЬ ---
-    // Ставим лимит чуть больше, чтобы зум работал, но не вылетал (0.5m)
-    viewer.maxCameraOrbit = "auto auto 0.5m"; 
+    viewer.maxCameraOrbit = "auto auto 0.4m"; 
     viewer.minCameraOrbit = "auto auto 0m";     
-    viewer.cameraTarget = "0.0m 0.85m -1.25m";     
-    viewer.cameraOrbit = "180deg 90deg 0.25m";     
-    viewer.fieldOfView = "85deg";     
+    
+    viewer.cameraTarget = "0.0m 0.80m -1.25m"; 
+    viewer.cameraOrbit = "180deg 90deg 0.2m";     
+    
+    viewer.fieldOfView = "100deg"; 
     viewer.exposure = 2.0;        
-    viewer.autoRotate = false;    
+    viewer.autoRotate = false;
+    
     btn.innerHTML = "Выйти из самолета";
     btn.style.background = "#ff4757"; 
     isInside = true;
 
   } else {
+    // --- ВЫХОДИМ НАРУЖУ (ПОЛНЫЙ СБРОС) ---    
+    // 1. Возвращаем цель камеры в центр самолета
+     viewer.cameraTarget = "0m 0m 0m";     
+    // 2. Снимаем все ограничения зума, которые мы ставили для кабины
     viewer.maxCameraOrbit = "auto auto auto";
-    viewer.minCameraOrbit = "auto auto auto";    
-    viewer.cameraTarget = "0m 0m 0m"; 
+    viewer.minCameraOrbit = "auto auto 2m"; // Возвращаем минимальную дистанцию снаружи     
+    // 3. Возвращаем угол обзора и положение камеры
+    viewer.fieldOfView = "30deg";
     viewer.cameraOrbit = "172.2deg 73.44deg 30.15m";
-    viewer.fieldOfView = "30deg";     
-    viewer.jumpCameraToGoal(); // Мгновенный перелет      
+    viewer.jumpCameraToGoal();      
     viewer.exposure = 1.3;
     viewer.autoRotate = true;    
     btn.innerHTML = "Заглянуть внутрь";
