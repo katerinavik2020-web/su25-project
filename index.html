@@ -343,13 +343,9 @@ function enterCabin() {
   viewer.autoRotate = false;
   viewer.setAttribute('field-of-view', '130deg');   
   viewer.setAttribute('camera-target', '-0.3m 0.8m -3.0m'); 
-  //viewer.setAttribute('camera-orbit', '10deg 100deg 0.1m'); 
-  viewer.setAttribute('camera-orbit', '10deg 100deg 0.01m');   
-  requestAnimationFrame(() => {
-    viewer.setAttribute('camera-orbit', '20deg 105deg 0.2m');
-    viewer.setAttribute('min-camera-orbit', 'auto auto 0.2m');
-    viewer.setAttribute('max-camera-orbit', 'auto auto 0.2m');
-  }); 
+  viewer.setAttribute('camera-orbit', '10deg 80deg 0.2m');
+  viewer.setAttribute('min-camera-orbit', 'auto auto 0.0m');
+  viewer.setAttribute('max-camera-orbit', 'auto auto 0.2m');
   viewer.disablePan = true;    
   viewer.exposure = 2.5;
   isInside = true;
