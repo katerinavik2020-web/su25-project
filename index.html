@@ -341,11 +341,13 @@ function enterCabin() {
   const viewer = document.getElementById('insideViewer');  
   const btn = document.getElementById('viewToggleButton');
   viewer.autoRotate = false;
-  viewer.setAttribute('field-of-view', '150deg'); 
+  viewer.setAttribute('field-of-view', '130deg'); 
   //viewer.setAttribute('field-of-view', 'auto'); 
   viewer.setAttribute('camera-target', '-0.3m 0.8m -3.0m'); 
   viewer.setAttribute('camera-orbit', '0deg 90deg 0.1m'); 
-  viewer.setAttribute('min-camera-orbit', 'auto auto 0m');     
+  viewer.setAttribute('camera-orbit', '0deg 90deg 0.01m');   
+  requestAnimationFrame(() => {  viewer.setAttribute('camera-orbit', '0deg 90deg 0.2m');
+  viewer.setAttribute('min-camera-orbit', 'auto auto 0.2m');     
   viewer.setAttribute('max-camera-orbit', 'auto auto 0.2m'); 
   viewer.disablePan = true;    
   viewer.exposure = 2.5;
