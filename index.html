@@ -172,8 +172,8 @@ function toggleView() {
     closeModelViewer2(); // Стираем и восстанавливаем модель
     
     setTimeout(() => {
-      // Открываем окно обратно. Используйте тот же display, что и при старте (flex или block)
-      document.getElementById('modelModal2').style.display = 'flex';
+      // Открываем окно обратно.  
+      openModelViewer2();
     }, 100); // Даем 0.1 сек на полную очистку памяти
   }
 }
@@ -267,29 +267,26 @@ function openModelViewer2(){document.getElementById('modelModal2').style.display
 function openModelViewer3(){document.getElementById('modelModal3').style.display='flex'}
 function closeModelViewer(){document.getElementById('modelModal').style.display='none'}
 function closeModelViewer2() {
-  const modal = document.getElementById('modelModal2');
   const viewer = document.getElementById('insideViewer');
+  const modal = document.getElementById('modelModal2');
   const btn = document.getElementById('viewToggleButton');
-
   if (modal) modal.style.display = 'none';
-  
   isInside = false;
-
   if (viewer) {
-    // ПОЛНАЯ ПЕРЕЗАГРУЗКА: сохраняем HTML, удаляем и вставляем заново
-    const parent = viewer.parentNode;
-    const cleanHTML = viewer.outerHTML; // Копируем "чистый" тег из HTML
+    viewer.setAttribute('max-camera-orbit', 'auto auto auto');
+    viewer.setAttribute('min-camera-orbit', 'auto auto auto');
+    viewer.setAttribute('camera-target', 'auto auto auto');
+    viewer.setAttribute('camera-orbit', 'auto auto auto');
+    viewer.setAttribute('field-of-view', 'auto');
     
-    parent.innerHTML = ''; // Полностью стираем старую модель со всеми глюками
-    parent.innerHTML = cleanHTML; // Вставляем новую чистую копию
+    viewer.exposure = 1.3;
+    viewer.autoRotate = true;
   }
-
   if (btn) {
     btn.innerHTML = "Заглянуть внутрь";
     btn.style.background = ""; 
   }
 }
-
 
 function closeModelViewer3(){document.getElementById('modelModal3').style.display='none'}
 function closeModal(){infoModal.style.display='none';  document.body.style.overflow = '';}
