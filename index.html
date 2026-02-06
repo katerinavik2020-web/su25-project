@@ -138,13 +138,16 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         auto-rotate
         camera-controls
         shadow-intensity="1">
-        <button slot="hotspot-cabin" 
+        <button slot="hotspot-salon" 
           class="cabin-hotspot" 
           data-position="0.14m 1.2m -1.25m" 
           data-normal="0.2 1 0" 
           data-visibility-attribute="visible"
-          onclick="enterCabin()">         
+          onclick="enterSalon()">         
         </button> 
+        <button  class="cabin-hotspot" slot="hotspot-cabin" data-position="0.14m 0.7m -3.7m" 
+         data-normal="0.3m 0.8m -0.4m" data-visibility-attribute="visible" onclick="enterCabin()>
+         </button>
       </model-viewer>
   <div id="viewToggleButton" class="modal-btn" onclick="toggleView()" 
          style="position: absolute; bottom: 30px; right: 250px; z-index: 10; cursor: pointer; ">
@@ -317,12 +320,26 @@ async function closeModelViewer2() {
 
 function closeModelViewer3(){document.getElementById('modelModal3').style.display='none'}
 function closeModal(){infoModal.style.display='none';  document.body.style.overflow = '';}
-function enterCabin() {
+function enterSalon() {
   const viewer = document.getElementById('insideViewer');  
   const btn = document.getElementById('viewToggleButton');
   viewer.autoRotate = false;
   viewer.setAttribute('field-of-view', '130deg'); 
   viewer.setAttribute('camera-target', '-0.1m 0.90m -1.45m'); 
+  viewer.setAttribute('camera-orbit', '180deg 90deg 0.1m'); 
+  viewer.setAttribute('min-camera-orbit', 'auto auto 0m');     
+  viewer.setAttribute('max-camera-orbit', 'auto auto 0.2m');     
+  viewer.exposure = 2.0;
+  isInside = true;
+  btn.innerHTML = "Выйти из самолета";
+  btn.style.background = "#ff4757"; 
+}
+function enterCabin() {
+  const viewer = document.getElementById('insideViewer');  
+  const btn = document.getElementById('viewToggleButton');
+  viewer.autoRotate = false;
+  viewer.setAttribute('field-of-view', '130deg'); 
+  viewer.setAttribute('camera-target', '-0.1m 0.40m -3.9'); 
   viewer.setAttribute('camera-orbit', '180deg 90deg 0.1m'); 
   viewer.setAttribute('min-camera-orbit', 'auto auto 0m');     
   viewer.setAttribute('max-camera-orbit', 'auto auto 0.2m');     
