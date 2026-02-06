@@ -174,33 +174,19 @@ function toggleView() {
     btn.style.background = "#ff4757";
 
   } else {
-     // --- ВЫХОД НАРУЖУ (РЕЖИМ ПРИНУДИТЕЛЬНОГО СБРОСА) ---
-    isInside = false;
-
-    // 1. СНАЧАЛА ПОЛНОСТЬЮ УДАЛЯЕМ ВСЕ ЛИМИТЫ И ЦЕЛИ (очистка)
-    viewer.removeAttribute('camera-orbit');
-    viewer.removeAttribute('camera-target');
-    viewer.removeAttribute('field-of-view');
-    viewer.removeAttribute('min-camera-orbit');
-    viewer.removeAttribute('max-camera-orbit');
-
-    // 2. УСТАНАВЛИВАЕМ НОВЫЕ ЗНАЧЕНИЯ (используем свойства напрямую)
-    // Эти значения заставят его встать носом и целиком
-    viewer.cameraOrbit = "180deg 75deg 35m"; 
-   // viewer.cameraTarget = "0m 0m 0m";
-    //viewer.fieldOfView = "30deg";
+   // --- ВЫХОД ЧЕРЕЗ ПЕРЕЗАГРУЗКУ ОКНА ---
+    // 1. Сначала вызываем вашу рабочую функцию закрытия
+    closeModelViewer2(); 
     
-    viewer.exposure = 1.3;
-    viewer.autoRotate = true;
-    
-    // 3. САМЫЙ ВАЖНЫЙ МОМЕНТ: 
-    // Заставляем модель пересчитать свои размеры, чтобы не было "полсамолета"
-    if (typeof viewer.jumpCameraToGoal === 'function') {
-        viewer.jumpCameraToGoal();
-    }
-
-    btn.innerHTML = "Заглянуть внутрь";
-    btn.style.background = "";
+    // 2. Через 50 миллисекунд открываем окно снова
+    setTimeout(() => {
+      // Здесь вызываем функцию, которая открывает ваше модальное окно
+      // Предположим, она называется openModelViewer2 (замените на свою, если имя другое)
+      document.getElementById('modelModal2').style.display = 'flex';
+      
+      // И принудительно убеждаемся, что мы "снаружи"
+      isInside = false;
+    }, 50);
   }
 }
 </script>
