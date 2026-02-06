@@ -299,7 +299,7 @@ async function closeModelViewer2() {
     viewer.autoRotate = true;
   }
    btn.innerHTML = "выходим...";
-    await delay(20); 
+    await delay(10); 
    viewer.setAttribute('max-camera-orbit', 'auto auto auto');
     viewer.setAttribute('min-camera-orbit', 'auto auto auto');
     viewer.setAttribute('camera-target', 'auto auto auto');
@@ -312,7 +312,7 @@ async function closeModelViewer2() {
     btn.innerHTML = "Заглянуть внутрь";
     btn.style.background = ""; 
   }
-  //if (modal) modal.style.display = 'none';
+  if (modal) modal.style.display = 'none';
 }
 
 function closeModelViewer3(){document.getElementById('modelModal3').style.display='none'}
