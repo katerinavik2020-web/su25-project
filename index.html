@@ -191,6 +191,7 @@ function toggleView() {
     viewer.jumpCameraToGoal();      
     viewer.exposure = 1.3;
     viewer.autoRotate = true; 
+    viewer.disablePan = false;  
     setTimeout(() => { closeModelViewer2(); }, 10);
     //closeModelViewer2(); // Стираем и восстанавливаем модель    
     setTimeout(() => {  openModelViewer2(); }, 10); 
@@ -300,6 +301,7 @@ async function closeModelViewer2() {
     viewer.setAttribute('field-of-view', 'auto');    
     viewer.exposure = 1.3;
     viewer.autoRotate = true;
+    viewer.disablePan = false;  
   }
    btn.innerHTML = "выходим...";
     await delay(10); 
@@ -310,6 +312,7 @@ async function closeModelViewer2() {
     viewer.setAttribute('field-of-view', 'auto');    
     viewer.exposure = 1.3;
     viewer.autoRotate = true;
+    viewer.disablePan = false;  
      await delay(20); 
   if (btn) {
     btn.innerHTML = "Заглянуть внутрь";
@@ -338,13 +341,14 @@ function enterCabin() {
   const viewer = document.getElementById('insideViewer');  
   const btn = document.getElementById('viewToggleButton');
   viewer.autoRotate = false;
-  //viewer.setAttribute('field-of-view', '150deg'); 
-  viewer.setAttribute('field-of-view', 'auto'); 
-  viewer.setAttribute('camera-target', '-0.2m 0.8m -3.1m'); 
+  viewer.setAttribute('field-of-view', '150deg'); 
+  //viewer.setAttribute('field-of-view', 'auto'); 
+  viewer.setAttribute('camera-target', '-0.3m 0.8m -3.0m'); 
   viewer.setAttribute('camera-orbit', '0deg 90deg 0.1m'); 
   viewer.setAttribute('min-camera-orbit', 'auto auto 0m');     
-  viewer.setAttribute('max-camera-orbit', 'auto auto 0.2m');     
-  viewer.exposure = 2.0;
+  viewer.setAttribute('max-camera-orbit', 'auto auto 0.2m'); 
+  viewer.disablePan = true;    
+  viewer.exposure = 2.5;
   isInside = true;
   btn.innerHTML = "Выйти из самолета";
   btn.style.background = "#ff4757"; 
