@@ -34,16 +34,6 @@ a:active {
 
 }
 
-.cabin-hotspot {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid white;
-  background: rgba(255, 71, 87, 0.8); /*  расный цвет */
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  animation: pulse 2s infinite;
-}
 
 .hotspot-label {
   position: absolute;
@@ -57,12 +47,38 @@ a:active {
   white-space: nowrap;
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
-  70% { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+.cabin-hotspot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background-color: #007bff; /* —иний цвет */
+  box-shadow: 0 0 0 rgba(0, 123, 255, 0.4);
+  animation: pulse-blue 2s infinite;
+  cursor: pointer;
+  padding: 0;
 }
 
+/* Ёффект пульсации (расшир€ющиес€ круги) */
+@keyframes pulse-blue {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 15px rgba(0, 123, 255, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+  }
+}
+
+/* —крываем точку, когда мы уже в кабине */
+#insideViewer.inside-view .cabin-hotspot {
+  display: none;
+}
 
 .close-model-btn {
   position: absolute; /* ќтносительно modal-content */
