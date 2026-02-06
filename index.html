@@ -179,6 +179,7 @@ function toggleView() {
     btn.style.background = "#ff4757"; 
   } else {
     // --- ВЫХОД ЧЕРЕЗ ЖЕСТКИЙ СБРОС ---
+    isInside = false;
     viewer.setAttribute('max-camera-orbit', 'auto auto auto');
     viewer.setAttribute('min-camera-orbit', 'auto auto auto');
     viewer.setAttribute('camera-target', 'auto auto auto');
@@ -187,9 +188,9 @@ function toggleView() {
     viewer.jumpCameraToGoal();      
     viewer.exposure = 1.3;
     viewer.autoRotate = true; 
-    //setTimeout(() => { closeModelViewer2(); }, 100);
+    setTimeout(() => { closeModelViewer2(); }, 10);
     //closeModelViewer2(); // Стираем и восстанавливаем модель    
-    //setTimeout(() => {  openModelViewer2(); }, 100); 
+    setTimeout(() => {  openModelViewer2(); }, 10); 
   }
 }
 </script>
