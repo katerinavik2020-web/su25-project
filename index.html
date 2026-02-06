@@ -174,27 +174,35 @@ function toggleView() {
     btn.style.background = "#ff4757";
 
   } else {
-    // --- ВЫХОД НАРУЖУ (БЕЗОПАСНЫЙ СБРОС) ---
+     // --- ВЫХОД НАРУЖУ (РЕЖИМ ПРИНУДИТЕЛЬНОГО СБРОСА) ---
     isInside = false;
-    
-    // Снимаем лимиты кабины
-    viewer.minCameraOrbit = "auto auto auto";
-    viewer.maxCameraOrbit = "auto auto auto";
-    
-    // Устанавливаем стартовые параметры (как в HTML)
-    // 0deg 75deg 35m — это носом к нам, на расстоянии 35 метров
-    viewer.cameraOrbit = "0deg 75deg 35m"; 
-    viewer.cameraTarget = "0m 0m 0m";
-    viewer.fieldOfView = "30deg";
+
+    // 1. СНАЧАЛА ПОЛНОСТЬЮ УДАЛЯЕМ ВСЕ ЛИМИТЫ И ЦЕЛИ (очистка)
+    viewer.removeAttribute('camera-orbit');
+    viewer.removeAttribute('camera-target');
+    viewer.removeAttribute('field-of-view');
+    viewer.removeAttribute('min-camera-orbit');
+    viewer.removeAttribute('max-camera-orbit');
+
+    // 2. УСТАНАВЛИВАЕМ НОВЫЕ ЗНАЧЕНИЯ (используем свойства напрямую)
+    // Эти значения заставят его встать носом и целиком
+    viewer.cameraOrbit = "180deg 75deg 35m"; 
+   // viewer.cameraTarget = "0m 0m 0m";
+    //viewer.fieldOfView = "30deg";
     
     viewer.exposure = 1.3;
     viewer.autoRotate = true;
     
-    // Команда принудительного перехода
+    // 3. САМЫЙ ВАЖНЫЙ МОМЕНТ: 
+    // Заставляем модель пересчитать свои размеры, чтобы не было "полсамолета"
     if (typeof viewer.jumpCameraToGoal === 'function') {
         viewer.jumpCameraToGoal();
     }
-    
+// Трюк: кратковременный сброс видимости для пересчета центра
+    viewer.style.opacity = "0";
+    setTimeout(() => {
+        viewer.style.opacity = "1";
+    }, 50);
     btn.innerHTML = "Заглянуть внутрь";
     btn.style.background = "";
   }
