@@ -187,13 +187,13 @@ function toggleView() {
     viewer.jumpCameraToGoal();      
     viewer.exposure = 1.3;
     viewer.autoRotate = true; 
-    setTimeout(() => { closeModelViewer2(); }, 2000);
+    setTimeout(() => { closeModelViewer2(); }, 100);
     //closeModelViewer2(); // Стираем и восстанавливаем модель
     
     setTimeout(() => {
       // Открываем окно обратно.  
       openModelViewer2();
-    }, 2000); // Даем 0.1 сек на полную очистку памяти
+    }, 100); // Даем 0.1 сек на полную очистку памяти
   }
 }
 </script>
