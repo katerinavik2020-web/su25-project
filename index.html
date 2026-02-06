@@ -159,34 +159,22 @@ function toggleView() {
     // --- ВХОД ВНУТРЬ ---
     isInside = true;
     viewer.autoRotate = false;
-    
-    // Принудительно задаем параметры кабины
-    viewer.fieldOfView = "130deg";
-    viewer.cameraTarget = "-0.1m 0.90m -1.45m";
-    viewer.cameraOrbit = "180deg 90deg 0.1m";
-    
-    // Ставим лимиты, чтобы не "вылететь" случайно
-    viewer.minCameraOrbit = "auto auto 0m";
-    viewer.maxCameraOrbit = "auto auto 0.2m";
-    
-    viewer.exposure = 2.0;
+    viewer.setAttribute('field-of-view', '130deg'); 
+    viewer.setAttribute('camera-target', '-0.1m 0.90m -1.45m'); 
+    viewer.setAttribute('camera-orbit', '180deg 90deg 0.1m'); 
+    viewer.setAttribute('min-camera-orbit', 'auto auto 0m');     
+    viewer.setAttribute('max-camera-orbit', 'auto auto 0.2m');     
+    viewer.exposure = 2.0;        
     btn.innerHTML = "Выйти из самолета";
-    btn.style.background = "#ff4757";
-
+    btn.style.background = "#ff4757"; 
   } else {
-   // --- ВЫХОД ЧЕРЕЗ ПЕРЕЗАГРУЗКУ ОКНА ---
-    // 1. Сначала вызываем вашу рабочую функцию закрытия
-    closeModelViewer2(); 
+    // --- ВЫХОД ЧЕРЕЗ ЖЕСТКИЙ СБРОС ---
+    closeModelViewer2(); // Стираем и восстанавливаем модель
     
-    // 2. Через 50 миллисекунд открываем окно снова
     setTimeout(() => {
-      // Здесь вызываем функцию, которая открывает ваше модальное окно
-      // Предположим, она называется openModelViewer2 (замените на свою, если имя другое)
+      // Открываем окно обратно. Используйте тот же display, что и при старте (flex или block)
       document.getElementById('modelModal2').style.display = 'flex';
-      
-      // И принудительно убеждаемся, что мы "снаружи"
-      isInside = false;
-    }, 50);
+    }, 100); // Даем 0.1 сек на полную очистку памяти
   }
 }
 </script>
@@ -279,26 +267,30 @@ function openModelViewer2(){document.getElementById('modelModal2').style.display
 function openModelViewer3(){document.getElementById('modelModal3').style.display='flex'}
 function closeModelViewer(){document.getElementById('modelModal').style.display='none'}
 function closeModelViewer2() {
-  const viewer = document.getElementById('insideViewer');
   const modal = document.getElementById('modelModal2');
+  const viewer = document.getElementById('insideViewer');
   const btn = document.getElementById('viewToggleButton');
+
   if (modal) modal.style.display = 'none';
+  
   isInside = false;
+
   if (viewer) {
-    viewer.setAttribute('max-camera-orbit', 'auto auto auto');
-    viewer.setAttribute('min-camera-orbit', 'auto auto auto');
-    viewer.setAttribute('camera-target', 'auto auto auto');
-    viewer.setAttribute('camera-orbit', 'auto auto auto');
-    viewer.setAttribute('field-of-view', 'auto');
+    // ПОЛНАЯ ПЕРЕЗАГРУЗКА: сохраняем HTML, удаляем и вставляем заново
+    const parent = viewer.parentNode;
+    const cleanHTML = viewer.outerHTML; // Копируем "чистый" тег из HTML
     
-    viewer.exposure = 1.3;
-    viewer.autoRotate = true;
+    parent.innerHTML = ''; // Полностью стираем старую модель со всеми глюками
+    parent.innerHTML = cleanHTML; // Вставляем новую чистую копию
   }
+
   if (btn) {
     btn.innerHTML = "Заглянуть внутрь";
     btn.style.background = ""; 
   }
 }
+
+
 function closeModelViewer3(){document.getElementById('modelModal3').style.display='none'}
 function closeModal(){infoModal.style.display='none';  document.body.style.overflow = '';}
 </script>
