@@ -71,10 +71,6 @@ a:active {
   }
 }
 
-/* Скрываем точку, когда мы уже в кабине */
-#insideViewer.inside-view .cabin-hotspot {
-  display: none;
-}
 
 .close-model-btn {
   position: absolute; /* Относительно modal-content */
@@ -94,7 +90,7 @@ a:active {
   background: rgba(255, 71, 87, 1); /* Краснеет при наведении */
 }
 
-/* Скрываем хотспот, когда мы в кабине (добавим класс через JS) */
+/* Скрываем хотспот, когда мы в кабине  */
 .inside-mode .cabin-hotspot {
   display: none;
 }
