@@ -138,6 +138,13 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         auto-rotate
         camera-controls
         shadow-intensity="1">
+        <button slot="hotspot-cabin" 
+          class="cabin-hotspot" 
+          data-position="0.14m 1.35m -1.25m" 
+          data-normal="0.2 1 0" 
+          data-visibility-attribute="visible"
+          onclick="enterCabin()">
+         <div class="hotspot-label">В салон</div>  
       </model-viewer>
   <div id="viewToggleButton" class="modal-btn" onclick="toggleView()" 
          style="position: absolute; bottom: 30px; right: 250px; z-index: 10; cursor: pointer; ">
@@ -290,6 +297,16 @@ function closeModelViewer2() {
 
 function closeModelViewer3(){document.getElementById('modelModal3').style.display='none'}
 function closeModal(){infoModal.style.display='none';  document.body.style.overflow = '';}
+function enterCabin() {
+  const viewer = document.getElementById('insideViewer');  
+  viewer.autoRotate = false;
+  viewer.setAttribute('field-of-view', '130deg'); 
+  viewer.setAttribute('camera-target', '-0.1m 0.90m -1.45m'); 
+  viewer.setAttribute('camera-orbit', '180deg 90deg 0.1m'); 
+  viewer.setAttribute('min-camera-orbit', 'auto auto 0m');     
+  viewer.setAttribute('max-camera-orbit', 'auto auto 0.2m');     
+  viewer.exposure = 2.0;
+}
 </script>
 </body>
 </html>
