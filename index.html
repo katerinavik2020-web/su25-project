@@ -297,6 +297,13 @@ function closeModelViewer2() {
     viewer.exposure = 1.3;
     viewer.autoRotate = true;
   }
+   viewer.setAttribute('max-camera-orbit', 'auto auto auto');
+    viewer.setAttribute('min-camera-orbit', 'auto auto auto');
+    viewer.setAttribute('camera-target', 'auto auto auto');
+    viewer.setAttribute('camera-orbit', 'auto auto auto');
+    viewer.setAttribute('field-of-view', 'auto');    
+    viewer.exposure = 1.3;
+    viewer.autoRotate = true;
   if (btn) {
     btn.innerHTML = "Заглянуть внутрь";
     btn.style.background = ""; 
