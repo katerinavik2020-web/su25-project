@@ -198,11 +198,7 @@ function toggleView() {
     if (typeof viewer.jumpCameraToGoal === 'function') {
         viewer.jumpCameraToGoal();
     }
-// Трюк: кратковременный сброс видимости для пересчета центра
-    viewer.style.opacity = "0";
-    setTimeout(() => {
-        viewer.style.opacity = "1";
-    }, 50);
+
     btn.innerHTML = "Заглянуть внутрь";
     btn.style.background = "";
   }
