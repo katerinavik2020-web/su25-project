@@ -287,7 +287,7 @@ async function closeModelViewer2() {
   const viewer = document.getElementById('insideViewer');
   const modal = document.getElementById('modelModal2');
   const btn = document.getElementById('viewToggleButton');
-  //if (modal) modal.style.display = 'none';
+  if (modal) modal.style.display = 'none';
   isInside = false;
   if (viewer) {
     viewer.setAttribute('max-camera-orbit', 'auto auto auto');
@@ -312,7 +312,7 @@ async function closeModelViewer2() {
     btn.innerHTML = "Заглянуть внутрь";
     btn.style.background = ""; 
   }
-  if (modal) modal.style.display = 'none';
+  //if (modal) modal.style.display = 'none';
 }
 
 function closeModelViewer3(){document.getElementById('modelModal3').style.display='none'}
