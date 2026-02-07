@@ -191,3 +191,16 @@ a:active {
   /* Чтобы страница не "прыгала" из-за исчезновения полосы прокрутки */
   padding-right: 15px; 
 }
+
+
+#modsu33 {
+    transition: filter 0.3s ease;
+}
+.camera-blur {
+    filter: brightness(1.5) blur(2px);
+}
+
+#modsu33 button, #modyak40 button, #modsu25 button, .cabin-area, .cabin-hotspot {
+    pointer-events: auto !important;
+    z-index: 999;
+}
