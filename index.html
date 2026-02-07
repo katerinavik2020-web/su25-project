@@ -123,6 +123,8 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         shadow-intensity="0.5"
         shadow-softness="1" 
         auto-rotate
+        min-camera-orbit="auto auto 0m" 
+        min-field-of-view="10deg"
         camera-controls
         shadow-intensity="1">
         <button slot="hotspot-bagage" 
@@ -434,12 +436,11 @@ function exitModel(vId, bId, eId = null) {
     ejectBtn.style.display = "none";
     if(b) { b.classList.remove('is-inside'); b.innerHTML = (vId === 'modyak40') ? "Заглянуть внутрь" : ""; b.style.background = ""; }
     if(eId) { const e = document.getElementById(eId); if(e) e.style.display = "none"; }
-    
-    v.minCameraOrbit = 'auto auto auto';
+    v.minCameraOrbit = 'auto auto 0m';
     v.maxCameraOrbit = 'auto auto auto';
     v.cameraTarget = 'auto auto auto';
     v.cameraOrbit = states[vId].orbit;
-    v.fieldOfView = '30deg';
+    v.fieldOfView = '10deg';
     v.exposure = 1.3;
     v.setAttribute('auto-rotate', '');
     v.autoRotate = true;
