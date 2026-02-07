@@ -55,22 +55,6 @@ a:active {
   padding: 0;
 }
 
-/* Эффект пульсации (расширяющиеся круги) */
-@keyframes pulse-blue {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
-  }
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 15px rgba(0, 123, 255, 0);
-  }
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
-  }
-}
-
 
 .close-model-btn {
   position: absolute; /* Относительно modal-content */
@@ -93,4 +77,117 @@ a:active {
 /* Скрываем хотспот, когда мы в кабине  */
 .inside-mode .cabin-hotspot {
   display: none;
+}
+
+
+#modsu33 [slot^="hotspot"] {
+  display: none; /* Скрыты, пока не проявятся текстуры */
+  position: relative; 
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  /* Центрируем кнопку в 3D точке, это свойство нельзя перебивать! */
+  transform: translate(-50%, -50%); 
+}
+
+/* ИКОНКА КАБИНЫ */
+#cabin-trigger {
+  width: 40px; 
+  height: 40px;
+  background: url('KABINA.png') no-repeat center / contain;
+  background-color: transparent;   
+  border: 2px solid rgba(255,255,255,0.3); 
+  opacity: 0.3 !important; 
+  --min-hotspot-opacity: 0.2;
+  transition: opacity 0.3s;
+}
+
+/* СОСТОЯНИЕ "ВНУТРИ" (Надпись вместо иконки) */
+#cabin-trigger.is-inside {
+  width: auto !important;
+  height: auto !important;
+  padding: 10px 20px;
+  background: rgba(255, 71, 25, 0.6) !important;
+  color: white !important;
+  border-radius: 5px;
+  font-weight: bold;
+  opacity: 1 !important;
+  --min-hotspot-opacity: 1 !important;
+  border: none;
+  white-space: nowrap;
+}
+
+
+#bagage-trigger.is-inside {
+  width: auto !important;
+  height: auto !important;
+  padding: 10px 20px;
+  background: rgba(255, 71, 25, 0.6) !important;
+  color: white !important;
+  border-radius: 5px;
+  font-weight: bold;
+  opacity: 1 !important;
+  --min-hotspot-opacity: 1 !important;
+  border: none;
+  white-space: nowrap;
+}
+
+/* ОРАНЖЕВЫЙ КВАДРАТ (Катапульта) */
+#eject-button {
+  /* Эти три строки критически важны для "прилипания" */
+  position: absolute; 
+  top: 0; 
+  left: 0;  
+  /* Центрируем в 3D точке */
+  transform: translate(-50%, -50%); 
+  
+  display: none; /* Пока не вошли в кабину */
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 120, 0, 0.9) !important;
+  border: 2px solid black;
+  z-index: 10; /* Чтобы был поверх модели */
+}
+
+
+/* Эффект пульсации (расширяющиеся круги) */
+@keyframes pulse-blue {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 15px rgba(0, 123, 255, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+  }
+}
+
+
+/* Кнопка Пропустить внутри видео */
+#skip-video {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    padding: 12px 24px;
+    background: rgba(255, 120, 0, 0.8); /* Оранжевая в стиле проекта */
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 10001;
+}  
+
+/* Класс для отключения прокрутки фона */
+.no-scroll {
+  overflow: hidden !important;
+  height: 100%;
+  /* Чтобы страница не "прыгала" из-за исчезновения полосы прокрутки */
+  padding-right: 15px; 
 }
