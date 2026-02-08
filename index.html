@@ -334,6 +334,7 @@ const pStyle = `style="text-align: justify; text-indent: 25px; hyphens: auto; ma
   infoModal.style.display='flex';
   modalContent.scrollTop = 0; 
   document.body.style.overflow = 'hidden';
+  history.pushState({ modalOpen: true, id: modalId }, "");
 }
 function closeModal(){infoModal.style.display='none';  document.body.style.overflow = '';}
 const viewersu33 = document.querySelector('#modsu33');
@@ -511,6 +512,7 @@ function exitModel(vId, bId, eId = null) {
 function openModelViewer(mId) {
     document.getElementById(mId).style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    history.pushState({ modalOpen: true, id: modalId }, "");
 }
 
 function closeModelViewer(mId, vId, bId) {
@@ -579,6 +581,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, {passive: true});
 });
+window.onpopstate = function(event) {
+    // Находим все открытые модалки и закрываем их
+    const openModals = document.querySelectorAll('.modal, [id^="modelModal"]');
+    openModals.forEach(modal => {
+        modal.style.display = 'none';
+    });
+};
 </script>    
 </body>
 </html>
