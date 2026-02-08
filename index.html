@@ -130,10 +130,10 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         ar        
         ar-modes="webxr scene-viewer quick-look"          
         alt="3D модель с поддержкой AR">  
-  <!-- Кастомная кнопка AR (появится только на мобильных с поддержкой AR) -->
-  <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
-    👋 Посмотреть в AR
-  </button>
+        <!-- Кастомная кнопка AR (появится только на мобильных с поддержкой AR) -->
+        <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
+          👋 Посмотреть в AR
+        </button>
         <button slot="hotspot-bagage" 
           class="cabin-hotspot" 
           id="bagage-trigger"
@@ -141,7 +141,21 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
           data-visibility-attribute="visible"
           onclick="enterbagage()">         
         </button> 
-        
+        <button class="hotspot_a" slot="hotspot-a1" data-position="0.2m 0.67m -3.3m" data-normal="0.8m 0.4m -0.3m">
+          <div class="annotation">Экипаж: 1 человек<br>Бронированная кабина («титановая ванна»)</div>
+        </button>
+        <button class="hotspot_a" slot="hotspot-a2" data-position="0.59m 0.83m 0.51m" data-normal="-0.01 1.00 0.08">
+          <div class="annotation">2 двигателя Р-95Ш<br>Макс. скорость: 950 км/ч</div>
+        </button>
+        <button class="hotspot_a" slot="hotspot-a3" data-position="3.02m 0.37m 0.22m" data-normal="1.00 -0.00 -0.00">
+          <div class="annotation">Вооружение: авиапушка ГШ-30-2<br>10 точек подвески вооружения<br>Боезапас: 250 снарядов</div>
+        </button>
+        <button class="hotspot_a" slot="hotspot-a4" data-position="-1.73m 0.73m 0.55m" data-normal="-0.07 1.00 0.07">
+          <div class="annotation">Размах крыла: 14.4 м</div>
+        </button>
+        <button class="hotspot_a" slot="hotspot-a5" data-position="1.52m 1.03m 3.66m" data-normal="-0.06 1.00 0.01" >
+          <div class="annotation">Штурмовик поддержки войск<br>Макс. взлётная масса: 17.6 т<br>Практический потолок: 7000 м</div>
+        </button>
       </model-viewer>
  <div class='modal-btn' onclick="closeModelViewer('modelModal', 'modsu25', 'bagage-trigger')" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div></div></div>
  <div class="modal" id="modelModal2"><div class="modal-content" style="max-width:90%;max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column;">
@@ -220,10 +234,24 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         data-position="7.2m 3.6m 0.2m" data-normal="0.1 0.6 0.8" 
         style="opacity: 0; pointer-events: none;"
         onclick="toggleView_su33()"> 
+        <div class="annotation">Экипаж: 1 человек</div>
         </button>
-         <button id="eject-button" class="hotspot" slot="hotspot-eject" 
+        <button id="eject-button" class="hotspot" slot="hotspot-eject" 
           data-position="7.31m 3.16m 0.18m" data-normal="-0.97m 0.24m 0m" 
-          style="display: none;">  </button>                 
+          style="display: none;">  </button>  
+        <button class="hotspot_a" slot="hotspot-a2" data-position="-5.99m 2.64m -0.93m" data-normal="-0.04 0.98 0.21">
+          <div class="annotation">2 двигателя АЛ-31Ф-3<br>Макс. скорость: 2300 км/ч (M=2.17)</div>
+        </button>
+        <button class="hotspot_a" slot="hotspot-a3" data-position="-5.98m 2.13m 0.37m" data-normal="-0.00 -1.00 0.04">
+          <div class="annotation">Тормозной гак для посадки<br>на авианосец «Адмирал Кузнецов»<br>Система дозаправки в воздухе</div>
+        </button>
+        <button class="hotspot_a" slot="hotspot-a4" data-position="-2.72m 2.65m 3.55m" data-normal="0.01 0.81 -0.59">
+          <div class="annotation">Размах крыла: 14.7 м<br>Крылья складываются для хранения</div>
+        </button>
+        <button class="hotspot_a" slot="hotspot-a5" data-position="-6.48m 1.93m -3.79m" data-normal="0.07 1.00 -0.07">
+          <div class="annotation">Многоцелевой палубный истребитель<br>Переднее горизонтальное оперение (ПГО)<br>Дальность: до 3000 км<br>
+          Практический потолок: около 17 000 м</div>
+        </button>  
 </model-viewer>
  <div class='modal-btn' onclick="closeModelViewer('modelModal3', 'modsu33', 'cabin-trigger')" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div></div></div> 
 
