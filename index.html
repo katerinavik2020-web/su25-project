@@ -168,10 +168,22 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
           data-position="0.14m 1.2m -1.25m" 
           data-normal="0.2 1 0" 
           data-visibility-attribute="visible"
-          onclick="enterSalon()">         
+          onclick="enterSalon()"> 
+           <div class="annotation">Пассажиров:	до 32</div>        
         </button> 
         <button  class="cabin-hotspot" slot="hotspot-cabin" data-position="0.14m 0.7m -3.7m" 
          data-normal="0.3 0.8 -0.4" data-visibility-attribute="visible" onclick="enterCabin()">
+         <div class="annotation">Экипаж:	3 человека</div>
+         </button>
+         <button class="hotspot_a" slot="hotspot-a1" data-position="-0.38m 1.20m 2.16m" data-normal="-0.47 0.88 0.00">
+           <div class="annotation">3 двигателя АИ-25 <br> Максимальная скорость	550 км/ч</div>
+         </button>
+          <button class="hotspot_a" slot="hotspot-a2" data-position="3.34m 0.335m 1.33m" data-normal="-0.08m 1m 0m">
+           <div class="annotation">Размах крыла:	25 м</div>
+         </button>  
+         </button>  
+          <button class="hotspot_a" slot="hotspot-a3" data-position="-2.16m 2.85m 7.09m" data-normal="-0.22 0.97 0.13">
+           <div class="annotation">Региональные пассажирские перевозки<br> Макс. взлётная масса: 16т <br>Дальность полёта	до 1800 км </div>
          </button>
       </model-viewer>
   <div id="viewToggleButton" class="modal-btn" onclick="toggleView()" 

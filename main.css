@@ -233,3 +233,57 @@ a:active {
     pointer-events: auto !important;
     z-index: 999;
 }
+
+/* Стиль самой точки (бледно-серая и полупрозрачная) */
+.hotspot_a {
+  width: 14px;            /* Чуть меньше размер, чтобы было аккуратнее */
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Тонкая светлая граница */
+  background-color: rgba(200, 200, 200, 0.4); /* Бледно-серый с прозрачностью */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease; /* Плавный переход при наведении */
+  padding: 0;
+}
+
+/* Эффект при наведении на точку */
+.hotspot_a:hover, 
+.hotspot_a:focus {
+  background-color: rgba(255, 255, 255, 0.8); /* Становится светлее и плотнее */
+  border-color: rgba(255, 255, 255, 1);
+  transform: scale(1.2); /* Слегка увеличивается */
+  outline: none;
+}
+
+/* Чтобы текст аннотации не наследовал прозрачность точки */
+.annotation {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  /* Стиль плашки с текстом (можно оставить темным для контраста) */
+  background-color: rgba(10, 25, 45, 0.9); 
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  width: max-content;
+  max-width: 220px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* Показ при наведении на точку или клике (focus) */
+.hotspot_a:hover .annotation,
+.hotspot_a:focus .annotation,
+.cabin-hotspot:hover .annotation {
+  visibility: visible;
+  opacity: 1;
+}
+
