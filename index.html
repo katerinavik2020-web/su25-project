@@ -518,21 +518,38 @@ function toggleView() {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Поиск ссылки "История и факты" по точному тексту
     const allLinks = document.querySelectorAll('a');
     const historyLink = Array.from(allLinks).find(link => 
         link.textContent.trim() === 'История и факты'
     );
-    
+
     if (historyLink) {
         historyLink.addEventListener('click', () => {
-            const buttons = document.querySelectorAll('.modal-btn');
-            buttons.forEach(btn => {
+            // Ищем все кнопки "Подробнее" в карточках
+            const detailButtons = document.querySelectorAll('.modal-btn');
+            
+            detailButtons.forEach(btn => {
+                // Перезапуск анимации
                 btn.classList.remove('blink-active');
-                setTimeout(() => btn.classList.add('blink-active'), 10);
-                setTimeout(() => btn.classList.remove('blink-active'), 3000);
+                void btn.offsetWidth; // Магия JS для сброса анимации (reflow)
+                btn.classList.add('blink-active');
+
+                // Удаление класса после завершения (3 секунды)
+                setTimeout(() => {
+                    btn.classList.remove('blink-active');
+                }, 3000);
             });
         });
     }
+
+    // 2. Вспомогательный код: если нужно, чтобы аннотации 
+    // закрывались на мобилках при клике в другое место
+    document.addEventListener('touchstart', (e) => {
+        if (!e.target.closest('.hotspot_a')) {
+            document.querySelectorAll('.annotation').forEach(a => a.style.opacity = '0');
+        }
+    }, {passive: true});
 });
 </script>    
 </body>
