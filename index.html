@@ -326,7 +326,7 @@ function setupModelLoad(id) {
 }
 ['modsu33', 'modsu25', 'modyak40'].forEach(setupModelLoad);
 
-// --- 3. ПЛАВНОЕ ПРОЯВЛЕНИЕ ТЕКСТУР (5 СЕКУНД) ---
+// --- 3. ПЛАВНОЕ ПРОЯВЛЕНИЕ ТЕКСТУР (3 СЕК) ---
 function smoothFadeIn(viewerId, btnId) {
     const viewer = document.getElementById(viewerId);
     if (!viewer || states[viewerId].isTextured) return;
@@ -343,7 +343,7 @@ function smoothFadeIn(viewerId, btnId) {
     let start = null;
     function step(timestamp) {
         if (!start) start = timestamp;
-        let progress = (timestamp - start) / 5000;
+        let progress = (timestamp - start) / 2500;
         if (progress > 1) progress = 1;
         const opacity = 0.5 + 0.5 * progress;
         const color = 0.9 + 0.1 * progress;
