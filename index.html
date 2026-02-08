@@ -504,7 +504,25 @@ function toggleView() {
 }
 
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const allLinks = document.querySelectorAll('a');
+    const historyLink = Array.from(allLinks).find(link => 
+        link.textContent.trim() === 'История и факты'
+    );
     
+    if (historyLink) {
+        historyLink.addEventListener('click', () => {
+            const buttons = document.querySelectorAll('.modal-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('blink-active');
+                setTimeout(() => btn.classList.add('blink-active'), 10);
+                setTimeout(() => btn.classList.remove('blink-active'), 3000);
+            });
+        });
+    }
+});
+</script>    
 </body>
 </html>
 

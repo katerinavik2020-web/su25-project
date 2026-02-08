@@ -169,6 +169,35 @@ a:active {
 }
 
 
+
+/* Анимация самой кнопки (легкая пульсация) */
+@keyframes button-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Анимация расходящейся волны */
+@keyframes echo-wave {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.blink-active {
+  position: relative; /* Нужно для позиционирования волны */
+  animation: button-pulse 0.6s ease-in-out 5;
+}
+
+/* Создаем "волну" через псевдоэлемент */
+.blink-active::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: inherit; /* Копирует скругление кнопки */
+  border: 2px solid #fff; /* Цвет волны (белый или желтый) */
+  animation: echo-wave 0.6s ease-out 5;
+}
+
 /* Кнопка Пропустить внутри видео */
 #skip-video {
     position: absolute;
