@@ -122,7 +122,8 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         exposure="1.3"
         shadow-intensity="0.5"
         shadow-softness="1" 
-        auto-rotate
+        autorotate-delay="10000"
+        auto-rotate        
         min-camera-orbit="auto auto 0m" 
         min-field-of-view="10deg"
         camera-controls
@@ -168,7 +169,8 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         exposure="1.3"
         shadow-intensity="0.5"
         shadow-softness="1" 
-        auto-rotate
+        auto-rotate        
+        autorotate-delay="10000"         
         camera-controls
         shadow-intensity="1"
         ar        
@@ -219,7 +221,8 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         exposure="1.3"
         shadow-intensity="0.5"
         shadow-softness="1" 
-        auto-rotate
+        autorotate-delay="10000"
+        auto-rotate        
         camera-controls
         shadow-intensity="1"
         touch-action="none"
@@ -264,7 +267,9 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         <source type="video/mp4">
     </video>
 </div>
-
+<div id="info-panel" class="info-panel-hidden">
+  <div class="info-panel-content"></div>
+</div>
 <script>
 const data={
   yak40:{
@@ -334,7 +339,7 @@ const pStyle = `style="text-align: justify; text-indent: 25px; hyphens: auto; ma
   infoModal.style.display='flex';
   modalContent.scrollTop = 0; 
   document.body.style.overflow = 'hidden';
-  history.pushState({ modalOpen: true, id: modalId }, "");
+  history.pushState({ modalOpen: true, id: k }, "");
 }
 function closeModal(){infoModal.style.display='none';  document.body.style.overflow = '';}
 const viewersu33 = document.querySelector('#modsu33');
@@ -370,11 +375,20 @@ function setupModelLoad(id) {
 // --- 3. ПЛАВНОЕ ПРОЯВЛЕНИЕ ТЕКСТУР (3 СЕК) ---
 function smoothFadeIn(viewerId, btnId) {
     const viewer = document.getElementById(viewerId);
-    if (!viewer || states[viewerId].isTextured) return;
+    if (!viewer) return;
+    // КРИТИЧЕСКАЯ ПРАВКА: Ждем, пока модель загрузится, если её еще нет
+    if (!viewer.model) {
+        viewer.addEventListener('load', () => smoothFadeIn(viewerId, btnId), { once: true });
+        return;
+    }
+    // Если текстуры уже есть, просто запускаем цикл
+    if (states[viewerId].isTextured) {
+        stopAllAnnotations();
+        startAnnotationCycle(viewerId);
+        return; 
+    }    
     states[viewerId].isTextured = true;
-
     const materials = viewer.model.materials;
-    // Возвращаем текстуры сразу
     materials.forEach(m => {
         if (m.userData.originalTexture) {
             m.pbrMetallicRoughness.baseColorTexture.setTexture(m.userData.originalTexture);
@@ -397,11 +411,20 @@ function smoothFadeIn(viewerId, btnId) {
                 m.setAlphaMode('OPAQUE');
                 m.pbrMetallicRoughness.setBaseColorFactor(); 
             });
+
+            // Показываем кнопки управления
             const btn = document.getElementById(btnId);
             if(btn) btn.style.display = 'block';
-            if(viewerId === 'modyak40') {
-                viewer.querySelectorAll('.cabin-hotspot').forEach(h => h.style.display = 'block');
-            }
+
+            // Показываем скрытые хотспоты
+            viewer.querySelectorAll('.cabin-hotspot, .cabin-area').forEach(h => {
+                h.style.display = 'block';
+                h.style.opacity = '1';
+                h.style.pointerEvents = 'auto';
+            });
+
+            // ЗАПУСКАЕМ АВТО-АННОТАЦИИ ПОСЛЕ ПРОЯВЛЕНИЯ ТЕКСТУР
+            startAnnotationCycle(viewerId);
         }
     }
     requestAnimationFrame(step);
@@ -421,6 +444,7 @@ function smoothFadeIn(viewerId, btnId) {
         smoothFadeIn(id, btnId);
     });
 });
+
 // --- 4. УНИВЕРСАЛЬНЫЙ КИНОПРОЛЕТ ---
 function cinematicFly(viewer, targetPos, targetOrbit, exposure, onComplete) {
     viewer.autoRotate = false;
@@ -462,6 +486,7 @@ function toggleView_su33() {
 function enterSalon() {
     const v = document.getElementById('modyak40');
     const b = document.getElementById('viewToggleButton');
+    stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
     states.modyak40.isInside = true;
     cinematicFly(v, '-0.1m 0.90m -1.45m', '180deg 90deg 0.1m', 2.0, () => {
         b.innerHTML = "Выйти из самолета"; b.style.background = "#ff4757";
@@ -471,6 +496,7 @@ function enterSalon() {
 function enterCabin() {
     const v = document.getElementById('modyak40');
     const b = document.getElementById('viewToggleButton');
+    stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
     states.modyak40.isInside = true;
     cinematicFly(v, '-0.3m 0.8m -3.0m', '10deg 80deg 0.2m', 2.5, () => {
         b.innerHTML = "Выйти из самолета"; b.style.background = "#ff4757";
@@ -480,6 +506,7 @@ function enterCabin() {
 function enterbagage() {
     const v = document.getElementById('modsu25');
     const b = document.getElementById('bagage-trigger');
+    stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
     if (!states.modsu25.isInside) {
         states.modsu25.isInside = true;
         cinematicFly(v, '-0m 0.5m -0.05m', '10deg 80deg 0.2m', 3.0, () => {
@@ -505,26 +532,51 @@ function exitModel(vId, bId, eId = null) {
     v.setAttribute('auto-rotate', '');
     v.autoRotate = true;
     v.disablePan = false; 
+    startAnnotationCycle(vId);
     v.jumpCameraToGoal();
     v.updateFraming();         
 }
 
 function openModelViewer(mId) {
-    document.getElementById(mId).style.display = 'flex';
+    const modal = document.getElementById(mId);
+    if (!modal) return;
+    modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    history.pushState({ modalOpen: true, id: modalId }, "");
+    history.pushState({ modalOpen: true, id: mId }, "");
+    // Соответствие твоих ID модалок и вьюеров
+    const config = {
+        'modelModal3': { vId: 'modsu33',  bId: 'cabin-trigger' },
+        'modelModal':  { vId: 'modsu25',  bId: 'bagage-trigger' },
+        'modelModal2': { vId: 'modyak40', bId: 'viewToggleButton' }
+    };
+    const current = config[mId];    
+    if (current) {
+        const viewerId = current.vId;
+        
+        // ПРОВЕРКА: Если модель УЖЕ проявлена (был клик ранее)
+        if (states[viewerId].isTextured) {
+            // Сразу включаем аннотации, не дожидаясь клика и без анимации проявления
+            stopAllAnnotations();
+            startAnnotationCycle(viewerId);
+        } else {
+            // Если модель еще серая — НИЧЕГО не вызываем. 
+            // Она будет просто крутиться серой, пока юзер сам не кликнет по ней.
+            // (Клик по модели запустит smoothFadeIn через твой старый слушатель событий).
+            stopAllAnnotations(); // На всякий случай чистим старые хвосты
+        }
+    }
 }
 
 function closeModelViewer(mId, vId, bId) {
     document.getElementById(mId).style.display = 'none';
     document.body.style.overflow = 'auto';
+    // Остановить все таймеры аннотаций
+    Object.values(activeAnnotationTimers).forEach(t => clearInterval(t));
+    // Сбросить состояния текстур, если нужно открывать заново серыми
+    // states[currentId].isTextured = false; 
+    stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
     exitModel(vId, bId);
 }
-
-// Старые функции для HTML-кнопок
-function closeModelViewer3() { closeModelViewer('modelModal3', 'modsu33', 'cabin-trigger'); }
-function closeModelViewer2() { closeModelViewer('modelModal2', 'modyak40', 'viewToggleButton'); }
-function closeModelViewer1() { closeModelViewer('modelModal', 'modsu25', 'bagage-trigger'); }
 
 // Видео и Пропуск
 const stopVid = () => { overlay.style.display = 'none'; video.pause(); exitModel('modsu33', 'cabin-trigger', 'eject-button'); };
@@ -588,6 +640,100 @@ window.onpopstate = function(event) {
         modal.style.display = 'none';
     });
 };
+</script>    
+<script>    
+
+// Объект для хранения таймеров аннотаций (чтобы можно было остановить)
+const activeAnnotationTimers = {};
+
+// --- 2. ЛОГИКА АВТО-АННОТАЦИЙ ---
+function startAnnotationCycle(viewerId) {
+    const viewer = document.getElementById(viewerId);
+    const infoPanel = document.querySelector('#info-panel');
+    const infoContent = infoPanel ? infoPanel.querySelector('.info-panel-content') : null;
+        
+    if (!viewer || !infoPanel) return;
+
+    if (activeAnnotationTimers[viewerId]) clearInterval(activeAnnotationTimers[viewerId]);
+
+    let currentIndex = 0;
+    let isUserInteracting = false;
+    let resumeTimeout = null;
+
+    const showNext = () => {
+        if (viewer.offsetParent === null) { 
+            stopAllAnnotations();
+            return;
+        }    
+        // Показываем только если:
+        // 1. Мы НЕ внутри (isInside = false)
+        // 2. Юзер НЕ трогает модель (isUserInteracting = false)
+        // 3. ВКЛЮЧЕНА авторотация (viewer.autoRotate === true)
+        if (states[viewerId].isInside || isUserInteracting || !viewer.autoRotate) {
+            infoPanel.classList.remove('visible'); 
+            return;
+        }
+        const hotspots = viewer.querySelectorAll('.hotspot_a, .cabin-hotspot, .cabin-area');
+        if (hotspots.length === 0) return;
+
+        document.querySelectorAll('.active').forEach(h => h.classList.remove('active'));
+
+        const current = hotspots[currentIndex];
+        const annotation = current.querySelector('.annotation');
+
+        if (annotation && infoContent) {
+            current.classList.add('active');
+            infoPanel.classList.add('visible');
+            infoContent.innerHTML = annotation.innerHTML;
+            viewer.classList.add('autocycle-active');
+        }
+        currentIndex = (currentIndex + 1) % hotspots.length;
+    };
+
+    activeAnnotationTimers[viewerId] = setInterval(showNext, 5000);
+
+   viewer.addEventListener('pointerdown', () => {
+        isUserInteracting = true;
+        
+        // 1. ПРИНУДИТЕЛЬНО ВЫКЛЮЧАЕМ авторотацию самой модели
+        viewer.autoRotate = false; 
+        
+        // 2. Прячем все панели и активные точки
+        infoPanel.classList.remove('visible');
+        viewer.classList.remove('autocycle-active');
+        document.querySelectorAll('.active').forEach(h => h.classList.remove('active'));
+
+        clearTimeout(resumeTimeout);
+        
+        // 3. Ждем ровно 10 секунд тишины
+        resumeTimeout = setTimeout(() => {
+            isUserInteracting = false;
+            
+            // 4. ПРИНУДИТЕЛЬНО ВКЛЮЧАЕМ авторотацию обратно
+            viewer.autoRotate = true; 
+            
+            // Можно даже чуть "подтолкнуть" модель, чтобы она сразу начала вращаться
+            viewer.play(); 
+        }, 10000); 
+    });
+}
+function stopAllAnnotations() {
+    // 1. Останавливаем все запущенные интервалы
+    Object.keys(activeAnnotationTimers).forEach(id => {
+        clearInterval(activeAnnotationTimers[id]);
+        delete activeAnnotationTimers[id];
+    });
+
+    // 2. Прячем саму панель
+    const infoPanel = document.querySelector('#info-panel');
+    if (infoPanel) {
+        infoPanel.classList.remove('visible');
+    }
+
+    // 3. Убираем подсветку со всех хотспотов
+    document.querySelectorAll('.active').forEach(h => h.classList.remove('active'));
+    document.querySelectorAll('model-viewer').forEach(v => v.classList.remove('autocycle-active'));
+}
 </script>    
 </body>
 </html>
