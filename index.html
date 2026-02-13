@@ -75,9 +75,9 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
 <section>
 <h2 class="section-title"><a name="_Коллекция_самолётов"></a>Коллекция самолётов</h2>
 <div class="gallery">
-<div class="card" style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal2')"><model-viewer src="model_yak40.glb" alt="3D модель" auto-rotate camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer></div><h3>Як-40</h3><p style="opacity:.85;font-size:.95rem">Региональный реактивный пассажирский самолёт для местных авиалиний.</p><div class="modal-btn" onclick="openModal('yak40')">Подробнее</div></div>
-<div class="card" style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal')"><model-viewer src="model_su25.glb" alt="3D модель" auto-rotate camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer></div><h3>Су-25</h3><p style="opacity:.85;font-size:.95rem">Бронированный штурмовик поддержки сухопутных войск.</p><div class="modal-btn" onclick="openModal('su25')">Подробнее</div></div>
-<div class="card" style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal3')"><model-viewer src="model_su33.glb" alt="3D модель" auto-rotate camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer></div><h3>СУ-33</h3><p style="opacity:.85;font-size:.95rem">Сверхзвуковой истребитель с изменяемой стреловидностью крыла.</p><div class="modal-btn" onclick="openModal('su33')">Подробнее</div></div>
+<div class="card" style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal2')"><model-viewer src="model_yak40.glb" alt="3D модель" auto-rotate interaction-prompt="none" loading="eager" camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer></div><h3>Як-40</h3><p style="opacity:.85;font-size:.95rem">Региональный реактивный пассажирский самолёт для местных авиалиний.</p><div class="modal-btn" onclick="openModal('yak40')">Подробнее</div></div>
+<div class="card" style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal')"><model-viewer src="model_su25.glb" alt="3D модель" auto-rotate interaction-prompt="none" loading="eager" camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer></div><h3>Су-25</h3><p style="opacity:.85;font-size:.95rem">Бронированный штурмовик поддержки сухопутных войск.</p><div class="modal-btn" onclick="openModal('su25')">Подробнее</div></div>
+<div class="card" style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal3')"><model-viewer src="model_su33.glb" alt="3D модель" auto-rotate interaction-prompt="none" loading="eager" camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer></div><h3>СУ-33</h3><p style="opacity:.85;font-size:.95rem">Сверхзвуковой истребитель с изменяемой стреловидностью крыла.</p><div class="modal-btn" onclick="openModal('su33')">Подробнее</div></div>
 </div>
 </section>
 <section>
@@ -157,6 +157,11 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         <button class="hotspot_a" slot="hotspot-a5" data-position="1.52m 1.03m 3.66m" data-normal="-0.06 1.00 0.01" >
           <div class="annotation">Штурмовик поддержки войск<br>Макс. взлётная масса: 17.6 т<br>Практический потолок: 7000 м</div>
         </button>
+        <!-- Индикатор загрузки -->
+        <div slot="progress-bar" class="custom-loader">
+           <div class="loader-text">Загрузка модели...</div>
+           <div class="update-bar"></div>
+         </div>
       </model-viewer>
  <div class='modal-btn' onclick="closeModelViewer('modelModal', 'modsu25', 'bagage-trigger')" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div></div></div>
  <div class="modal" id="modelModal2"><div class="modal-content" style="max-width:90%;max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column;">
@@ -201,6 +206,11 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
           <button class="hotspot_a" slot="hotspot-a3" data-position="-2.16m 2.85m 7.09m" data-normal="-0.22 0.97 0.13">
            <div class="annotation">Региональные пассажирские перевозки<br> Макс. взлётная масса: 16т <br>Дальность полёта	до 1800 км </div>
          </button>
+        <!-- Индикатор загрузки -->
+        <div slot="progress-bar" class="custom-loader">
+           <div class="loader-text">Загрузка модели...</div>
+           <div class="update-bar"></div>
+         </div>         
       </model-viewer>
   <div id="viewToggleButton" class="modal-btn" onclick="toggleView()" 
          style="position: absolute; bottom: 30px; right: 250px; z-index: 10; cursor: pointer; ">
@@ -255,6 +265,11 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
           <div class="annotation">Многоцелевой палубный истребитель<br>Переднее горизонтальное оперение (ПГО)<br>Дальность: до 3000 км<br>
           Практический потолок: около 17 000 м</div>
         </button>  
+        <!-- Индикатор загрузки -->
+        <div slot="progress-bar" class="custom-loader">
+           <div class="loader-text">Загрузка модели...</div>
+           <div class="update-bar"></div>
+         </div>        
 </model-viewer>
  <div class='modal-btn' onclick="closeModelViewer('modelModal3', 'modsu33', 'cabin-trigger')" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div></div></div> 
 
@@ -640,6 +655,24 @@ window.onpopstate = function(event) {
         modal.style.display = 'none';
     });
 };
+
+document.querySelectorAll('model-viewer').forEach(viewer => {
+    viewer.addEventListener('progress', (event) => {
+        const progressBar = viewer.querySelector('.update-bar');
+        if (progressBar) {
+            // Устанавливаем переменную CSS --progress от 0 до 100
+            const progress = event.detail.totalProgress * 100;
+            progressBar.style.setProperty('--progress', `${progress}%`);
+        }
+    });
+
+    viewer.addEventListener('load', () => {
+        const loader = viewer.querySelector('.custom-loader');
+        if (loader) {
+            loader.classList.add('hidden'); // Плавно скрываем после загрузки
+        }
+    });
+});
 </script>    
 <script>    
 
