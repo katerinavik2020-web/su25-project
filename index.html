@@ -697,16 +697,19 @@ function startAnnotationCycle(viewerId) {
         if (viewer.offsetParent === null) { 
             stopAllAnnotations();
             return;
-        }    
-        // Показываем только если:
-        // 1. Мы НЕ внутри (isInside = false)
-        // 2. Юзер НЕ трогает модель (isUserInteracting = false)
-        // 3. ВКЛЮЧЕНА авторотация (viewer.autoRotate === true)
-        if (states[viewerId].isInside || isUserInteracting || !viewer.autoRotate) {
+        }          
+        // --- ГЛАВНАЯ ПРАВКА ДЛЯ ГИТХАБА ---
+        if (states[viewerId].isInside) {
+            viewer.autoRotate = false; // Принудительно выключаем вращение внутри
             infoPanel.classList.remove('visible'); 
             return;
         }
-        const hotspots = viewer.querySelectorAll('.hotspot_a, .cabin-hotspot, .cabin-area');
+        // Если юзер трогает модель или она не должна крутиться — пропускаем аннотации
+        if (isUserInteracting || !viewer.autoRotate) {
+            infoPanel.classList.remove('visible'); 
+            return;
+        }
+        const hotspots = viewer.querySelectorAll('.hotspot_a, .cabin-hotspot, .cabin-area');        
         if (hotspots.length === 0) return;
 
         document.querySelectorAll('.active').forEach(h => h.classList.remove('active'));
