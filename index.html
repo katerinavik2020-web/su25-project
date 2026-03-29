@@ -332,6 +332,7 @@ const data={
 let isFireMode = false; 
 let rocketsLaunched = false;
 let globalResumeTimeout = null;
+let reloadTimerF = null;
 function openModal(k){
   const specs={
   yak40:`<table class="spec-table">
@@ -873,7 +874,7 @@ function setGearVisibility(show) {
 // Подгружаем звук modsu25
 
 const launchSound = new Audio('sound_launch.mp3'); 
-let reloadTimerF = null; 
+ 
 function updateButtonUI(text, isReload) {
   const btn = document.getElementById('fire-control');
   if (btn) {
