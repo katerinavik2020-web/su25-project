@@ -970,6 +970,10 @@ if (states.modsu25.isInside) {
 
       // 3. ЭФФЕКТЫ РАКЕТ
       setTimeout(() => {
+viewer.exposure = 3.0; // Вспышка
+setTimeout(() => {
+    viewer.exposure = 1.3; // Возврат к норме
+}, 200);
       if (launchSound && launchSound.readyState >= 2) { // 2 означает, что данные загружены
           launchSound.currentTime = 0;
           launchSound.play().catch(() => playSynthLaunch()); // Если play не сработал — поет синтезатор
