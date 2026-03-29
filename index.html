@@ -910,6 +910,31 @@ function resetRocketsState(vId) {
     if (btn) btn.classList.remove('reloading');
 }
 
+function playSynthLaunch() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        // Тип "sawtooth" (пила) дает более "технический" звук двигателя
+        osc.type = 'sawtooth'; 
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        // Резкое падение частоты имитирует удаляющийся объект (эффект Доплера)
+        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 1.2);
+
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.2);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + 1.2);
+    } catch (e) {
+        console.log("Синтезатор звука не поддерживается");
+    }
+}
+
 function handleFireClick(event) {
   if (event) event.stopPropagation();
   const viewer = document.getElementById('modsu25');
@@ -945,6 +970,12 @@ if (states.modsu25.isInside) {
 
       // 3. ЭФФЕКТЫ РАКЕТ
       setTimeout(() => {
+      if (launchSound && launchSound.readyState >= 2) { // 2 означает, что данные загружены
+          launchSound.currentTime = 0;
+          launchSound.play().catch(() => playSynthLaunch()); // Если play не сработал — поет синтезатор
+      } else {
+          playSynthLaunch(); // Файла нет или он не готов — поет синтезатор
+      }
         if (mat) {
           mat.setAlphaMode('OPAQUE');
           mat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]);
