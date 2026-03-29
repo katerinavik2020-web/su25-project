@@ -119,6 +119,7 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         id="modsu25" 
         skybox-image="nebo2.jpg"   
         environment-image="neutral"
+        camera-orbit="490.4deg 73.01deg 22.14m"          
         exposure="1.3"
         shadow-intensity="0.5"
         shadow-softness="1" 
@@ -156,13 +157,21 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         </button>
         <button class="hotspot_a" slot="hotspot-a5" data-position="1.52m 1.03m 3.66m" data-normal="-0.06 1.00 0.01" >
           <div class="annotation">Штурмовик поддержки войск<br>Макс. взлётная масса: 17.6 т<br>Практический потолок: 7000 м</div>
-        </button>
+        </button>        
+        <div id="t1" slot="hotspot-t1" class="rocket-trail" data-position="1.50m 0.21m -1.20m" data-normal="0.90m 0.37m -0.23m"></div>
+        <div id="t2" slot="hotspot-t2" class="rocket-trail" data-position="2.02m 0.19m -0.82m" data-normal="0.67m 0.67m -0.31m"></div>
+        <div id="t3" slot="hotspot-t3" class="rocket-trail" data-position="2.55m 0.12m -0.72m" data-normal="0.92m 0.24m -0.31m"></div>
+        <div id="t4" slot="hotspot-t4" class="rocket-trail" data-position="3.12m 0.10m -0.73m" data-normal="0.97m 0.25m -0.02m"></div>
+        <div id="t5" slot="hotspot-t5" class="rocket-trail" data-position="-1.79m 0.08m -0.92m" data-normal="0.92m -0.24m -0.31m"></div>
+        <div id="t6" slot="hotspot-t6" class="rocket-trail" data-position="-2.36m 0.12m -0.75m" data-normal="0.92m 0.23m -0.31m"></div>
+        <div id="t7" slot="hotspot-t7" class="rocket-trail" data-position="-2.94m 0.10m -0.49m" data-normal="0.22m 0.52m -0.82m"></div>
         <!-- Индикатор загрузки -->
         <div slot="progress-bar" class="custom-loader">
            <div class="loader-text">Загрузка модели...</div>
            <div class="update-bar"></div>
          </div>
       </model-viewer>
+      <div id="fire-control" onclick="handleFireClick(event)"></div>
  <div class='modal-btn' onclick="closeModelViewer('modelModal', 'modsu25', 'bagage-trigger')" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div></div></div>
  <div class="modal" id="modelModal2"><div class="modal-content" style="max-width:90%;max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column;">
 <model-viewer
@@ -246,7 +255,8 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
         camera-controls
         shadow-intensity="1"
         touch-action="none"
-        camera-orbit="52.32deg 52.35deg 44.54m" field-of-view="30deg"
+        camera-orbit="52.32deg 52.35deg 44.54m" 
+        field-of-view="30deg"
         poster="poster_su33.webp" 
         ar        
         ar-modes="webxr scene-viewer quick-look"         
@@ -319,6 +329,9 @@ const data={
 };
 
 
+let isFireMode = false; 
+let rocketsLaunched = false;
+let globalResumeTimeout = null;
 function openModal(k){
   const specs={
   yak40:`<table class="spec-table">
@@ -378,7 +391,7 @@ const skipBtn = document.querySelector('#skip-video');
 const states = {
     modsu33: { isInside: false, isTextured: false, orbit: '52.32deg 52.35deg 44.54m' },
     modyak40: { isInside: false, isTextured: false, orbit: '180deg 75deg auto' },
-    modsu25: { isInside: false, isTextured: false, orbit: '52.32deg 52.35deg 44.54m' }
+    modsu25: { isInside: false, isTextured: false, orbit: '490.4deg 73.01deg 22.14m' }
 };
 
 // --- 2. ПОДГОТОВКА ВСЕХ МОДЕЛЕЙ (ПРОЗРАЧНОСТЬ И СЕРЫЙ ЦВЕТ) ---
@@ -549,12 +562,8 @@ function exitModel(vId, bId, eId = null) {
     ejectBtn.style.display = "none";
     if(b) { b.classList.remove('is-inside'); b.innerHTML = (vId === 'modyak40') ? "Заглянуть внутрь" : ""; b.style.background = ""; }
     if(eId) { const e = document.getElementById(eId); if(e) e.style.display = "none"; }
-    v.minCameraOrbit = 'auto auto 0m';
-    v.maxCameraOrbit = 'auto auto auto';
-    v.cameraTarget = 'auto auto auto';
-    v.cameraOrbit = states[vId].orbit;
-    v.fieldOfView = '10deg';
-    v.exposure = 1.3;    
+        // Когда окно закрывается, принудительно возвращаем шасси  
+    setGearVisibility(true); 
     // Сбрасываем статус ночи, если он был включен
     const nightSwitch = document.querySelector('#night-checkbox');
     if (nightSwitch) nightSwitch.checked = false; // Выключаем тумблер визуально    
@@ -562,6 +571,21 @@ function exitModel(vId, bId, eId = null) {
     // Гасим свет в окнах
     const winMat = v.model.materials.find(m => m.name === 'Material.001');
     if (winMat) winMat.setEmissiveFactor();
+    const rocketMat = v.model.materials.find(m => m.name === 'Spo15Rhaw1Mtl.001');
+    if (rocketMat) {
+        // Возвращаем видимость и выключаем свечение
+        rocketMat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]);
+        rocketMat.setAlphaMode('OPAQUE');
+        rocketMat.setEmissiveFactor([0, 0, 0]);
+    }
+    resetRocketsState(vId);
+    v.resetTurntableRotation();
+    v.minCameraOrbit = 'auto auto 0m';
+    v.maxCameraOrbit = 'auto auto auto';
+    v.cameraTarget = 'auto auto auto';
+    v.cameraOrbit = states[vId].orbit;
+    v.fieldOfView = '30deg';
+    v.exposure = 1.3;  
     v.setAttribute('auto-rotate', '');
     v.autoRotate = true;
     v.disablePan = false; 
@@ -630,8 +654,7 @@ function toggleView() {
     else enterSalon();
 }
 
-</script>
-<script>
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Поиск ссылки "История и факты" по точному тексту
     const allLinks = document.querySelectorAll('a');
@@ -691,8 +714,7 @@ document.querySelectorAll('model-viewer').forEach(viewer => {
         }
     });
 });
-</script>    
-<script>    
+  
 
 // Объект для хранения таймеров аннотаций (чтобы можно было остановить)
 const activeAnnotationTimers = {};
@@ -709,7 +731,7 @@ function startAnnotationCycle(viewerId) {
 
     let currentIndex = 0;
     let isUserInteracting = false;
-    let resumeTimeout = null;
+   // let resumeTimeout = null;
 
     const showNext = () => {
         if (viewer.offsetParent === null) { 
@@ -747,6 +769,7 @@ function startAnnotationCycle(viewerId) {
     activeAnnotationTimers[viewerId] = setInterval(showNext, 5000);
 
    viewer.addEventListener('pointerdown', () => {
+        if (isFireMode) return; 
         isUserInteracting = true;
         
         // 1. ПРИНУДИТЕЛЬНО ВЫКЛЮЧАЕМ авторотацию самой модели
@@ -757,10 +780,11 @@ function startAnnotationCycle(viewerId) {
         viewer.classList.remove('autocycle-active');
         document.querySelectorAll('.active').forEach(h => h.classList.remove('active'));
 
-        clearTimeout(resumeTimeout);
+        clearTimeout(globalResumeTimeout);
         
         // 3. Ждем ровно 10 секунд тишины
-        resumeTimeout = setTimeout(() => {
+        globalResumeTimeout = setTimeout(() => {
+            if (isFireMode) return; 
             isUserInteracting = false;
             
             // 4. ПРИНУДИТЕЛЬНО ВКЛЮЧАЕМ авторотацию обратно
@@ -801,6 +825,7 @@ nightSwitch.addEventListener('change', (event) => {
   }
 
   const isNight = event.target.checked;
+  setGearVisibility(!isNight); 
   const windowMaterial = viewer.model.materials.find(m => m.name === 'Material.001');
   
   if (isNight) {
@@ -818,7 +843,148 @@ nightSwitch.addEventListener('change', (event) => {
   }
 });
 
+/**
+ * Управляет видимостью шасси (Material.020)
+ * @param {boolean} show - true (показать/день), false (скрыть/ночь)
+ */
+function setGearVisibility(show) {
+  const viewer = document.getElementById('modyak40');
+  if (!viewer || !viewer.model) return;
 
+  const gearMaterial = viewer.model.materials.find(m => m.name === 'Material.020');
+  
+  if (gearMaterial) {
+    const color = gearMaterial.pbrMetallicRoughness.baseColorFactor;
+    
+    if (show) {
+      // ВОЗВРАЩАЕМ ШАССИ
+      gearMaterial.pbrMetallicRoughness.setBaseColorFactor([color[0], color[1], color[2], 1]);
+      gearMaterial.setAlphaMode('OPAQUE');
+      gearMaterial.pbrMetallicRoughness.setMetallicFactor(1); 
+    } else {
+      // СКРЫВАЕМ 
+      gearMaterial.pbrMetallicRoughness.setBaseColorFactor([color[0], color[1], color[2], 0]);
+      gearMaterial.setAlphaMode('BLEND');
+      gearMaterial.pbrMetallicRoughness.setMetallicFactor(0); // убираем блики
+    }
+  }
+}
+
+// Подгружаем звук modsu25
+
+const launchSound = new Audio('sound_launch.mp3'); 
+let reloadTimerF = null; 
+function updateButtonUI(text, isReload) {
+  const btn = document.getElementById('fire-control');
+  if (btn) {
+    btn.innerText = text;
+    if (isReload) btn.classList.add('reloading');
+    else btn.classList.remove('reloading');
+  }
+}
+function resetRocketsState(vId) {
+    const v = document.getElementById(vId);
+    const mat = v.model ? v.model.materials.find(m => m.name === 'Spo15Rhaw1Mtl.001') : null;
+    
+    if (mat) {
+        mat.setAlphaMode('OPAQUE');
+        mat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]);
+        mat.setEmissiveFactor([0, 0, 0]);
+    }
+
+    const ids = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8'];
+    ids.forEach(id => {
+        const t = document.getElementById(id);
+        if (t) {
+            t.style.transition = "none"; 
+            t.classList.remove('launch');
+            t.style.opacity = "0";
+        }
+    });
+
+    rocketsLaunched = false;
+    updateButtonUI("+", false);
+    // Удаляем класс reloading с кнопки, если он там был
+    const btn = document.getElementById('fire-control');
+    if (btn) btn.classList.remove('reloading');
+}
+
+function handleFireClick(event) {
+  if (event) event.stopPropagation();
+  const viewer = document.getElementById('modsu25');
+  const mat = viewer.model ? viewer.model.materials.find(m => m.name === 'Spo15Rhaw1Mtl.001') : null;
+  const trails = ['t1','t2','t3','t4','t5','t6','t7','t8'].map(id => document.getElementById(id));
+if (states.modsu25.isInside) {
+      console.log("Блокировка: нельзя стрелять изнутри!");
+      return; 
+  }
+  if (!rocketsLaunched) {
+    // --- ПУСК ---
+    isFireMode = true;
+    // Сбрасываем старый таймер на всякий случай
+    clearTimeout(reloadTimerF);
+    stopAllAnnotations();
+
+    // 1. УДАЛЯЕМ АТРИБУТЫ (Очищаем "память" HTML)
+    viewer.removeAttribute('camera-orbit'); 
+    viewer.removeAttribute('auto-rotate');
+    viewer.autoRotate = false;
+     viewer.resetTurntableRotation();
+     viewer.jumpCameraToGoal();
+
+    // 2. ФОРСИРОВАННЫЙ ПРЫЖОК (Через микро-паузу)
+    // Это единственный способ заставить модель проигнорировать угол остановки
+    setTimeout(() => {
+      viewer.cameraOrbit = "130.5deg 73.44deg 22.14m";
+      viewer.cameraTarget = "0m 0.5m 0m";
+      viewer.fieldOfView = "30deg";
+      viewer.jumpCameraToGoal(); // Мгновенное перемещение
+
+      console.log("Камера принудительно зафиксирована");
+
+      // 3. ЭФФЕКТЫ РАКЕТ
+      setTimeout(() => {
+        if (mat) {
+          mat.setAlphaMode('OPAQUE');
+          mat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]);
+          mat.setEmissiveFactor([6.0, 1.2, 0.0]);
+        }
+        trails.forEach((t, i) => {
+          if (t) {
+            t.style.opacity = "1";
+            setTimeout(() => t.classList.add('launch'), i * 50);
+          }
+        });
+        setTimeout(() => {
+          if (mat) {
+            mat.setAlphaMode('BLEND');
+            mat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 0]);
+          }
+          rocketsLaunched = true;
+          updateButtonUI("ЗАРЯД", true);
+        }, 200);
+      }, 400);
+    }, 50); // Пауза 50мс нужна, чтобы модель успела обработать удаление атрибутов
+reloadTimerF = setTimeout(() => {
+      if (rocketsLaunched) { 
+        console.log("Автоматическая перезарядка...");
+        handleFireClick(); // Рекурсивно вызываем эту же функцию
+      }
+    }, 8000); // 8000 мс = 8 секунд
+
+  } else {
+    // --- ПЕРЕЗАРЯДКА (ручная или автоматическая) ---
+    isFireMode = false;
+    
+    // 3. ОБЯЗАТЕЛЬНО очищаем таймер, чтобы он не сработал позже
+    clearTimeout(reloadTimerF);
+    resetRocketsState('modsu25');
+    
+    // Возвращаем авторотацию
+    viewer.autoRotate = true;
+    startAnnotationCycle('modsu25'); 
+  }
+}
 </script>    
 </body>
 </html>
