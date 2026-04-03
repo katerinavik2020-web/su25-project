@@ -25,6 +25,12 @@ const data={
     text: 'Ми-2 - легкий многоцелевой вертолёт, ставший первым советским серийным вертолётом с газотурбинными двигателями.',
     history: 'Разработан в ОКБ М. Л. Миля в начале 1960-х годов. Вертолёт уникален тем, что при советской разработке всё его серийное производство было сосредоточено в Польше. Широко применялся в сельском хозяйстве, санитарной авиации и обучении пилотов.',
     exhibit: 'Используется на учебном аэродроме МАИ для практических занятий студентов факультета №1.'
+  },
+  kvant: {
+    title: 'Квант (МАИ-890)',
+    text: 'Легкий многоцелевой самолет-биплан, разработанный в ОСКБЭС МАИ.',
+    history: 'Проектирование началось в 1987 году. Самолет создавался как очень простая, надежная и маневренная машина. Он уникален тем, что при малых размерах обладает полноценным управлением и прочностью взрослого самолета. МАИ-890 прошел сертификацию и выпускался серийно.',
+    exhibit: 'Натурный образец находится в ангаре кафедры 101 и на учебном аэродроме МАИ.'
   }
 };
 
@@ -70,6 +76,14 @@ function openModal(k){
     <tr><th>📏 Диаметр несущего винта</th><td>14,5 м</td></tr>
     <tr><th>⚖️ Макс. взлётная масса</th><td>3 550 кг</td></tr>
     <tr><th>⚔️ Назначение</th><td>Многоцелевой (учебный, санитарный, с/х)</td></tr>
+  </table>`,
+  kvant: `<table class="spec-table">
+    <tr><th>👨‍✈️ Экипаж</th><td>1 человек</td></tr>
+    <tr><th>🚀 Максимальная скорость</th><td>160 км/ч</td></tr>
+    <tr><th>🛫 Дальность полёта</th><td>до 400 км</td></tr>
+    <tr><th>📏 Размах крыла</th><td>6,7 м</td></tr>
+    <tr><th>⚖️ Макс. взлётная масса</th><td>540 кг</td></tr>
+    <tr><th>⚔️ Особенность</th><td>Короткий разбег и посадка на неподготовленные площадки</td></tr>
   </table>`
 };
 const pStyle = `style="text-align: justify; text-indent: 25px; hyphens: auto; margin-bottom: 10px;"`;
@@ -100,7 +114,9 @@ const skipBtn = document.querySelector('#skip-video');
 const states = {
     modsu33: { isInside: false, isTextured: false, orbit: '52.32deg 52.35deg 44.54m' },
     modyak40: { isInside: false, isTextured: false, orbit: '180deg 75deg auto' },
-    modsu25: { isInside: false, isTextured: false, orbit: '490.4deg 73.01deg 22.14m' }
+    modsu25: { isInside: false, isTextured: false, orbit: '490.4deg 73.01deg 22.14m' },
+    modmi2:   { isInside: false, isTextured: false, orbit: '90deg 80deg 15m' },
+    modkvant: { isInside: false, isTextured: false, orbit: '180deg 75deg 10m' }
 };
 
 // --- 2. ПОДГОТОВКА ВСЕХ МОДЕЛЕЙ (ПРОЗРАЧНОСТЬ И СЕРЫЙ ЦВЕТ) ---
@@ -118,7 +134,7 @@ function setupModelLoad(id) {
         });
     });
 }
-['modsu33', 'modsu25', 'modyak40'].forEach(setupModelLoad);
+['modsu33', 'modsu25', 'modyak40', 'modmi2', 'modkvant'].forEach(setupModelLoad);
 
 // --- 3. ПЛАВНОЕ ПРОЯВЛЕНИЕ ТЕКСТУР (3 СЕК) ---
 function smoothFadeIn(viewerId, btnId) {
