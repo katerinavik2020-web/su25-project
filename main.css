@@ -1,4 +1,4 @@
-/* Сброс отступов */
+/* Г‘ГЎГ°Г®Г± Г®ГІГ±ГІГіГЇГ®Гў */
 * {
 margin: 0;
 padding: 0;
@@ -6,7 +6,7 @@ box-sizing: border-box;
 }
 
 
-/* Делаем 3D плеер на весь браузер */
+/* Г„ГҐГ«Г ГҐГ¬ 3D ГЇГ«ГҐГҐГ° Г­Г  ГўГҐГ±Гј ГЎГ°Г ГіГ§ГҐГ° */
 model-viewer {
 height: 100vh;
 width: 100%;
@@ -15,18 +15,18 @@ filter: brightness(1.1) contrast(1.05);
 }
 
 a {
-    color: #cfe2ff; /* Цвет обычных ссылок */
-    text-decoration: none; /* Убрать подчеркивание (опционально) */
+    color: #cfe2ff; /* Г–ГўГҐГІ Г®ГЎГ»Г·Г­Г»Гµ Г±Г±Г»Г«Г®ГЄ */
+    text-decoration: none; /* Г“ГЎГ°Г ГІГј ГЇГ®Г¤Г·ГҐГ°ГЄГЁГўГ Г­ГЁГҐ (Г®ГЇГ¶ГЁГ®Г­Г Г«ГјГ­Г®) */
 }
 a:visited {
-    color: #cfa2ff; /* Цвет посещенных ссылок */
+    color: #cfa2ff; /* Г–ГўГҐГІ ГЇГ®Г±ГҐГ№ГҐГ­Г­Г»Гµ Г±Г±Г»Г«Г®ГЄ */
 }
 a:hover {
-    color: #0000ff; /* Цвет при наведении курсора */
-    text-decoration: underline; /* Подчеркивание при наведении */
+    color: #0000ff; /* Г–ГўГҐГІ ГЇГ°ГЁ Г­Г ГўГҐГ¤ГҐГ­ГЁГЁ ГЄГіГ°Г±Г®Г°Г  */
+    text-decoration: underline; /* ГЏГ®Г¤Г·ГҐГ°ГЄГЁГўГ Г­ГЁГҐ ГЇГ°ГЁ Г­Г ГўГҐГ¤ГҐГ­ГЁГЁ */
 }
 a:active {
-    color: #00ff00; /* Цвет активной ссылки (при нажатии) */
+    color: #00ff00; /* Г–ГўГҐГІ Г ГЄГІГЁГўГ­Г®Г© Г±Г±Г»Г«ГЄГЁ (ГЇГ°ГЁ Г­Г Г¦Г ГІГЁГЁ) */
 
 }
 
@@ -48,7 +48,7 @@ a:active {
   height: 20px;
   border-radius: 50%;
   border: none;
-  background-color: #007bff; /* Синий цвет */
+  background-color: #007bff; /* Г‘ГЁГ­ГЁГ© Г¶ГўГҐГІ */
   box-shadow: 0 0 0 rgba(0, 123, 255, 0.4);
   animation: pulse-blue 2s infinite;
   cursor: pointer;
@@ -57,10 +57,10 @@ a:active {
 
 
 .close-model-btn {
-  position: absolute; /* Относительно modal-content */
+  position: absolute; /* ГЋГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г® modal-content */
   top: 20px;
   right: 20px;
-  z-index: 1000; /* Всегда поверх модели */
+  z-index: 1000; /* Г‚Г±ГҐГЈГ¤Г  ГЇГ®ГўГҐГ°Гµ Г¬Г®Г¤ГҐГ«ГЁ */
   background: rgba(0, 0, 0, 0.6);
   color: white;
   padding: 10px 20px;
@@ -71,28 +71,28 @@ a:active {
 }
 
 .close-model-btn:hover {
-  background: rgba(255, 71, 87, 1); /* Краснеет при наведении */
+  background: rgba(255, 71, 87, 1); /* ГЉГ°Г Г±Г­ГҐГҐГІ ГЇГ°ГЁ Г­Г ГўГҐГ¤ГҐГ­ГЁГЁ */
 }
 
-/* Скрываем хотспот, когда мы в кабине  */
+/* Г‘ГЄГ°Г»ГўГ ГҐГ¬ ГµГ®ГІГ±ГЇГ®ГІ, ГЄГ®ГЈГ¤Г  Г¬Г» Гў ГЄГ ГЎГЁГ­ГҐ  */
 .inside-mode .cabin-hotspot {
   display: none;
 }
 
 
 #modsu33 [slot^="hotspot"] {
-  display: none; /* Скрыты, пока не проявятся текстуры */
+  display: none; /* Г‘ГЄГ°Г»ГІГ», ГЇГ®ГЄГ  Г­ГҐ ГЇГ°Г®ГїГўГїГІГ±Гї ГІГҐГЄГ±ГІГіГ°Г» */
   position: relative; 
   border: none;
   cursor: pointer;
   outline: none;
   padding: 0;
   margin: 0;
-  /* Центрируем кнопку в 3D точке, это свойство нельзя перебивать! */
+  /* Г–ГҐГ­ГІГ°ГЁГ°ГіГҐГ¬ ГЄГ­Г®ГЇГЄГі Гў 3D ГІГ®Г·ГЄГҐ, ГЅГІГ® Г±ГўГ®Г©Г±ГІГўГ® Г­ГҐГ«ГјГ§Гї ГЇГҐГ°ГҐГЎГЁГўГ ГІГј! */
   transform: translate(-50%, -50%); 
 }
 
-/* ИКОНКА КАБИНЫ */
+/* Г€ГЉГЋГЌГЉГЂ ГЉГЂГЃГ€ГЌГ› */
 #cabin-trigger {
   width: 40px; 
   height: 40px;
@@ -104,7 +104,7 @@ a:active {
   transition: opacity 0.3s;
 }
 
-/* СОСТОЯНИЕ "ВНУТРИ" (Надпись вместо иконки) */
+/* Г‘ГЋГ‘Г’ГЋГџГЌГ€Г… "Г‚ГЌГ“Г’ГђГ€" (ГЌГ Г¤ГЇГЁГ±Гј ГўГ¬ГҐГ±ГІГ® ГЁГЄГ®Г­ГЄГЁ) */
 #cabin-trigger.is-inside {
   width: auto !important;
   height: auto !important;
@@ -134,25 +134,25 @@ a:active {
   white-space: nowrap;
 }
 
-/* ОРАНЖЕВЫЙ КВАДРАТ (Катапульта) */
+/* ГЋГђГЂГЌГ†Г…Г‚Г›Г‰ ГЉГ‚ГЂГ„ГђГЂГ’ (ГЉГ ГІГ ГЇГіГ«ГјГІГ ) */
 #eject-button {
-  /* Эти три строки критически важны для "прилипания" */
+  /* ГќГІГЁ ГІГ°ГЁ Г±ГІГ°Г®ГЄГЁ ГЄГ°ГЁГІГЁГ·ГҐГ±ГЄГЁ ГўГ Г¦Г­Г» Г¤Г«Гї "ГЇГ°ГЁГ«ГЁГЇГ Г­ГЁГї" */
   position: absolute; 
   top: 0; 
   left: 0;  
-  /* Центрируем в 3D точке */
+  /* Г–ГҐГ­ГІГ°ГЁГ°ГіГҐГ¬ Гў 3D ГІГ®Г·ГЄГҐ */
   transform: translate(-50%, -50%); 
   
-  display: none; /* Пока не вошли в кабину */
+  display: none; /* ГЏГ®ГЄГ  Г­ГҐ ГўГ®ГёГ«ГЁ Гў ГЄГ ГЎГЁГ­Гі */
   width: 60px;
   height: 60px;
   background-color: rgba(255, 120, 0, 0.9) !important;
   border: 2px solid black;
-  z-index: 10; /* Чтобы был поверх модели */
+  z-index: 10; /* Г—ГІГ®ГЎГ» ГЎГ»Г« ГЇГ®ГўГҐГ°Гµ Г¬Г®Г¤ГҐГ«ГЁ */
 }
 
 
-/* Эффект пульсации (расширяющиеся круги) */
+/* ГќГґГґГҐГЄГІ ГЇГіГ«ГјГ±Г Г¶ГЁГЁ (Г°Г Г±ГёГЁГ°ГїГѕГ№ГЁГҐГ±Гї ГЄГ°ГіГЈГЁ) */
 @keyframes pulse-blue {
   0% {
     transform: scale(0.95);
@@ -170,41 +170,41 @@ a:active {
 
 
 
-/* Анимация самой кнопки (легкая пульсация) */
+/* ГЂГ­ГЁГ¬Г Г¶ГЁГї Г±Г Г¬Г®Г© ГЄГ­Г®ГЇГЄГЁ (Г«ГҐГЈГЄГ Гї ГЇГіГ«ГјГ±Г Г¶ГЁГї) */
 @keyframes button-pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
 
-/* Анимация расходящейся волны */
+/* ГЂГ­ГЁГ¬Г Г¶ГЁГї Г°Г Г±ГµГ®Г¤ГїГ№ГҐГ©Г±Гї ГўГ®Г«Г­Г» */
 @keyframes echo-wave {
   0% { transform: scale(1); opacity: 0.8; }
   100% { transform: scale(1.6); opacity: 0; }
 }
 
 .blink-active {
-  position: relative; /* Нужно для позиционирования волны */
+  position: relative; /* ГЌГіГ¦Г­Г® Г¤Г«Гї ГЇГ®Г§ГЁГ¶ГЁГ®Г­ГЁГ°Г®ГўГ Г­ГЁГї ГўГ®Г«Г­Г» */
   animation: button-pulse 0.6s ease-in-out 5;
 }
 
-/* Создаем "волну" через псевдоэлемент */
+/* Г‘Г®Г§Г¤Г ГҐГ¬ "ГўГ®Г«Г­Гі" Г·ГҐГ°ГҐГ§ ГЇГ±ГҐГўГ¤Г®ГЅГ«ГҐГ¬ГҐГ­ГІ */
 .blink-active::after {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  border-radius: inherit; /* Копирует скругление кнопки */
-  border: 2px solid #fff; /* Цвет волны (белый или желтый) */
+  border-radius: inherit; /* ГЉГ®ГЇГЁГ°ГіГҐГІ Г±ГЄГ°ГіГЈГ«ГҐГ­ГЁГҐ ГЄГ­Г®ГЇГЄГЁ */
+  border: 2px solid #fff; /* Г–ГўГҐГІ ГўГ®Г«Г­Г» (ГЎГҐГ«Г»Г© ГЁГ«ГЁ Г¦ГҐГ«ГІГ»Г©) */
   animation: echo-wave 0.6s ease-out 5;
 }
 
-/* Кнопка Пропустить внутри видео */
+/* ГЉГ­Г®ГЇГЄГ  ГЏГ°Г®ГЇГіГ±ГІГЁГІГј ГўГ­ГіГІГ°ГЁ ГўГЁГ¤ГҐГ® */
 #skip-video {
     position: absolute;
     bottom: 40px;
     right: 40px;
     padding: 12px 24px;
-    background: rgba(255, 120, 0, 0.8); /* Оранжевая в стиле проекта */
+    background: rgba(255, 120, 0, 0.8); /* ГЋГ°Г Г­Г¦ГҐГўГ Гї Гў Г±ГІГЁГ«ГҐ ГЇГ°Г®ГҐГЄГІГ  */
     color: white;
     border: none;
     border-radius: 50px;
@@ -213,11 +213,11 @@ a:active {
     z-index: 10001;
 }  
 
-/* Класс для отключения прокрутки фона */
+/* ГЉГ«Г Г±Г± Г¤Г«Гї Г®ГІГЄГ«ГѕГ·ГҐГ­ГЁГї ГЇГ°Г®ГЄГ°ГіГІГЄГЁ ГґГ®Г­Г  */
 .no-scroll {
   overflow: hidden !important;
   height: 100%;
-  /* Чтобы страница не "прыгала" из-за исчезновения полосы прокрутки */
+  /* Г—ГІГ®ГЎГ» Г±ГІГ°Г Г­ГЁГ¶Г  Г­ГҐ "ГЇГ°Г»ГЈГ Г«Г " ГЁГ§-Г§Г  ГЁГ±Г·ГҐГ§Г­Г®ГўГҐГ­ГЁГї ГЇГ®Г«Г®Г±Г» ГЇГ°Г®ГЄГ°ГіГІГЄГЁ */
   padding-right: 15px; 
 }
 
@@ -233,7 +233,7 @@ a:active {
     pointer-events: auto !important;
     z-index: 999;
 }
-/* ЕДИНЫЙ СТИЛЬ ДЛЯ АННОТАЦИЙ (Hotspots) */
+/* Г…Г„Г€ГЌГ›Г‰ Г‘Г’Г€Г‹Гњ Г„Г‹Гџ ГЂГЌГЌГЋГ’ГЂГ–Г€Г‰ (Hotspots) */
 
 .hotspot_a {
   width: 14px;
@@ -244,26 +244,26 @@ a:active {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   padding: 0;
-  display: block !important; /* Проявляем, если были скрыты */
+  display: block !important; /* ГЏГ°Г®ГїГўГ«ГїГҐГ¬, ГҐГ±Г«ГЁ ГЎГ»Г«ГЁ Г±ГЄГ°Г»ГІГ» */
  /* z-index: 999;*/
   
-  /* КРИТИЧЕСКИ ВАЖНО: Центрирование точки + плавный переход */
+  /* ГЉГђГ€Г’Г€Г—Г…Г‘ГЉГ€ Г‚ГЂГ†ГЌГЋ: Г–ГҐГ­ГІГ°ГЁГ°Г®ГўГ Г­ГЁГҐ ГІГ®Г·ГЄГЁ + ГЇГ«Г ГўГ­Г»Г© ГЇГҐГ°ГҐГµГ®Г¤ */
   position: absolute;
   transform: translate(-50%, -50%) scale(1);
   transition: background-color 0.3s, transform 0.3s;
 }
 
-/* Эффект при наведении на точку */
+/* ГќГґГґГҐГЄГІ ГЇГ°ГЁ Г­Г ГўГҐГ¤ГҐГ­ГЁГЁ Г­Г  ГІГ®Г·ГЄГі */
 .hotspot_a:hover, 
 .hotspot_a:focus {
   background-color: rgba(255, 255, 255, 0.9);
   border-color: rgba(255, 255, 255, 1);
-  /* Сохраняем центрирование и добавляем масштаб */
+  /* Г‘Г®ГµГ°Г Г­ГїГҐГ¬ Г¶ГҐГ­ГІГ°ГЁГ°Г®ГўГ Г­ГЁГҐ ГЁ Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ Г¬Г Г±ГёГІГ ГЎ */
   transform: translate(-50%, -50%) scale(1.3);
   outline: none;
 }
 
-/* Стиль всплывающего текста */
+/* Г‘ГІГЁГ«Гј ГўГ±ГЇГ«Г»ГўГ ГѕГ№ГҐГЈГ® ГІГҐГЄГ±ГІГ  */
 .annotation {
   visibility: hidden;
   opacity: 0;
@@ -282,13 +282,13 @@ a:active {
   text-align: center;
   width: max-content;
   max-width: 280px;
-  border: 1px solid rgba(77, 163, 255, 0.3); /* Цвет из вашего проекта */
+  border: 1px solid rgba(77, 163, 255, 0.3); /* Г–ГўГҐГІ ГЁГ§ ГўГ ГёГҐГЈГ® ГЇГ°Г®ГҐГЄГІГ  */
   z-index: 1000;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
 
-/* Показ текста при наведении */
+/* ГЏГ®ГЄГ Г§ ГІГҐГЄГ±ГІГ  ГЇГ°ГЁ Г­Г ГўГҐГ¤ГҐГ­ГЁГЁ */
 .hotspot_a:hover .annotation,
 .hotspot_a:focus .annotation,
 .cabin-hotspot:hover .annotation,
@@ -300,16 +300,16 @@ a:active {
 #cabin-trigger:hover, 
 #cabin-trigger:active,
 #cabin-trigger:focus-within {
-  opacity: 1 !important; /* Убираем прозрачность полностью */
-  transition: opacity 0.2s ease-in-out; /* Плавный переход */
+  opacity: 1 !important; /* Г“ГЎГЁГ°Г ГҐГ¬ ГЇГ°Г®Г§Г°Г Г·Г­Г®Г±ГІГј ГЇГ®Г«Г­Г®Г±ГІГјГѕ */
+  transition: opacity 0.2s ease-in-out; /* ГЏГ«Г ГўГ­Г»Г© ГЇГҐГ°ГҐГµГ®Г¤ */
 }
 
-/* Настройка аннотации внутри, чтобы она была четкой */
+/* ГЌГ Г±ГІГ°Г®Г©ГЄГ  Г Г­Г­Г®ГІГ Г¶ГЁГЁ ГўГ­ГіГІГ°ГЁ, Г·ГІГ®ГЎГ» Г®Г­Г  ГЎГ»Г«Г  Г·ГҐГІГЄГ®Г© */
 #cabin-trigger:hover .annotation {
   visibility: visible;
   opacity: 1 !important;
-  background-color: rgba(10, 25, 45, 0.95) !important; /* Плотный фон */
-  filter: none !important; /* Убираем размытие, если оно было */
+  background-color: rgba(10, 25, 45, 0.95) !important; /* ГЏГ«Г®ГІГ­Г»Г© ГґГ®Г­ */
+  filter: none !important; /* Г“ГЎГЁГ°Г ГҐГ¬ Г°Г Г§Г¬Г»ГІГЁГҐ, ГҐГ±Г«ГЁ Г®Г­Г® ГЎГ»Г«Г® */
 }
 
 @media (max-width: 600px) {
@@ -320,7 +320,7 @@ a:active {
 }
 
 
-/* Универсальный селектор для всех типов хотспотов в активном состоянии */
+/* Г“Г­ГЁГўГҐГ°Г±Г Г«ГјГ­Г»Г© Г±ГҐГ«ГҐГЄГІГ®Г° Г¤Г«Гї ГўГ±ГҐГµ ГІГЁГЇГ®Гў ГµГ®ГІГ±ГЇГ®ГІГ®Гў Гў Г ГЄГІГЁГўГ­Г®Г¬ Г±Г®Г±ГІГ®ГїГ­ГЁГЁ */
 .hotspot_a.active, 
 .cabin-hotspot.active, 
 .cabin-area.active {
@@ -337,9 +337,9 @@ a:active {
 }
 
 
-/* Панель в левом верхнем углу */
+/* ГЏГ Г­ГҐГ«Гј Гў Г«ГҐГўГ®Г¬ ГўГҐГ°ГµГ­ГҐГ¬ ГіГЈГ«Гі */
 #info-panel {
-  /* Фиксируем в окне браузера, чтобы модалка её не перекрывала */
+  /* Г”ГЁГЄГ±ГЁГ°ГіГҐГ¬ Гў Г®ГЄГ­ГҐ ГЎГ°Г ГіГ§ГҐГ°Г , Г·ГІГ®ГЎГ» Г¬Г®Г¤Г Г«ГЄГ  ГҐВё Г­ГҐ ГЇГҐГ°ГҐГЄГ°Г»ГўГ Г«Г  */
   position: fixed !important; 
   top: 100px !important;
   left: 30px !important;
@@ -347,27 +347,27 @@ a:active {
   width: 300px !important;
   min-height: 60px !important;
   
-  /* Цвета и дизайн */
+  /* Г–ГўГҐГІГ  ГЁ Г¤ГЁГ§Г Г©Г­ */
   background: rgba(10, 25, 45, 0.95) !important;
   color: #ffffff !important;
   border-left: 5px solid #4da3ff !important;
   border-radius: 8px !important;
   padding: 20px !important;
   
-  /* Слой — максимально высокий */
+  /* Г‘Г«Г®Г© В— Г¬Г ГЄГ±ГЁГ¬Г Г«ГјГ­Г® ГўГ»Г±Г®ГЄГЁГ© */
   z-index: 999999 !important; 
   
-  /* Отображение */
+  /* ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ */
   display: block !important;
   pointer-events: none;
   
-  /* Плавность */
+  /* ГЏГ«Г ГўГ­Г®Г±ГІГј */
   opacity: 0;
   transform: translateX(-30px);
   transition: opacity 0.5s ease, transform 0.5s ease !important;
 }
 
-/* Состояние при работе цикла */
+/* Г‘Г®Г±ГІГ®ГїГ­ГЁГҐ ГЇГ°ГЁ Г°Г ГЎГ®ГІГҐ Г¶ГЁГЄГ«Г  */
 #info-panel.visible {
   opacity: 1 !important;
   transform: translateX(0) !important;
@@ -380,19 +380,19 @@ a:active {
   line-height: 1.5 !important;
 }
 
-/* Скрываем штатные аннотации при авто-цикле */
+/* Г‘ГЄГ°Г»ГўГ ГҐГ¬ ГёГІГ ГІГ­Г»ГҐ Г Г­Г­Г®ГІГ Г¶ГЁГЁ ГЇГ°ГЁ Г ГўГІГ®-Г¶ГЁГЄГ«ГҐ */
 .autocycle-active .annotation {
   display: none !important;
 }
 
 
-/* При этом обычный hover (когда юзер сам навел) должен работать */
+/* ГЏГ°ГЁ ГЅГІГ®Г¬ Г®ГЎГ»Г·Г­Г»Г© hover (ГЄГ®ГЈГ¤Г  ГѕГ§ГҐГ° Г±Г Г¬ Г­Г ГўГҐГ«) Г¤Г®Г«Г¦ГҐГ­ Г°Г ГЎГ®ГІГ ГІГј */
 .hotspot_a:hover .annotation, 
 .cabin-hotspot:hover .annotation {
   display: block !important;
 }
 
-/* Контейнер загрузчика */
+/* ГЉГ®Г­ГІГҐГ©Г­ГҐГ° Г§Г ГЈГ°ГіГ§Г·ГЁГЄГ  */
 .custom-loader {
   display: flex;
   flex-direction: column;
@@ -400,7 +400,7 @@ a:active {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: rgba(10, 25, 45, 0.9); /* Твой основной цвет фона */
+  background-color: rgba(10, 25, 45, 0.9); /* Г’ГўГ®Г© Г®Г±Г­Г®ГўГ­Г®Г© Г¶ГўГҐГІ ГґГ®Г­Г  */
   position: absolute;
   top: 0;
   left: 0;
@@ -408,7 +408,7 @@ a:active {
   transition: opacity 0.5s ease;
 }
 
-/* Текст */
+/* Г’ГҐГЄГ±ГІ */
 .loader-text {
   color: #4da3ff;
   font-family: sans-serif;
@@ -417,7 +417,7 @@ a:active {
   letter-spacing: 1px;
 }
 
-/* Сама полоса (фон) */
+/* Г‘Г Г¬Г  ГЇГ®Г«Г®Г±Г  (ГґГ®Г­) */
 .update-bar {
   width: 200px;
   height: 4px;
@@ -427,31 +427,31 @@ a:active {
   overflow: hidden;
 }
 
-/* Заполняющая часть полосы */
+/* Г‡Г ГЇГ®Г«Г­ГїГѕГ№Г Гї Г·Г Г±ГІГј ГЇГ®Г«Г®Г±Г» */
 .update-bar::before {
   content: "";
   display: block;
   position: absolute;
   top: 0;
   left: 0;
-  width: var(--progress, 0%); /* Управляется через JS */
+  width: var(--progress, 0%); /* Г“ГЇГ°Г ГўГ«ГїГҐГІГ±Гї Г·ГҐГ°ГҐГ§ JS */
   height: 100%;
   background: #4da3ff;
   box-shadow: 0 0 10px #4da3ff;
   transition: width 0.3s ease;
 }
 
-/* Скрываем загрузчик, когда модель готова */
+/* Г‘ГЄГ°Г»ГўГ ГҐГ¬ Г§Г ГЈГ°ГіГ§Г·ГЁГЄ, ГЄГ®ГЈГ¤Г  Г¬Г®Г¤ГҐГ«Гј ГЈГ®ГІГ®ГўГ  */
 .custom-loader.hidden {
   opacity: 0;
   pointer-events: none;
 }
 
-/* Стили для панели управления (переключателя) */
+/* Г‘ГІГЁГ«ГЁ Г¤Г«Гї ГЇГ Г­ГҐГ«ГЁ ГіГЇГ°Г ГўГ«ГҐГ­ГЁГї (ГЇГҐГ°ГҐГЄГ«ГѕГ·Г ГІГҐГ«Гї) */
 .control-panel {
   position: absolute;   
   top: 30px;          
-  left: 200px;
+  left: 100px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -491,24 +491,24 @@ input:checked + .slider { background-color: #ccc; }
 input:checked + .slider:before { transform: translateX(22px); }
 
 
-/* Общие стили для всех габаритов (Hotspots) */
+/* ГЋГЎГ№ГЁГҐ Г±ГІГЁГ«ГЁ Г¤Г«Гї ГўГ±ГҐГµ ГЈГ ГЎГ Г°ГЁГІГ®Гў (Hotspots) */
 .nav-light {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   border: none;
-  pointer-events: none; /* чтобы не мешали вращать модель */
-  opacity: 0;           /* днем они полностью скрыты */
+  pointer-events: none; /* Г·ГІГ®ГЎГ» Г­ГҐ Г¬ГҐГёГ Г«ГЁ ГўГ°Г Г№Г ГІГј Г¬Г®Г¤ГҐГ«Гј */
+  opacity: 0;           /* Г¤Г­ГҐГ¬ Г®Г­ГЁ ГЇГ®Г«Г­Г®Г±ГІГјГѕ Г±ГЄГ°Г»ГІГ» */
   transition: opacity 0.5s ease;
 }
 
-/* Показываем огни только когда у model-viewer есть класс .night-mode */
+/* ГЏГ®ГЄГ Г§Г»ГўГ ГҐГ¬ Г®ГЈГ­ГЁ ГІГ®Г«ГјГЄГ® ГЄГ®ГЈГ¤Г  Гі model-viewer ГҐГ±ГІГј ГЄГ«Г Г±Г± .night-mode */
 .night-mode .nav-light {
   opacity: 1;
 }
 
 
-/* Цвета и эффект свечения (Bloom) */
+/* Г–ГўГҐГІГ  ГЁ ГЅГґГґГҐГЄГІ Г±ГўГҐГ·ГҐГ­ГЁГї (Bloom) */
 .red { 
   background: #ff0000; 
   box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.8); 
@@ -525,10 +525,10 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 
 
-/* Анимация моргания (только для белого хвоста) */
+/* ГЂГ­ГЁГ¬Г Г¶ГЁГї Г¬Г®Г°ГЈГ Г­ГЁГї (ГІГ®Г«ГјГЄГ® Г¤Г«Гї ГЎГҐГ«Г®ГЈГ® ГµГўГ®Г±ГІГ ) */
 @keyframes aviation-blink {
-  0%, 85% { opacity: 0.2; transform: scale(0.8); } /* тускло большую часть времени */
-  92% { opacity: 1; transform: scale(1.3); }      /* резкая вспышка */
+  0%, 85% { opacity: 0.2; transform: scale(0.8); } /* ГІГіГ±ГЄГ«Г® ГЎГ®Г«ГјГёГіГѕ Г·Г Г±ГІГј ГўГ°ГҐГ¬ГҐГ­ГЁ */
+  92% { opacity: 1; transform: scale(1.3); }      /* Г°ГҐГ§ГЄГ Гї ГўГ±ГЇГ»ГёГЄГ  */
   100% { opacity: 0.2; transform: scale(0.8); }
 }
 
@@ -536,10 +536,10 @@ input:checked + .slider:before { transform: translateX(22px); }
   animation: aviation-blink 1.5s infinite ease-in-out;
 }
 
-/* Стили для гашетки пуска */
+/* Г‘ГІГЁГ«ГЁ Г¤Г«Гї ГЈГ ГёГҐГІГЄГЁ ГЇГіГ±ГЄГ  */
 #fire-control {
   position: absolute; bottom: 30px; left: 30px;
-  width: 85px; height: 85px; /* Немного увеличим для красоты */
+  width: 85px; height: 85px; /* ГЌГҐГ¬Г­Г®ГЈГ® ГіГўГҐГ«ГЁГ·ГЁГ¬ Г¤Г«Гї ГЄГ°Г Г±Г®ГІГ» */
   background: radial-gradient(circle at 30% 30%, #444, #111);
   border: 4px solid #222; border-radius: 50%;
   box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 0 10px rgba(0,0,0,0.5);
@@ -547,65 +547,65 @@ input:checked + .slider:before { transform: translateX(22px); }
   display: flex; align-items: center; justify-content: center;
   color: #fff; font-family: 'Courier New', monospace; font-weight: 900; font-size: 14px;
   z-index: 100; transition: all 0.3s;
-  overflow: hidden; /* Чтобы крест не вылезал за границы кнопки */
+  overflow: hidden; /* Г—ГІГ®ГЎГ» ГЄГ°ГҐГ±ГІ Г­ГҐ ГўГ»Г«ГҐГ§Г Г« Г§Г  ГЈГ°Г Г­ГЁГ¶Г» ГЄГ­Г®ГЇГЄГЁ */
 }
 
-/* Три кольца прицела (используем ::before и дополнительные тени) */
+/* Г’Г°ГЁ ГЄГ®Г«ГјГ¶Г  ГЇГ°ГЁГ¶ГҐГ«Г  (ГЁГ±ГЇГ®Г«ГјГ§ГіГҐГ¬ ::before ГЁ Г¤Г®ГЇГ®Г«Г­ГЁГІГҐГ«ГјГ­Г»ГҐ ГІГҐГ­ГЁ) */
 #fire-control::before {
   content: ''; 
   position: absolute; 
-  width: 35%; height: 35%; /* Внутреннее кольцо */
+  width: 35%; height: 35%; /* Г‚Г­ГіГІГ°ГҐГ­Г­ГҐГҐ ГЄГ®Г«ГјГ¶Г® */
   border: 1px solid rgba(255,255,255,0.4); 
   border-radius: 50%;
-  /* Рисуем среднее и внешнее кольца через box-shadow */
+  /* ГђГЁГ±ГіГҐГ¬ Г±Г°ГҐГ¤Г­ГҐГҐ ГЁ ГўГ­ГҐГёГ­ГҐГҐ ГЄГ®Г«ГјГ¶Г  Г·ГҐГ°ГҐГ§ box-shadow */
   box-shadow: 
     0 0 0 8px rgba(255,255,255,0.15), 
     0 0 0 18px rgba(255,255,255,0.05); 
 }
 
-/* Большой крестик на все кольца */
+/* ГЃГ®Г«ГјГёГ®Г© ГЄГ°ГҐГ±ГІГЁГЄ Г­Г  ГўГ±ГҐ ГЄГ®Г«ГјГ¶Г  */
 #fire-control::after {
   content: ''; 
   position: absolute; 
   width: 70%; height: 70%;
-  /* Рисуем крест с помощью двух тонких линий градиентом */
+  /* ГђГЁГ±ГіГҐГ¬ ГЄГ°ГҐГ±ГІ Г± ГЇГ®Г¬Г®Г№ГјГѕ Г¤ГўГіГµ ГІГ®Г­ГЄГЁГµ Г«ГЁГ­ГЁГ© ГЈГ°Г Г¤ГЁГҐГ­ГІГ®Г¬ */
   background: 
     linear-gradient(to right, transparent 48%, rgba(255,255,255,0.3) 49%, rgba(255,255,255,0.3) 51%, transparent 52%),
     linear-gradient(to bottom, transparent 48%, rgba(255,255,255,0.3) 49%, rgba(255,255,255,0.3) 51%, transparent 52%);
   pointer-events: none;
 }
 
-/* Текст (надпись) поверх всего */
+/* Г’ГҐГЄГ±ГІ (Г­Г Г¤ГЇГЁГ±Гј) ГЇГ®ГўГҐГ°Гµ ГўГ±ГҐГЈГ® */
 #fire-control {
   text-shadow: 0 0 5px #000;
 }
 
-/* Состояние "Идет перезарядка" */
+/* Г‘Г®Г±ГІГ®ГїГ­ГЁГҐ "Г€Г¤ГҐГІ ГЇГҐГ°ГҐГ§Г Г°ГїГ¤ГЄГ " */
 #fire-control.reloading {
   background: #1a1a1a;
-  color: #00ff00; /* Зеленый текст "ЗАРЯД" будет круто смотреться */
+  color: #00ff00; /* Г‡ГҐГ«ГҐГ­Г»Г© ГІГҐГЄГ±ГІ "Г‡ГЂГђГџГ„" ГЎГіГ¤ГҐГІ ГЄГ°ГіГІГ® Г±Г¬Г®ГІГ°ГҐГІГјГ±Гї */
   box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
   filter: brightness(0.8);
 }
 
 
-/* Сам след ракеты */
+/* Г‘Г Г¬ Г±Г«ГҐГ¤ Г°Г ГЄГҐГІГ» */
 .rocket-trail {
   display: block !important;
   position: absolute;
-  width: 400px; /* Еще длиннее */
-  height: 8px;  /* Толще */
-  /* Яркий градиент с белым ядром */
+  width: 400px; /* Г…Г№ГҐ Г¤Г«ГЁГ­Г­ГҐГҐ */
+  height: 8px;  /* Г’Г®Г«Г№ГҐ */
+  /* ГџГ°ГЄГЁГ© ГЈГ°Г Г¤ГЁГҐГ­ГІ Г± ГЎГҐГ«Г»Г¬ ГїГ¤Г°Г®Г¬ */
   background: linear-gradient(to left, rgba(255,100,0,0) 0%, #ff4500 30%, #fff 100%);
   border-radius: 4px;
   opacity: 0;
   pointer-events: none;
-  /* Свечение вокруг следа (делает его очень заметным) */
+  /* Г‘ГўГҐГ·ГҐГ­ГЁГҐ ГўГ®ГЄГ°ГіГЈ Г±Г«ГҐГ¤Г  (Г¤ГҐГ«Г ГҐГІ ГҐГЈГ® Г®Г·ГҐГ­Гј Г§Г Г¬ГҐГІГ­Г»Г¬) */
   box-shadow: 0 0 15px rgba(255, 69, 0, 0.8), 0 0 5px #fff;
   filter: blur(1px);
   z-index: 9999;
   
-  /* Начальная точка */
+  /* ГЌГ Г·Г Г«ГјГ­Г Гї ГІГ®Г·ГЄГ  */
   transform: translate(0, 0) scale(1);
   transition: transform 2.5s cubic-bezier(0.1, 0, 0.2, 1), opacity 0.3s;
 }
@@ -613,10 +613,10 @@ input:checked + .slider:before { transform: translateX(22px); }
 .rocket-trail.launch {
   opacity: 0;
   /* 
-     3500px — вперед вправо
-     1200px — значительно НИЖЕ (теперь должны пройти под носом)
-     scale(0.1) — уменьшение
-     rotate(25deg) — увеличили наклон самого следа
+     3500px В— ГўГЇГҐГ°ГҐГ¤ ГўГЇГ°Г ГўГ®
+     1200px В— Г§Г­Г Г·ГЁГІГҐГ«ГјГ­Г® ГЌГ€Г†Г… (ГІГҐГЇГҐГ°Гј Г¤Г®Г«Г¦Г­Г» ГЇГ°Г®Г©ГІГЁ ГЇГ®Г¤ Г­Г®Г±Г®Г¬)
+     scale(0.1) В— ГіГ¬ГҐГ­ГјГёГҐГ­ГЁГҐ
+     rotate(25deg) В— ГіГўГҐГ«ГЁГ·ГЁГ«ГЁ Г­Г ГЄГ«Г®Г­ Г±Г Г¬Г®ГЈГ® Г±Г«ГҐГ¤Г 
   */
   transform: translate(3500px, 1200px) scale(0.1) rotate(25deg);
   transition: transform 2.0s cubic-bezier(0.2, 0, 0.2, 1), opacity 1.0s;
@@ -626,23 +626,23 @@ input:checked + .slider:before { transform: translateX(22px); }
     height: 260px;
     border-radius: 18px;
     background: linear-gradient(135deg, var(--mai-blue-dark), var(--mai-blue-light));
-    /* Убрали flex, оставляем только это: */
+    /* Г“ГЎГ°Г Г«ГЁ flex, Г®Г±ГІГ ГўГ«ГїГҐГ¬ ГІГ®Г«ГјГЄГ® ГЅГІГ®: */
     position: relative !important; 
     overflow: hidden;
     cursor: pointer;
 }
 
-/* Сама модель должна занимать всё место внутри */
+/* Г‘Г Г¬Г  Г¬Г®Г¤ГҐГ«Гј Г¤Г®Г«Г¦Г­Г  Г§Г Г­ГЁГ¬Г ГІГј ГўГ±Вё Г¬ГҐГ±ГІГ® ГўГ­ГіГІГ°ГЁ */
 .model-placeholder model-viewer {
     width: 100%;
     height: 100%;
     display: block;
 }
 
-/* Надпись-подсказка */
+/* ГЌГ Г¤ГЇГЁГ±Гј-ГЇГ®Г¤Г±ГЄГ Г§ГЄГ  */
 .click-hint {
     position: absolute;
-    top: 20px; /* Опустим её вниз, чтобы не загораживала нос самолета */
+    top: 20px; /* ГЋГЇГіГ±ГІГЁГ¬ ГҐВё ГўГ­ГЁГ§, Г·ГІГ®ГЎГ» Г­ГҐ Г§Г ГЈГ®Г°Г Г¦ГЁГўГ Г«Г  Г­Г®Г± Г±Г Г¬Г®Г«ГҐГІГ  */
     left: 50%;
     transform: translateX(-50%);
     background: rgba(255, 255, 255, 0.15);
@@ -654,7 +654,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     font-size: 0.75rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
     white-space: nowrap;   
-    pointer-events: none; /* Важно, чтобы клик шел "сквозь" надпись на модель */
+    pointer-events: none; /* Г‚Г Г¦Г­Г®, Г·ГІГ®ГЎГ» ГЄГ«ГЁГЄ ГёГҐГ« "Г±ГЄГўГ®Г§Гј" Г­Г Г¤ГЇГЁГ±Гј Г­Г  Г¬Г®Г¤ГҐГ«Гј */
 }
 
 .all-models-btn {
@@ -681,7 +681,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 .nav-container {
     padding: 20px 40px;
-    position: sticky; /* Кнопка будет "плыть" при скролле сверху */
+    position: sticky; /* ГЉГ­Г®ГЇГЄГ  ГЎГіГ¤ГҐГІ "ГЇГ«Г»ГІГј" ГЇГ°ГЁ Г±ГЄГ°Г®Г«Г«ГҐ Г±ГўГҐГ°ГµГі */
     top: 0;
     background: linear-gradient(180deg, var(--mai-blue-dark), transparent);
 }
@@ -707,7 +707,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     background: var(--mai-accent);
     color: var(--mai-blue-dark);
     box-shadow: 0 0 20px rgba(77, 163, 255, 0.5);
-    transform: translateX(-5px); /* Легкое движение влево при наведении */
+    transform: translateX(-5px); /* Г‹ГҐГЈГЄГ®ГҐ Г¤ГўГЁГ¦ГҐГ­ГЁГҐ ГўГ«ГҐГўГ® ГЇГ°ГЁ Г­Г ГўГҐГ¤ГҐГ­ГЁГЁ */
 }
 
 .back-btn .arrow {
