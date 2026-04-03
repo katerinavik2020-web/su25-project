@@ -449,6 +449,9 @@ a:active {
 
 /* Стили для панели управления (переключателя) */
 .control-panel {
+  position: absolute;   
+  top: 30px;          
+  left: 200px;
   display: flex;
   align-items: center;
   gap: 12px;
