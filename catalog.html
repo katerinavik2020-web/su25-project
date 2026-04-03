@@ -58,57 +58,22 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
 </style>
 </head>
 <body>
-<header>
+<div class="nav-container">
+    <a href="index.html#_Коллекция_самолётов" class="back-btn">
+        <span class="arrow">←</span> На главную
+    </a>
+</div>
 <div>
-<h1>Виртуальный музей самолётов МАИ</h1>
-<p>Учебный веб‑проект, посвящённый истории авиационной техники</p>
-<div class="header-features">
-  <div class="feature">✈️ <span><a href="#_Коллекция_самолётов">Легендарные самолёты</a></span></div>
-  <div class="feature">📚 <span><a href="#_Коллекция_самолётов">История и факты</a></span></div>
-  <div class="feature">🎓 <span><a href="#_О_проекте">Учебный проект МАИ</a></span></div>
+<div class="audio-toggle" onclick="toggleAudio()">
+    <span id="speaker-icon">🔇</span>
+    <span id="speaker-text">Звук выкл.</span>
 </div>
-</div>
-</header>
 <section>
 <h2 class="section-title"><a name="_Коллекция_самолётов"></a>Коллекция самолётов</h2>
 <div class="gallery">
-<div class="card" style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal2')"><model-viewer src="model_yak40.glb" alt="3D модель"  poster="poster_yak40.webp" auto-rotate interaction-prompt="none" loading="lazy" power-preference="low-power" minimum-render-scale="0.5" camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer><div class="click-hint">Нажмите для просмотра 3D</div></div><h3>Як-40</h3><p style="opacity:.85;font-size:.95rem">Региональный реактивный пассажирский самолёт для местных авиалиний.</p><div class="modal-btn" onclick="openModal('yak40')">Подробнее</div></div>
-<div class="card" style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal')"><model-viewer src="model_su25.glb" alt="3D модель"  poster="poster_su25.webp" auto-rotate interaction-prompt="none" loading="lazy" power-preference="low-power" minimum-render-scale="0.5"  camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer><div class="click-hint">Нажмите для просмотра 3D</div></div><h3>Су-25</h3><p style="opacity:.85;font-size:.95rem">Бронированный штурмовик поддержки сухопутных войск.</p><div class="modal-btn" onclick="openModal('su25')">Подробнее</div></div>
-<div class="card" style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal3')"><model-viewer src="model_su33.glb" alt="3D модель" poster="poster_su33.webp" auto-rotate interaction-prompt="none" loading="lazy" power-preference="low-power" minimum-render-scale="0.5"  camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer><div class="click-hint">Нажмите для просмотра 3D</div></div><h3>СУ-33</h3><p style="opacity:.85;font-size:.95rem">Сверхзвуковой истребитель с изменяемой стреловидностью крыла.</p><div class="modal-btn" onclick="openModal('su33')">Подробнее</div></div>
-</div>
-<div style="text-align: center; margin-top: 40px;">
-    <a href="catalog.html" class="all-models-btn">Вся коллекция самолётов →</a>
-</div>
-</section>
-<section>
-<h2 class="section-title"><a name="_О_проекте"></a>О проекте</h2>
-<div style="max-width:900px;margin:auto;line-height:1.8;opacity:.95; text-align: justify;  hyphens: auto; text-indent: 30px;  ">
-<p>
-Виртуальный музей самолётов МАИ — это учебный и просветительский веб‑проект,
-созданный в рамках образовательной деятельности и направленный на изучение
-истории развития авиационной техники, а также инженерных решений,
-применявшихся при создании отечественных самолётов.
-</p>
-<p>
-Проект объединяет в себе элементы исторического исследования и цифровой
-визуализации. На сайте представлены различные классы летательных аппаратов —
-гражданские пассажирские самолёты, боевые штурмовики и истребители‑перехватчики.
-Для каждого экспоната приведены подробные сведения о назначении,
-конструктивных особенностях, этапах разработки и эксплуатации.
-</p>
-<p>
-Особое внимание уделено самолётам, связанным с учебной и научной деятельностью
-Московского авиационного института. Экспонаты виртуального музея отражают вклад
-отечественных конструкторских бюро в развитие мировой авиации и позволяют
-рассмотреть эволюцию авиационной техники второй половины XX века.
-</p>
-<p>
-Проект предназначен для использования в учебных целях: при подготовке
-рефератов, проектных и исследовательских работ, а также для расширения общего
-кругозора студентов и всех, кто интересуется авиацией и историей техники.
-Виртуальный формат делает музей доступным независимо от места и времени,
-обеспечивая наглядное и структурированное представление информации.
-</p>
+<div class="card" onmouseenter="speakCard(this)" onmouseleave="stopSpeak()"  style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal2')"><model-viewer src="model_yak40.glb" alt="3D модель"  poster="poster_yak40.webp" auto-rotate interaction-prompt="none" loading="lazy" power-preference="low-power" minimum-render-scale="0.5" camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer><div class="click-hint">Нажмите для просмотра 3D</div></div><h3>Як-40</h3><p style="opacity:.85;font-size:.95rem">Региональный реактивный пассажирский самолёт для местных авиалиний.</p><div class="modal-btn" onclick="openModal('yak40')">Подробнее</div></div>
+<div class="card" onmouseenter="speakCard(this)" onmouseleave="stopSpeak()"  style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal')"><model-viewer src="model_su25.glb" alt="3D модель"  poster="poster_su25.webp" auto-rotate interaction-prompt="none" loading="lazy" power-preference="low-power" minimum-render-scale="0.5"  camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer><div class="click-hint">Нажмите для просмотра 3D</div></div><h3>Су-25</h3><p style="opacity:.85;font-size:.95rem">Бронированный штурмовик поддержки сухопутных войск.</p><div class="modal-btn" onclick="openModal('su25')">Подробнее</div></div>
+<div class="card" data-speech="Сверхзвуковой истребитель с изменяемой стреловидностью крылаа" onmouseenter="speakCard(this)" onmouseleave="stopSpeak()"  style="background: linear-gradient(160deg, #0a3a7a, #011833) !important;"><div class="model-placeholder" onclick="openModelViewer('modelModal3')"><model-viewer src="model_su33.glb" alt="3D модель" poster="poster_su33.webp" auto-rotate interaction-prompt="none" loading="lazy" power-preference="low-power" minimum-render-scale="0.5"  camera-controls disable-zoom style="width:100%;height:100%;background:transparent"></model-viewer><div class="click-hint">Нажмите для просмотра 3D</div></div><h3>СУ-33</h3><p style="opacity:.85;font-size:.95rem">Сверхзвуковой истребитель с изменяемой стреловидностью крыла.</p><div class="modal-btn" onclick="openModal('su33')">Подробнее</div></div>
 </div>
 </section>
 <footer>© 2026 Виртуальный музей самолётов МАИ · Учебный проект</footer>
@@ -144,19 +109,19 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
           onclick="enterbagage()">         
         </button> 
         <button class="hotspot_a" slot="hotspot-a1" data-position="0.2m 0.67m -3.3m" data-normal="0.8m 0.4m -0.3m">
-          <div class="annotation">Экипаж: 1 человек<br>Бронированная кабина («титановая ванна»)</div>
+          <div class="annotation">Экипаж: 1 человек <br>Бронированная кабина («титановая ванна»)</div>
         </button>
         <button class="hotspot_a" slot="hotspot-a2" data-position="0.59m 0.83m 0.51m" data-normal="-0.01 1.00 0.08">
-          <div class="annotation">2 двигателя Р-95Ш<br>Макс. скорость: 950 км/ч</div>
+          <div class="annotation">2 двигателя Р-95Ш <br>Максимальная скорость: 950 км/ч</div>
         </button>
         <button class="hotspot_a" slot="hotspot-a3" data-position="3.02m 0.37m 0.22m" data-normal="1.00 -0.00 -0.00">
-          <div class="annotation">Вооружение: авиапушка ГШ-30-2<br>10 точек подвески вооружения<br>Боезапас: 250 снарядов</div>
+          <div class="annotation">Вооружение: авиапушка ГШ-30-2 <br>10 точек подвески вооружения <br>Боезапас: 250 снарядов</div>
         </button>
         <button class="hotspot_a" slot="hotspot-a4" data-position="-1.73m 0.73m 0.55m" data-normal="-0.07 1.00 0.07">
           <div class="annotation">Размах крыла: 14.4 м</div>
         </button>
         <button class="hotspot_a" slot="hotspot-a5" data-position="1.52m 1.03m 3.66m" data-normal="-0.06 1.00 0.01" >
-          <div class="annotation">Штурмовик поддержки войск<br>Макс. взлётная масса: 17.6 т<br>Практический потолок: 7000 м</div>
+          <div class="annotation">Штурмовик поддержки войск <br>Максимальная взлётная масса: 17.6 тонн <br>Практический потолок: 7000 м</div>
         </button>        
         <div id="t1" slot="hotspot-t1" class="rocket-trail" data-position="1.50m 0.21m -1.20m" data-normal="0.90m 0.37m -0.23m"></div>
         <div id="t2" slot="hotspot-t2" class="rocket-trail" data-position="2.02m 0.19m -0.82m" data-normal="0.67m 0.67m -0.31m"></div>
@@ -207,14 +172,14 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
          <div class="annotation">Экипаж:	3 человека</div>
          </button>
          <button class="hotspot_a" slot="hotspot-a1" data-position="-0.38m 1.20m 2.16m" data-normal="-0.47 0.88 0.00">
-           <div class="annotation">3 двигателя АИ-25 <br> Максимальная скорость	550 км/ч</div>
+           <div class="annotation">3 двигателя АИ-25  <br> Максимальная скорость	550 км/ч</.div>
          </button>
           <button class="hotspot_a" slot="hotspot-a2" data-position="3.34m 0.335m 1.33m" data-normal="-0.08m 1m 0m">
            <div class="annotation">Размах крыла:	25 м</div>
          </button>  
          </button>  
           <button class="hotspot_a" slot="hotspot-a3" data-position="-2.16m 2.85m 7.09m" data-normal="-0.22 0.97 0.13">
-           <div class="annotation">Региональные пассажирские перевозки<br> Макс. взлётная масса: 16т <br>Дальность полёта	до 1800 км </div>
+           <div class="annotation">Региональные пассажирские перевозки <br> Максимальная взлётная масса: 16 тонн  <br>Дальность полёта	до 1800 км </div>
          </button>
          <button slot="hotspot-light-left" class="nav-light red" data-position="-7.16m 0.65m 1.5m" data-normal="0.14m 0.98m 0.15m"></button>  
          <button slot="hotspot-light-right" class="nav-light green" data-position="7.16m 0.65m 1.5m" data-normal="-0.03m 0.1m -0.01m"></button>
@@ -274,16 +239,16 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
           data-position="7.31m 3.16m 0.18m" data-normal="-0.97m 0.24m 0m" 
           style="display: none;">  </button>  
         <button class="hotspot_a" slot="hotspot-a2" data-position="-5.99m 2.64m -0.93m" data-normal="-0.04 0.98 0.21">
-          <div class="annotation">2 двигателя АЛ-31Ф-3<br>Макс. скорость: 2300 км/ч (M=2.17)</div>
+          <div class="annotation">2 двигателя АЛ-31Ф-3 <br>Максимальная скорость: 2300 км/ч </div>
         </button>
         <button class="hotspot_a" slot="hotspot-a3" data-position="-5.98m 2.13m 0.37m" data-normal="-0.00 -1.00 0.04">
-          <div class="annotation">Тормозной гак для посадки<br>на авианосец «Адмирал Кузнецов»<br>Система дозаправки в воздухе</div>
+          <div class="annotation">Тормозной гак для посадки<br>на авианосец «Адмирал Кузнецов» <br>Система дозаправки в воздухе.</div>
         </button>
         <button class="hotspot_a" slot="hotspot-a4" data-position="-2.72m 2.65m 3.55m" data-normal="0.01 0.81 -0.59">
-          <div class="annotation">Размах крыла: 14.7 м<br>Крылья складываются для хранения</div>
+          <div class="annotation">Размах крыла: 14.7 м <br>Крылья складываются для хранения</div>
         </button>
         <button class="hotspot_a" slot="hotspot-a5" data-position="-6.48m 1.93m -3.79m" data-normal="0.07 1.00 -0.07">
-          <div class="annotation">Многоцелевой палубный истребитель<br>Переднее горизонтальное оперение (ПГО)<br>Дальность: до 3000 км<br>
+          <div class="annotation">Многоцелевой палубный истребитель <br>Переднее горизонтальное оперение (ПГО) <br>Дальность: до 3000 км <br>
           Практический потолок: около 17 000 м</div>
         </button>  
         <!-- Индикатор загрузки -->
@@ -761,13 +726,15 @@ function startAnnotationCycle(viewerId) {
         if (annotation && infoContent) {
             current.classList.add('active');
             infoPanel.classList.add('visible');
+            const textToRead = annotation.innerText; 
             infoContent.innerHTML = annotation.innerHTML;
             viewer.classList.add('autocycle-active');
+            speakAnnotation(textToRead);
         }
         currentIndex = (currentIndex + 1) % hotspots.length;
     };
 
-    activeAnnotationTimers[viewerId] = setInterval(showNext, 5000);
+    activeAnnotationTimers[viewerId] = setInterval(showNext, 8000);
 
    viewer.addEventListener('pointerdown', () => {
         if (isFireMode) return; 
@@ -1020,6 +987,90 @@ reloadTimerF = setTimeout(() => {
     viewer.autoRotate = true;
     startAnnotationCycle('modsu25'); 
   }
+}
+function playBeep() {
+    const context = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = context.createOscillator();
+    const gain = context.createGain();
+
+    osc.type = 'sine'; // Чистый мягкий звук
+    osc.frequency.setValueAtTime(880, context.currentTime); // Высокая нота (Ля 2-й октавы)
+    
+    gain.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+    
+    osc.connect(gain);
+    gain.connect(context.destination);
+
+    osc.start();
+    osc.stop(context.currentTime + 0.5);
+}
+let isAudioEnabled = false; // По умолчанию звук выключен
+
+function toggleAudio() {
+    isAudioEnabled = !isAudioEnabled;
+    const icon = document.getElementById('speaker-icon');
+    const text = document.getElementById('speaker-text');
+    const btn = document.querySelector('.audio-toggle');
+
+    if (isAudioEnabled) {
+        icon.innerText = '🔊';
+        text.innerText = 'Звук вкл.';
+        btn.classList.add('active');
+        // Небольшой приветственный звук, чтобы "разбудить" движок браузера
+        playBeep();
+    } else {
+        icon.innerText = '🔇';
+        text.innerText = 'Звук выкл.';
+        btn.classList.remove('active');
+        window.speechSynthesis.cancel(); // Сразу замолкаем при выключении
+    }
+}
+let synth = window.speechSynthesis;
+function speakCard(element) {
+    if (!isAudioEnabled) return; // Если звук выключен — ничего не делаем
+    window.speechSynthesis.cancel();
+    const title = element.querySelector('h3').innerText;
+    const description = element.getAttribute('data-speech') || element.querySelector('p').innerText;    
+    const textToSpeak = `${title}. ${description}`;
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+    // Находим все голоса
+    const voices = window.speechSynthesis.getVoices();
+    
+    // Пытаемся найти мужской (Pavel) или Microsoft Dmitry
+    const maleVoice = voices.find(v => v.lang.includes('ru') && (v.name.includes('Pavel') || v.name.includes('Dmitry')));
+    
+    if (maleVoice) {
+        utterance.voice = maleVoice;
+        utterance.pitch = 0.8; // Для мужского чуть-чуть баса
+    } else {
+        // ЕСЛИ МУЖСКОГО НЕТ (Осталась только Ирина):
+        utterance.pitch = 0.5; // МАКСИМАЛЬНЫЙ БАС (превращает женский в низкий мужской)
+    }
+
+    utterance.lang = 'ru-RU';
+    utterance.rate = 2.0; // Замедляем, чтобы звучало весомо
+    
+    window.speechSynthesis.speak(utterance);
+}
+function speakAnnotation(text) {
+    if (!isAudioEnabled) return; // Озвучка сработает, только если включен звук кнопкой
+    window.speechSynthesis.cancel(); // Прерываем старую речь
+    const utterance = new SpeechSynthesisUtterance(text);    
+    const voices = window.speechSynthesis.getVoices();    
+    const maleVoice = voices.find(v => v.lang.includes('ru') && (v.name.includes('Pavel') || v.name.includes('Dmitry')));    
+    if (maleVoice) {
+        utterance.voice = maleVoice;
+        utterance.pitch = 0.8; // Для мужского чуть-чуть баса
+    } else {        
+        utterance.pitch = 0.5; 
+    }
+    utterance.lang = 'ru-RU';
+    utterance.rate = 1.5; 
+    window.speechSynthesis.speak(utterance);
+}
+function stopSpeak() {
+    window.speechSynthesis.cancel();
 }
 </script>    
 </body>
