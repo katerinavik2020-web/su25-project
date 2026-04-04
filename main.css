@@ -747,3 +747,33 @@ input:checked + .slider:before { transform: translateX(22px); }
     border-color: var(--mai-accent);
     color: var(--mai-accent);
 }
+
+/* Прячем лоадер, когда постер (картинка) исчезла — значит модель готова */
+model-viewer[poster-dismissed] .custom-loader {
+  display: none !important;
+}
+/* Показываем, пока модель грузится */
+model-viewer:not([poster-dismissed]) .custom-loader {
+  display: flex !important;
+}
+.plane-poster {
+    border: none;
+    background: none;
+    transition: opacity 1.5s ease-in, transform 0.3s; /* Плавное проявление */
+    cursor: pointer;
+}
+
+.hidden-poster {
+    opacity: 0; /* Скрыты по умолчанию */
+    pointer-events: none;
+}
+
+.visible-poster {
+    opacity: 1 !important; /* Проявляются */
+    pointer-events: auto;
+}
+
+.plane-poster:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}

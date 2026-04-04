@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Виртуальный музей самолётов МАИ</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="main.css">
+<link rel="icon" type="image/png" href="osn_icon.png">
+<!--script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script-->
+<script type="module" src="model-viewer.min.js"></script>
+<script src="model_script.js" defer></script>
+<style>
+*{box-sizing:border-box}
+:root{
+  --mai-blue-dark:#010b1c;
+  --mai-blue:#011833;
+  --mai-blue-light:#022a55;
+  --mai-accent:#4da3ff;
+  --panel-bg:#011428;
+}
+body{margin:0;font-family:'Montserrat',sans-serif;background:linear-gradient(180deg,#010b1c,#011833);color:#e6ecff;position:relative;overflow-x:hidden}
+body::before{left:0;background:linear-gradient(180deg, rgba(255,95,162,0.25), transparent)}
+body::before{left:0;background:radial-gradient(ellipse at left center, rgba(77,163,255,0.25) 0%, rgba(77,163,255,0.15) 30%, rgba(77,163,255,0.05) 55%, transparent 70%)}
+body::after{right:0;background:linear-gradient(180deg, rgba(214,106,160,0.25), transparent)}
+header{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px;background:linear-gradient(135deg,#010b1c,#011833);color:#ffffff;position:relative;overflow:hidden}
+header h1{font-size:3rem;margin-bottom:10px;position:relative;z-index:2;text-shadow:0 0 18px rgba(77,163,255,.45)}
+header p{font-size:1.2rem;max-width:800px;margin:20px auto 30px;opacity:.95;position:relative;z-index:2}
+section{padding:80px 40px}
+.section-title{text-align:center;font-size:2.6rem;margin-bottom:40px;color:var(--mai-accent);font-weight:700;text-shadow:0 0 14px rgba(77,163,255,.6)}
+.gallery {  display: grid;  grid-template-columns: repeat(3, 1fr);   gap: 40px;  margin-bottom:  5vh; }
+.card { background: linear-gradient(160deg, #011833, #010b1c); border-radius: 22px; padding: 25px; box-shadow: 0 14px 40px rgba(0, 0, 0, .65);  transition: .35s; color: #e6ecff; border: 2px solid rgba(77, 163, 255, .45); width: auto; }
+@media (max-width: 992px) {  .gallery {  grid-template-columns: repeat(2, 1fr);  }}
+@media (max-width: 600px) {  .gallery {    grid-template-columns: 1fr;   margin-bottom: 40px;  }}
+.card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,.65),0 0 18px rgba(77,163,255,.6);border-color:var(--mai-accent)}
+.card h3{color:var(--mai-accent);font-size:1.5rem;font-weight:700;letter-spacing:.5px}
+.modal-btn{margin-top:15px;display:inline-block;cursor:pointer;padding:11px 20px;border-radius:20px;background:linear-gradient(135deg,#0a4fa3,#032a66);color:#ffffff;transition:.3s;font-weight:700;box-shadow:0 6px 18px rgba(77,163,255,.45)}
+.modal-btn:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 10px 26px rgba(77,163,255,.7)}
+.header-features{display:flex;justify-content:center;gap:40px;margin-top:25px}
+.feature{display:flex;align-items:center;gap:10px;font-weight:600;color:#cfe2ff;font-size:1rem;opacity:.9}
+.feature span{letter-spacing:.3px}
+footer{background:linear-gradient(180deg,#011833,#010b1c);padding:40px;text-align:center;font-size:.9rem;color:#e6ecff;opacity:.95}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;animation:modalFade .4s ease}
+.modal-content{background:linear-gradient(160deg,#011833,#010b1c);border-radius:22px;padding:32px;max-width:700px;width:90%;max-height:85vh;overflow-y:auto;animation:fadeUp .3s ease;color:#e6ecff}
+.modal-content h3{color:var(--mai-accent);font-size:2rem}
+.modal-content h4{margin-top:20px;color:var(--mai-light)}
+.modal-content ul{padding-left:20px}
+.modal-content li{margin-bottom:8px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:768px){header h1{font-size:2.2rem}section{padding:60px 20px}.header-features{flex-direction:column;gap:14px}}section{padding:60px 20px}}
+.spec-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.95rem}
+.spec-table th,.spec-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.15);text-align:left;color:#e6ecff}
+.spec-table th{color:var(--mai-accent);font-weight:600;width:55%}
+.spec-table tr:last-child th,.spec-table tr:last-child td{border-bottom:none}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+header::before,header::after{content:'';position:absolute;top:0;bottom:0;width:220px;z-index:1;pointer-events:none}
+header::before{left:0;background:radial-gradient(ellipse at left center, rgba(77,163,255,0.22) 0%, rgba(77,163,255,0.12) 35%, rgba(77,163,255,0.05) 55%, transparent 75%);filter:blur(30px)}
+header::after{right:0;background:radial-gradient(ellipse at right center, rgba(77,163,255,0.22) 0%, rgba(77,163,255,0.12) 35%, rgba(77,163,255,0.05) 55%, transparent 75%);filter:blur(30px)}
+</style>
+</head>
+<body>
+<div class="nav-container">
+    <a href="index.html#_Коллекция_самолётов" class="back-btn">
+        <span class="arrow">←</span> На главную
+    </a>
+</div>
+<div class="audio-toggle" onclick="toggleAudio()">
+    <span id="speaker-icon">🔇</span>
+    <span id="speaker-text">Звук выкл.</span> 
+</div>
+<section class="angar-section" style="padding: 40px 20px; text-align: center;">
+  <h2 class="section-title">Виртуальная стоянка ангара МАИ</h2>
+<div style="position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 30px; min-height: 40px;">
+    <p style="margin: 0; opacity: 0.8; font-size: 0.95rem;">
+        Наведите на самолёт, чтобы увидеть название, или кликните для подробностей
+    </p>
+    <!-- Слайдер, прижатый в самый правый край -->
+    <div style="position: absolute; right: 0; display: flex; align-items: center;">
+        <span style="margin-right: 10px; color: #007bff; font-weight: 700; font-size: 15px; text-align: right; line-height: 1.2;">
+            Режим 3D
+        </span>
+        <label class="switch" style="transform: scale(0.85); margin-right: 0;">
+            <input type="checkbox" id="three-d-mode-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+  </div>
+
+  <div id="main-view-container" style="position: relative; width: 100%;">
+    
+    <!-- РЕЖИМ 2D (Фото с твоими полными текстами) -->
+    <div id="view-2d" class="angar-container" style="position: relative; width: 100%; line-height: 0;">
+      <img src="angar_mai.jpg" style="width: 100%; height: auto; display: block;">
+      
+      <!-- Точка над Як-40 -->
+      <button class="hotspot_a" 
+              onclick="openModal('yak40')" 
+              onmouseenter="speakAnnotation('Самолет Як-40')" 
+              onmouseleave="stopSpeak()"
+              style="top: 38%; left: 80%; background-color: #007bff !important; border: 2px solid white !important; box-shadow: 0 0 10px rgba(0,0,0,0.8) !important; width: 16px; height: 16px;">
+        <div class="annotation">
+          Як-40<br>
+          <span style="font-size: 12px; font-weight: 400; opacity: 0.8;">Нажмите, чтобы узнать историю</span>
+        </div>
+      </button>
+
+      <!-- Точка над Су-25 -->
+      <button class="hotspot_a" 
+              onclick="openModal('su25')" 
+              onmouseenter="speakAnnotation('Штурмовик Су-25')" 
+              onmouseleave="stopSpeak()"
+              style="top: 55%; left: 50%; background-color: #007bff !important; border: 2px solid white !important; box-shadow: 0 0 10px rgba(0,0,0,0.8) !important; width: 16px; height: 16px;">
+        <div class="annotation">
+          Штурмовик Су-25<br>
+          <span style="font-size: 12px; font-weight: 400; opacity: 0.8;">Посмотреть характеристики</span>
+        </div>
+      </button>
+
+      <!-- Точка над Квантом -->
+      <button class="hotspot_a" 
+              onclick="openModal('kvant')" 
+              onmouseenter="speakAnnotation('Самолет Квант')" 
+              onmouseleave="stopSpeak()"
+              style="top: 27%; left: 25%; background-color: #007bff !important; border: 2px solid white !important; box-shadow: 0 0 10px rgba(0,0,0,0.8) !important; width: 16px; height: 16px;">
+        <div class="annotation">
+          МАИ-890 «Квант»<br>
+          <span style="font-size: 12px; font-weight: 400; opacity: 0.8;">Учебный биплан</span>
+        </div>
+      </button>
+    </div>
+
+    <!-- РЕЖИМ 3D (будущее 3D-пространство ангара) -->
+    <div id="view-3d" style="display: none; width: 100%; height: 600px; background: #000; border-radius: 15px; overflow: hidden; position: relative;">
+    <model-viewer src="model_angar.glb" id="modangar" camera-controls tone-mapping="neutral" shadow-intensity="2"  interaction-prompt="none" disable-zoom 
+     camera-orbit="-223.7deg 77.74deg 167.2m" min-camera-orbit="auto auto 0m"  min-field-of-view="10deg" field-of-view="29.19deg" shadow-softness="0.54">
+<!-- Су-25 (Слева от центра) -->
+  <button slot="hotspot-su25" class="plane-poster hidden-poster" 
+          data-position="-5m 2m 2m" data-normal="0 1 0" 
+          onclick="openModelViewer('su25')">
+      <img src="poster_su25.webp" style="width: 300px; height: auto;">
+      <div class="annotation">Су-25</div>
+  </button>
+
+  <!-- Як-40 (Справа от центра) -->
+  <button slot="hotspot-yak40" class="plane-poster hidden-poster" 
+          data-position="6m 2.5m -2m" data-normal="0 1 0" 
+          onclick="openModelViewer('yak40')">
+      <img src="poster_yak40.webp" style="width: 400px; height: auto;">
+      <div class="annotation">Як-40</div>
+  </button>
+
+  <!-- Су-33 (Чуть в глубине по центру) -->
+  <button slot="hotspot-su33" class="plane-poster hidden-poster" 
+          data-position="0.78m 2.5m -10m" data-normal="0 1 0" 
+          onclick="openModelViewer('su33')">
+      <img src="poster_su33.webp" style="width: 280px; height: auto;">
+      <div class="annotation">Су-33</div>
+  </button>
+    </model-viewer>
+    </div>
+  </div> 
+</section>
+<footer>© 2026 Виртуальный музей самолётов МАИ · Учебный проект</footer>
+<div class="modal" id="infoModal"><div class="modal-content" id="modalContent"></div></div>
+<!-- Скрытый элемент аудио -->
+<audio id="ambient-sound">
+    <source src="samolety_1.mp3" type="audio/mpeg">
+</audio>
+<div class="modal" id="modelModal">
+   <div class="modal-content" id="modelModalContent" style="max-width:90%; max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column; ">
+     </div>
+</div>
+<div id="info-panel" class="info-panel-hidden">
+  <div class="info-panel-content"></div>
+</div>
+ 
+</body>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('three-d-mode-toggle');
+    const view2d = document.getElementById('view-2d');
+    const view3d = document.getElementById('view-3d');
+    const angar = document.getElementById('modangar');
+
+    if (toggle && view2d && view3d) {
+        toggle.addEventListener('change', (e) => {
+    if (e.target.checked) {
+        view2d.style.display = 'none';
+        view3d.style.display = 'block';
+
+        if (angar) {
+            // Сначала ПРИНУДИТЕЛЬНО ставим камеру далеко (на улице) без анимации
+            angar.jumpCameraToGoal(); 
+            
+            // Даем крошечную паузу, чтобы браузер отрисовал вид снаружи
+            setTimeout(() => {
+                // Теперь плавно летим внутрь 
+                smoothEnterAngar(angar, '0.78m 2m -0.07m', '-180deg 85deg 30m', 1.3);            
+            }, 100); 
+        }
+    } else {
+        view2d.style.display = 'block';
+        view3d.style.display = 'none';
+        if (angar) {
+            // Возвращаем камеру "на улицу" для следующего раза
+            angar.cameraOrbit = "-223.7deg 77.74deg 150m";
+            angar.cameraTarget = "0m 5m 0m";
+        }
+    }
+});
+    }
+
+    // НАСТРОЙКА ЦВЕТА (чтобы при загрузке ангар был серым)
+    if (angar) {
+        angar.addEventListener('load', () => {
+            const materials = angar.model.materials;
+            materials.forEach(material => {
+                material.pbrMetallicRoughness.setBaseColorFactor([0.2, 0.2, 0.2, 1]);
+                material.pbrMetallicRoughness.setMetallicFactor(0.6);
+                material.pbrMetallicRoughness.setRoughnessFactor(0.5);
+            });
+            angar.exposure = 0.6;
+        });
+    }
+});
+</script>
+</html>
+
+
+
+   
+   

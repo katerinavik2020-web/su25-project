@@ -1,205 +1,5 @@
-//    'angarModal':  { vId: 'modangar', bId: null,               template: 'angar' } // для Ангара
-
-const viewerConfig = {
-    'yak40': { vId: 'modyak40', bId: 'viewToggleButton', mId: 'modelModal' },
-    'su25':  { vId: 'modsu25',  bId: 'bagage-trigger',   mId: 'modelModal' },
-    'su33':  { vId: 'modsu33',  bId: 'cabin-trigger',    mId: 'modelModal' }
-};
-let currentActivePlane = null;
-let currentOpenModalId = null;
 let isFireMode = false;
 let rocketsLaunched = false;
-const modelTemplates = {
-    yak40: `<model-viewer
-        src="model_yak40.glb"
-        id="modyak40" 
-        skybox-image="cloud_layers_1k.hdr"   
-        environment-image="neutral"
-        camera-orbit="180deg 75deg auto"    
-        exposure="1.3"
-        shadow-intensity="0.5"
-        shadow-softness="1" 
-        auto-rotate        
-        autorotate-delay="10000"         
-        camera-controls
-        shadow-intensity="1"
-        poster="poster_yak40.webp" 
-        ar        
-        ar-modes="webxr scene-viewer quick-look"         
-        alt="3D модель с поддержкой AR">    
-  <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
-    👋 Посмотреть в AR
-  </button>
-        <button slot="hotspot-salon" 
-          class="cabin-hotspot" 
-          data-position="0.14m 1.2m -1.25m" 
-          data-normal="0.2 1 0" 
-          data-visibility-attribute="visible"
-          onclick="enterSalon()"> 
-           <div class="annotation">Пассажиров:	до 32</div>        
-        </button> 
-        <button  class="cabin-hotspot" slot="hotspot-cabin" data-position="0.14m 0.7m -3.7m" 
-         data-normal="0.3 0.8 -0.4" data-visibility-attribute="visible" onclick="enterCabin()">
-         <div class="annotation">Экипаж:	3 человека</div>
-         </button>
-         <button class="hotspot_a" slot="hotspot-a1" data-position="-0.38m 1.20m 2.16m" data-normal="-0.47 0.88 0.00">
-           <div class="annotation">3 двигателя АИ-25 <br> Максимальная скорость	550 км/ч</div>
-         </button>
-          <button class="hotspot_a" slot="hotspot-a2" data-position="3.34m 0.335m 1.33m" data-normal="-0.08m 1m 0m">
-           <div class="annotation">Размах крыла:	25 м</div>
-         </button>  
-          <button class="hotspot_a" slot="hotspot-a3" data-position="-2.16m 2.85m 7.09m" data-normal="-0.22 0.97 0.13">
-           <div class="annotation">Региональные пассажирские перевозки<br> Макс. взлётная масса: 16т <br>Дальность полёта	до 1800 км </div>
-         </button>
-         <button slot="hotspot-light-left" class="nav-light red" data-position="-7.16m 0.65m 1.5m" data-normal="0.14m 0.98m 0.15m"></button>  
-         <button slot="hotspot-light-right" class="nav-light green" data-position="7.16m 0.65m 1.5m" data-normal="-0.03m 0.1m -0.01m"></button>
-         <button slot="hotspot-light-tail" class="nav-light white" data-position="-0.022m 2.88m 7.52m" data-normal="0.05m 0.98m 0.20m"></button>
-        <!-- Индикатор загрузки -->
-        <div slot="progress-bar" class="custom-loader">
-           <div class="loader-text">Загрузка модели...</div>
-           <div class="update-bar"></div>
-         </div>         
-      </model-viewer>
-    <div id="viewToggleButton" class="modal-btn" onclick="toggleView()" 
-         style="position: absolute; bottom: 30px; right: 250px; z-index: 10; cursor: pointer; ">
-      Заглянуть внутрь
-    </div>  
-    <div class="control-panel">      
-      <label class="switch">       
-        <input type="checkbox" id="night-checkbox">
-        <span class="slider"></span>
-      </label>
-    </div>       
- <div class="modal-btn" 
-     onclick="closeModelViewer()"
-     style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
-  Закрыть
-  </div>`,
-    
-    su25: `<model-viewer
-        src="model_su25.glb"
-        id="modsu25" 
-        skybox-image="nebo2.jpg"   
-        environment-image="neutral"
-        camera-orbit="490.4deg 73.01deg 22.14m"          
-        exposure="1.3"
-        shadow-intensity="0.5"
-        shadow-softness="1" 
-        autorotate-delay="10000"
-        auto-rotate        
-        min-camera-orbit="auto auto 0m" 
-        min-field-of-view="10deg"
-        camera-controls
-        shadow-intensity="1"       
-        ar        
-        ar-modes="webxr scene-viewer quick-look"          
-        alt="3D модель с поддержкой AR">  
-        <!-- Кастомная кнопка AR (появится только на мобильных с поддержкой AR) -->
-        <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
-          👋 Посмотреть в AR
-        </button>
-        <button slot="hotspot-bagage" 
-          class="cabin-hotspot" 
-          id="bagage-trigger"
-          data-position="0.31m -0.20m -0.05m" data-normal="0 -1 0"
-          data-visibility-attribute="visible"
-          onclick="enterbagage()">         
-        </button> 
-        <button class="hotspot_a" slot="hotspot-a1" data-position="0.2m 0.67m -3.3m" data-normal="0.8m 0.4m -0.3m">
-          <div class="annotation">Экипаж: 1 человек<br>Бронированная кабина («титановая ванна»)</div>
-        </button>
-        <button class="hotspot_a" slot="hotspot-a2" data-position="0.59m 0.83m 0.51m" data-normal="-0.01 1.00 0.08">
-          <div class="annotation">2 двигателя Р-95Ш<br>Макс. скорость: 950 км/ч</div>
-        </button>
-        <button class="hotspot_a" slot="hotspot-a3" data-position="3.02m 0.37m 0.22m" data-normal="1.00 -0.00 -0.00">
-          <div class="annotation">Вооружение: авиапушка ГШ-30-2<br>10 точек подвески вооружения<br>Боезапас: 250 снарядов</div>
-        </button>
-        <button class="hotspot_a" slot="hotspot-a4" data-position="-1.73m 0.73m 0.55m" data-normal="-0.07 1.00 0.07">
-          <div class="annotation">Размах крыла: 14.4 м</div>
-        </button>
-        <button class="hotspot_a" slot="hotspot-a5" data-position="1.52m 1.03m 3.66m" data-normal="-0.06 1.00 0.01" >
-          <div class="annotation">Штурмовик поддержки войск<br>Макс. взлётная масса: 17.6 т<br>Практический потолок: 7000 м</div>
-        </button>        
-        <div id="t1" slot="hotspot-t1" class="rocket-trail" data-position="1.50m 0.21m -1.20m" data-normal="0.90m 0.37m -0.23m"></div>
-        <div id="t2" slot="hotspot-t2" class="rocket-trail" data-position="2.02m 0.19m -0.82m" data-normal="0.67m 0.67m -0.31m"></div>
-        <div id="t3" slot="hotspot-t3" class="rocket-trail" data-position="2.55m 0.12m -0.72m" data-normal="0.92m 0.24m -0.31m"></div>
-        <div id="t4" slot="hotspot-t4" class="rocket-trail" data-position="3.12m 0.10m -0.73m" data-normal="0.97m 0.25m -0.02m"></div>
-        <div id="t5" slot="hotspot-t5" class="rocket-trail" data-position="-1.79m 0.08m -0.92m" data-normal="0.92m -0.24m -0.31m"></div>
-        <div id="t6" slot="hotspot-t6" class="rocket-trail" data-position="-2.36m 0.12m -0.75m" data-normal="0.92m 0.23m -0.31m"></div>
-        <div id="t7" slot="hotspot-t7" class="rocket-trail" data-position="-2.94m 0.10m -0.49m" data-normal="0.22m 0.52m -0.82m"></div>
-        <!-- Индикатор загрузки -->
-        <div slot="progress-bar" class="custom-loader">
-           <div class="loader-text">Загрузка модели...</div>
-           <div class="update-bar"></div>
-         </div>
-      </model-viewer>
-      <div id="fire-control" onclick="handleFireClick(event)"></div>
- <div class='modal-btn' onclick="closeModelViewer()" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div>`,
-    
-    su33: `<model-viewer
-        id="modsu33" 
-        src="model_su33.glb"
-        skybox-image="nebo1.jpg"   
-        environment-image="neutral"
-        exposure="1.3"
-        shadow-intensity="0.5"
-        shadow-softness="1" 
-        autorotate-delay="10000"
-        auto-rotate        
-        camera-controls
-        shadow-intensity="1"
-        touch-action="none"
-        camera-orbit="52.32deg 52.35deg 44.54m" 
-        field-of-view="30deg"
-        poster="poster_su33.webp" 
-        ar        
-        ar-modes="webxr scene-viewer quick-look"         
-        alt="3D модель с поддержкой AR">    
-  <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
-    👋 Посмотреть в AR
-  </button>
-        <button slot="hotspot-su331" id="cabin-trigger" class="cabin-area" 
-        data-position="7.2m 3.6m 0.2m" data-normal="0.1 0.6 0.8" 
-        style="opacity: 0; pointer-events: none;"
-        onclick="toggleView_su33()"> 
-        <div class="annotation">Экипаж: 1 человек</div>
-        </button>
-<button id="eject-button" class="hotspot" slot="hotspot-eject" 
-        data-position="7.31m 3.16m 0.18m" 
-        onclick="event.stopPropagation(); startEjectVideo();" 
-        style="display: none;">
-</button>
-        <button class="hotspot_a" slot="hotspot-a2" data-position="-5.99m 2.64m -0.93m" data-normal="-0.04 0.98 0.21">
-          <div class="annotation">2 двигателя АЛ-31Ф-3<br>Макс. скорость: 2300 км/ч (M=2.17)</div>
-        </button>
-        <button class="hotspot_a" slot="hotspot-a3" data-position="-5.98m 2.13m 0.37m" data-normal="-0.00 -1.00 0.04">
-          <div class="annotation">Тормозной гак для посадки<br>на авианосец «Адмирал Кузнецов»<br>Система дозаправки в воздухе</div>
-        </button>
-        <button class="hotspot_a" slot="hotspot-a4" data-position="-2.72m 2.65m 3.55m" data-normal="0.01 0.81 -0.59">
-          <div class="annotation">Размах крыла: 14.7 м<br>Крылья складываются для хранения</div>
-        </button>
-        <button class="hotspot_a" slot="hotspot-a5" data-position="-6.48m 1.93m -3.79m" data-normal="0.07 1.00 -0.07">
-          <div class="annotation">Многоцелевой палубный истребитель<br>Переднее горизонтальное оперение (ПГО)<br>Дальность: до 3000 км<br>
-          Практический потолок: около 17 000 м</div>
-        </button>  
-        <!-- Индикатор загрузки -->
-        <div slot="progress-bar" class="custom-loader">
-           <div class="loader-text">Загрузка модели...</div>
-           <div class="update-bar"></div>
-         </div>        
-</model-viewer>
-<div id="video-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; justify-content: center; align-items: center;">
-    <!-- Кнопка пропуска -->
-    <button id="skip-video" style="position: absolute; bottom: 30px; right: 30px; padding: 10px 20px; background: rgba(255, 120, 0, 0.2); color: white; border: 1px solid white; cursor: pointer; border-radius: 5px; z-index: 10000;">
-        Пропустить →
-    </button>    
-    <video id="eject-video" style="max-width: 100%; max-height: 100%;">
-        <source type="video/mp4">
-    </video>
-</div>
- <div class='modal-btn' onclick="closeModelViewer()" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div>`
-};
-
 const activeAnnotationTimers = {};
 const data={
   yak40:{
@@ -334,7 +134,7 @@ function setupModelLoad(id) {
         });
     });
 }
-//['modsu33', 'modsu25', 'modyak40', 'modmi2', 'modkvant'].forEach(setupModelLoad);
+['modsu33', 'modsu25', 'modyak40', 'modmi2', 'modkvant'].forEach(setupModelLoad);
 
 // --- 3. ПЛАВНОЕ ПРОЯВЛЕНИЕ ТЕКСТУР (3 СЕК) ---
 function smoothFadeIn(viewerId, btnId) {
@@ -353,11 +153,9 @@ function smoothFadeIn(viewerId, btnId) {
     }    
     states[viewerId].isTextured = true;
     const materials = viewer.model.materials;
-materials.forEach(m => {
-        // Проверка: если данных нет (еще не сохранились), берем текущую текстуру
-        const tex = (m.userData && m.userData.originalTexture) ? m.userData.originalTexture : null;
-        if (tex && m.pbrMetallicRoughness.baseColorTexture) {
-            m.pbrMetallicRoughness.baseColorTexture.setTexture(tex);
+    materials.forEach(m => {
+        if (m.userData.originalTexture) {
+            m.pbrMetallicRoughness.baseColorTexture.setTexture(m.userData.originalTexture);
         }
     });
 
@@ -399,30 +197,30 @@ materials.forEach(m => {
 // Привязка проявления к клику
 // Объект для хранения таймеров (чтобы можно было отменить их при клике)
 const autoFadeTimers = {};
-//['modsu33', 'modsu25', 'modyak40'].forEach(id => {
-//    const v = document.getElementById(id);
-//    if (!v) return;
-//    // --- ФУНКЦИЯ ПРОЯВЛЕНИЯ ---
-//    const runFade = () => {
-//        // Если таймер еще тикает — отменяем его (так как проявление уже пошло)
-//        if (autoFadeTimers[id]) {
-//            clearTimeout(autoFadeTimers[id]);
-//            delete autoFadeTimers[id];
-//        }        
-//        const btnId = (id === 'modsu33') ? 'cabin-trigger' : (id === 'modsu25') ? 'bagage-trigger' : 'viewToggleButton';
-//        smoothFadeIn(id, btnId);
-//    };
-//    // 1. АВТО-ПРОЯВЛЕНИЕ: запускаем таймер на 5 секунд после загрузки модели
-//    v.addEventListener('load', () => {
-//        autoFadeTimers[id] = setTimeout(runFade, 5000); // 5000 мс = 5 сек
-//    });
-//    // 2. РУЧНОЕ ПРОЯВЛЕНИЕ (твой текущий код)
-//    v.addEventListener('click', (e) => {
-//        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;        
-//        // Если пользователь кликнул сам — отменяем авто-таймер
-//        runFade(); 
-//    });
-//});
+['modsu33', 'modsu25', 'modyak40'].forEach(id => {
+    const v = document.getElementById(id);
+    if (!v) return;
+    // --- ФУНКЦИЯ ПРОЯВЛЕНИЯ ---
+    const runFade = () => {
+        // Если таймер еще тикает — отменяем его (так как проявление уже пошло)
+        if (autoFadeTimers[id]) {
+            clearTimeout(autoFadeTimers[id]);
+            delete autoFadeTimers[id];
+        }        
+        const btnId = (id === 'modsu33') ? 'cabin-trigger' : (id === 'modsu25') ? 'bagage-trigger' : 'viewToggleButton';
+        smoothFadeIn(id, btnId);
+    };
+    // 1. АВТО-ПРОЯВЛЕНИЕ: запускаем таймер на 5 секунд после загрузки модели
+    v.addEventListener('load', () => {
+        autoFadeTimers[id] = setTimeout(runFade, 5000); // 5000 мс = 5 сек
+    });
+    // 2. РУЧНОЕ ПРОЯВЛЕНИЕ (твой текущий код)
+    v.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;        
+        // Если пользователь кликнул сам — отменяем авто-таймер
+        runFade(); 
+    });
+});
 
 
 
@@ -454,24 +252,14 @@ function cinematicFly(viewer, targetPos, targetOrbit, exposure, onComplete) {
 
 // --- 5. ФУНКЦИИ ВХОДА (СУ-33, ЯК-40, СУ-25) ---
 function toggleView_su33() {
-    // Ищем элементы ПРЯМО ВНУТРИ функции, чтобы всегда находить новые из шаблона
-    const v = document.getElementById('modsu33');
-    const b = document.getElementById('cabin-trigger');
-    const e = document.getElementById('eject-button');
-
-    if (!v || !b) return; // Защита от вылета
-
     if (!states.modsu33.isInside) {
         states.modsu33.isInside = true;
-        // Передаем найденный 'v' вместо старой переменной
-        cinematicFly(v, '6.9m 3.3m 0.1m', '300deg 60deg 0.05m', 3.0, () => {
-            b.classList.add('is-inside');
-            b.innerHTML = "Внешний вид";
-            if(e) e.style.display = "block";
+        cinematicFly(viewersu33, '6.9m 3.3m 0.1m', '300deg 60deg 0.05m', 3.0, () => {
+            cabinBtn.classList.add('is-inside');
+            cabinBtn.innerHTML = "Внешний вид";
+            if(ejectBtn) ejectBtn.style.display = "block";
         });
-    } else { 
-        exitModel('modsu33', 'cabin-trigger', 'eject-button'); 
-    }
+    } else { exitModel('modsu33', 'cabin-trigger', 'eject-button'); }
 }
 
 function enterSalon() {
@@ -510,13 +298,8 @@ function enterbagage() {
 function exitModel(vId, bId, eId = null) {
     const v = document.getElementById(vId);
     const b = document.getElementById(bId);
-    // ПРОВЕРКА: Если вьюер не найден, выходим сразу, чтобы не упасть на v.classList или v.model
-    if (!v) return; 
-    const ejectBtn = document.getElementById('eject-button');
-    states[vId].isInside = false;    
-    if (ejectBtn) { 
-        ejectBtn.style.display = "none"; 
-    }
+    states[vId].isInside = false;
+    ejectBtn.style.display = "none";
     if(b) { b.classList.remove('is-inside'); b.innerHTML = (vId === 'modyak40') ? "Заглянуть внутрь" : ""; b.style.background = ""; }
     if(eId) { const e = document.getElementById(eId); if(e) e.style.display = "none"; }
         // Когда окно закрывается, принудительно возвращаем шасси  
@@ -526,7 +309,6 @@ function exitModel(vId, bId, eId = null) {
     if (nightSwitch) nightSwitch.checked = false; // Выключаем тумблер визуально    
     v.classList.remove('night-mode'); // Гасим габариты в CSS    
     // Гасим свет в окнах
- //if (!v.model || !v.model.materials) return; 
     const winMat = v.model.materials.find(m => m.name === 'Material.001');
     if (winMat) winMat.setEmissiveFactor();
     const rocketMat = v.model.materials.find(m => m.name === 'Spo15Rhaw1Mtl.001');
@@ -552,106 +334,66 @@ function exitModel(vId, bId, eId = null) {
     v.updateFraming();         
 }
 
-function openModelViewer(planeKey) {
-    currentOpenModalId = 'modelModal'; 
-    currentActivePlane = planeKey;
-    const modal = document.getElementById('modelModal'); 
-    const container = document.getElementById('modelModalContent');
-    const config = viewerConfig[planeKey]; 
-    if (!modal || !container || !config) return;
-
-    // --- НОВОЕ: Сбрасываем статус текстур для этой модели перед открытием ---
-    if (states[config.vId]) {
-        states[config.vId].isTextured = false;
-    }
-
-    // 1. Вставляем шаблон
-    container.innerHTML = modelTemplates[planeKey];
+function openModelViewer(mId) {
+    const modal = document.getElementById(mId);
+    if (!modal) return;
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    
-    const v = document.getElementById(config.vId);
-    if (v) {
-        // 2. СРАЗУ ПОСЛЕ ЗАГРУЗКИ МОДЕЛИ ДЕЛАЕМ ЕЁ СЕРОЙ
-        v.addEventListener('load', () => {
-            const loader = v.querySelector('.custom-loader');
-            if (loader) loader.style.setProperty('display', 'none', 'important');
-
-            const materials = v.model.materials;
-            materials.forEach(material => {
-                const texture = material.pbrMetallicRoughness.baseColorTexture;
-                material.userData = { originalTexture: texture ? texture.texture : null };
-                material.setAlphaMode('BLEND'); 
-                material.pbrMetallicRoughness.baseColorTexture.setTexture(null); 
-                material.pbrMetallicRoughness.setBaseColorFactor([0.9, 0.9, 0.9, 0.5]);
-            });
-
-            // 3. АВТО-ПРОЯВЛЕНИЕ ЧЕРЕЗ 5 СЕКУНД
-            autoFadeTimers[config.vId] = setTimeout(() => {
-                smoothFadeIn(config.vId, config.bId);
-            }, 5000);
-        }, { once: true });
-
-        // 4. РУЧНОЕ ПРОЯВЛЕНИЕ ПО КЛИКУ
-        v.addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
-            if (autoFadeTimers[config.vId]) clearTimeout(autoFadeTimers[config.vId]);
-            smoothFadeIn(config.vId, config.bId);
-        });
-    }
-
-    // --- ОЖИВЛЯЕМ ДЕНЬ-НОЧЬ ЯКА ---
-    if (planeKey === 'yak40') {
-        const ns = document.getElementById('night-checkbox');
-        if (ns) {
-            ns.addEventListener('change', (e) => {
-                if (typeof toggleNightMode === 'function') {
-                    toggleNightMode(e.target.checked);
-                }
-            });
+    history.pushState({ modalOpen: true, id: mId }, "");
+    // Соответствие твоих ID модалок и вьюеров
+    const config = {
+        'modelModal3': { vId: 'modsu33',  bId: 'cabin-trigger' },
+        'modelModal':  { vId: 'modsu25',  bId: 'bagage-trigger' },
+        'modelModal2': { vId: 'modyak40', bId: 'viewToggleButton' }
+    };
+    const current = config[mId];    
+    if (current) {
+        const viewerId = current.vId;
+        
+        // ПРОВЕРКА: Если модель УЖЕ проявлена (был клик ранее)
+        if (states[viewerId].isTextured) {
+            // Сразу включаем аннотации, не дожидаясь клика и без анимации проявления
+            stopAllAnnotations();
+            startAnnotationCycle(viewerId);
+        } else {
+            // Если модель еще серая — НИЧЕГО не вызываем. 
+            // Она будет просто крутиться серой, пока юзер сам не кликнет по ней.
+            // (Клик по модели запустит smoothFadeIn через твой старый слушатель событий).
+            stopAllAnnotations(); // На всякий случай чистим старые хвосты
         }
     }
-
-    // Запуск аннотаций, если модель уже была проявлена (эту часть можно оставить или убрать, если хочешь ВСЕГДА проявление)
-    if (states[config.vId] && states[config.vId].isTextured) {
-        stopAllAnnotations();
-        startAnnotationCycle(config.vId);
-    }
-
-    history.pushState({ modalOpen: true, id: 'modelModal' }, "");
 }
-function closeModelViewer() {
-    const mId = currentOpenModalId; 
-    if (!mId) return;
 
-    const config = viewerConfig[mId];
-    const modal = document.getElementById(mId);
-
-    // 1. Сначала выполняем сброс (exitModel), пока кнопки еще есть в HTML!
-    if (config) {
-        exitModel(config.vId, config.bId);
-    }
-
-    // 2. И только ПОТОМ очищаем всё и закрываем
-    if (modal) modal.style.display = 'none';
+function closeModelViewer(mId, vId, bId) {
+    document.getElementById(mId).style.display = 'none';
     document.body.style.overflow = 'auto';
-
+    // Остановить все таймеры аннотаций
     Object.values(activeAnnotationTimers).forEach(t => clearInterval(t));
-    stopAllAnnotations();
+    // Сбросить состояния текстур, если нужно открывать заново серыми
+    // states[currentId].isTextured = false; 
+    stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
+    exitModel(vId, bId);
+}
 
-    // Очистка в самом конце
-    const container = document.getElementById('modelModalContent');
-    if (container) container.innerHTML = '';
-    
-    currentOpenModalId = null;
+// Видео и Пропуск
+const stopVid = () => { overlay.style.display = 'none'; video.pause(); exitModel('modsu33', 'cabin-trigger', 'eject-button'); };
+if(video) video.onended = stopVid;
+if(skipBtn) skipBtn.onclick = stopVid;
+
+if(ejectBtn) {
+    ejectBtn.onclick = (e) => {
+        e.stopPropagation();
+        overlay.style.display = 'flex';
+        video.src = "eject.mp4";
+        video.play();
+    };
 }
 
 function toggleView() {
-    const v = document.getElementById('modyak40');
-    if (!v) return;
     if (states.modyak40.isInside) exitModel('modyak40', 'viewToggleButton');
     else enterSalon();
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Поиск ссылки "История и факты" по точному тексту
@@ -813,52 +555,36 @@ function stopAllAnnotations() {
     document.querySelectorAll('model-viewer').forEach(v => v.classList.remove('autocycle-active'));
 }
 //// День-Ночь
-//const nightSwitch = document.querySelector('#night-checkbox');
-//if (nightSwitch) {
-//nightSwitch.addEventListener('change', (event) => {
-//  const viewer = document.getElementById('modyak40');
-//  
-//  // 1. ПРОВЕРКА: Если мы внутри (isInside === true), отменяем переключение
-//  if (states['modyak40'] && states['modyak40'].isInside) {
-//    event.target.checked = false; // Возвращаем тумблер обратно в "выкл"    
-//    return;
-//  }
-//
-//  const isNight = event.target.checked;
-//  setGearVisibility(!isNight); 
-//  const windowMaterial = viewer.model.materials.find(m => m.name === 'Material.001');
-//  
-//  if (isNight) {
-//    viewer.classList.add('night-mode');
-//    viewer.exposure = 0.2;
-//    if (windowMaterial) {
-//      windowMaterial.setEmissiveFactor([2.5, 2.0, 1.0]);
-//    }
-//  } else {
-//    viewer.classList.remove('night-mode');
-//    viewer.exposure = 1.3; // Возвращаем вашу стандартную яркость
-//    if (windowMaterial) {
-//      windowMaterial.setEmissiveFactor();
-//    }
-//  }
-//})};
-function toggleNightMode(isNight) {
-    const viewer = document.getElementById('modyak40');
-    if (!viewer || !viewer.model) return;
+const nightSwitch = document.querySelector('#night-checkbox');
+if (nightSwitch) {
+nightSwitch.addEventListener('change', (event) => {
+  const viewer = document.getElementById('modyak40');
+  
+  // 1. ПРОВЕРКА: Если мы внутри (isInside === true), отменяем переключение
+  if (states['modyak40'] && states['modyak40'].isInside) {
+    event.target.checked = false; // Возвращаем тумблер обратно в "выкл"    
+    return;
+  }
 
-    setGearVisibility(!isNight); 
-    const windowMaterial = viewer.model.materials.find(m => m.name === 'Material.001');
-    
-    if (isNight) {
-        viewer.classList.add('night-mode');
-        viewer.exposure = 0.2;
-        if (windowMaterial) windowMaterial.setEmissiveFactor([2.5, 2.0, 1.0]);
-    } else {
-        viewer.classList.remove('night-mode');
-        viewer.exposure = 1.3;
-        if (windowMaterial) windowMaterial.setEmissiveFactor();
+  const isNight = event.target.checked;
+  setGearVisibility(!isNight); 
+  const windowMaterial = viewer.model.materials.find(m => m.name === 'Material.001');
+  
+  if (isNight) {
+    viewer.classList.add('night-mode');
+    viewer.exposure = 0.2;
+    if (windowMaterial) {
+      windowMaterial.setEmissiveFactor([2.5, 2.0, 1.0]);
     }
-}
+  } else {
+    viewer.classList.remove('night-mode');
+    viewer.exposure = 1.3; // Возвращаем вашу стандартную яркость
+    if (windowMaterial) {
+      windowMaterial.setEmissiveFactor();
+    }
+  }
+})};
+
 /**
  * Управляет видимостью шасси (Material.020)
  * @param {boolean} show - true (показать/день), false (скрыть/ночь)
@@ -953,7 +679,6 @@ function playSynthLaunch() {
 function handleFireClick(event) {
   if (event) event.stopPropagation();
   const viewer = document.getElementById('modsu25');
-  if (!viewer) return; 
   const mat = viewer.model ? viewer.model.materials.find(m => m.name === 'Spo15Rhaw1Mtl.001') : null;
   const trails = ['t1','t2','t3','t4','t5','t6','t7','t8'].map(id => document.getElementById(id));
 if (states.modsu25.isInside) {
@@ -1159,76 +884,3 @@ function speakDetailedInfo(k) {
         console.log("Команда на чтение отправлена:", data[k].title);
     }, 100); 
 }
-
-function startEjectVideo() {
-    // Ищем элементы внутри открытого модального окна
-    const ov = document.getElementById('video-overlay');
-    const vid = document.getElementById('eject-video');
-    const skp = document.getElementById('skip-video');
-
-    if (ov && vid) {
-        ov.style.display = 'flex'; // Показываем черный фон
-        vid.src = "eject.mp4";     // Указываем файл
-        vid.muted = !isAudioEnabled; // Звук зависит от твоей кнопки
-        
-        vid.load(); // Подгружаем файл
-        vid.play().catch(err => console.log("Ошибка воспроизведения:", err));
-
-        // Функция закрытия видео
-        const stopVid = () => {
-            ov.style.display = 'none';
-            vid.pause();
-            vid.currentTime = 0;
-            // Возвращаем камеру Су-33 в исходное состояние
-            exitModel('modsu33', 'cabin-trigger', 'eject-button');
-        };
-
-        vid.onended = stopVid; // Само закроется в конце
-        if (skp) skp.onclick = stopVid; // Закроется при нажатии "Пропустить"
-    }
-}
-document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.getElementById('three-d-mode-toggle');
-    const view2d = document.getElementById('view-2d');
-    const view3d = document.getElementById('view-3d');
-
-    if (toggle) {
-        toggle.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                view2d.style.display = 'none';
-                view3d.style.display = 'block';
-                console.log("Включен 3D режим ангара");
-            } else {
-                view2d.style.display = 'block';
-                view3d.style.display = 'none';
-                console.log("Возврат к фото-режиму");
-            }
-        });
-    }
-});
-// Специальная плавная версия для ангара (без двойных прыжков)
-function smoothEnterAngar(viewer, targetPos, targetOrbit) {
-    viewer.autoRotate = false;
-    viewer.removeAttribute('auto-rotate');
-    viewer.interpolationDecay = 150; 
-    viewer.fieldOfView = '45deg'; 
-    viewer.cameraTarget = targetPos;
-    viewer.cameraOrbit = targetOrbit;
-    // ---: Проявление постеров внутри ---    
-    setTimeout(() => {
-        const posters = viewer.querySelectorAll('.plane-poster');
-        posters.forEach(p => p.classList.add('visible-poster'));
-    }, 100); 
-
-    setTimeout(() => {
-        viewer.interpolationDecay = 100; 
-    }, 4000);
-}
-Video = startEjectVideo;
-window.openModelViewer = openModelViewer;
-window.closeModelViewer = closeModelViewer;
-window.toggleView = toggleView;
-window.enterbagage = enterbagage;
-window.handleFireClick = handleFireClick;
-window.enterSalon = enterSalon;
-window.enterCabin = enterCabin;
