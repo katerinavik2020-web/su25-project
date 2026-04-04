@@ -312,13 +312,6 @@ a:active {
   filter: none !important; /* Убираем размытие, если оно было */
 }
 
-@media (max-width: 600px) {
-  .annotation {
-    font-size: 14px;
-    padding: 8px 12px;
-  }
-}
-
 
 /* Универсальный селектор для всех типов хотспотов в активном состоянии */
 .hotspot_a.active, 
@@ -777,3 +770,34 @@ model-viewer:not([poster-dismissed]) .custom-loader {
     transform: scale(1.1);
     filter: brightness(1.2);
 }
+
+
+
+@media (max-width: 600px) {
+  /* Сама плашка аннотации (текст над самолетом) */
+  .annotation {
+    font-size: 11px !important;    /* Уменьшаем шрифт, чтобы не лез на соседей */
+    padding: 4px 8px !important;   /* Компактные отступы */
+    width: 130px !important;       /* Ограничиваем ширину плашки */
+    white-space: normal !important; /* Разрешаем перенос текста на новую строку */
+    line-height: 1.2 !important;
+  }
+
+  /* Сама синяя точка-кнопка (делаем чуть меньше для пальца) */
+  .hotspot_a {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  .plane-poster img {
+        width: 180px !important; /* Уменьшаем самолеты для маленьких экранов */
+    }
+    #view-3d {
+        height: 400px !important; /* Уменьшаем высоту окна ангара на телефонах */
+    }
+  /* Уменьшаем текст "Режим 3D" у слайдера на мобилках */
+  #three-d-mode-toggle + .slider + span, 
+  .angar-section span {
+    font-size: 12px !important;
+  }
+  
+

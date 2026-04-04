@@ -70,21 +70,42 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
 </div>
 <section class="angar-section" style="padding: 40px 20px; text-align: center;">
   <h2 class="section-title">Виртуальная стоянка ангара МАИ</h2>
-<div style="position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 30px; min-height: 40px;">
-    <p style="margin: 0; opacity: 0.8; font-size: 0.95rem;">
+<div style="position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 30px; min-height: 50px; width: 100%;">
+    
+    <!-- ТЕКСТ: Всегда в центре. На мобилках уменьшаем ширину, чтобы не бил слайдер -->
+    <p style="margin: 0; opacity: 0.8; font-size: 0.95rem; text-align: center; max-width: 60%; line-height: 1.3;">
         Наведите на самолёт, чтобы увидеть название, или кликните для подробностей
     </p>
-    <!-- Слайдер, прижатый в самый правый край -->
-    <div style="position: absolute; right: 0; display: flex; align-items: center;">
-        <span style="margin-right: 10px; color: #007bff; font-weight: 700; font-size: 15px; text-align: right; line-height: 1.2;">
+
+    <!-- СЛАЙДЕР: Прибит к правому краю через position: absolute -->
+    <div style="position: absolute; right: 0; display: flex; align-items: center; white-space: nowrap;">
+        <span style="margin-right: 10px; color: #007bff; font-weight: 700; font-size: 14px; text-align: right; line-height: 1.1;">
             Режим 3D
         </span>
-        <label class="switch" style="transform: scale(0.85); margin-right: 0;">
+        <label class="switch" style="transform: scale(0.8); margin-right: 0;">
             <input type="checkbox" id="three-d-mode-toggle">
             <span class="slider"></span>
         </label>
     </div>
-  </div>
+</div>
+
+<style>
+/* Магия для телефона: если экран меньше 768px, отключаем "абсолютное" позиционирование слайдера */
+@media (max-width: 768px) {
+    [style*="position: absolute; right: 0"] {
+        position: static !important; 
+        margin-top: 15px;
+        width: 100%;
+        justify-content: center !important;
+    }
+    [style*="display: flex; justify-content: center"] {
+        flex-direction: column;
+    }
+    [style*="max-width: 60%"] {
+        max-width: 100% !important;
+    }
+}
+</style>
 
   <div id="main-view-container" style="position: relative; width: 100%;">
     
