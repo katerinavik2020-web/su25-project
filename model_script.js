@@ -1218,7 +1218,7 @@ function smoothEnterAngar(viewer, targetPos, targetOrbit) {
     setTimeout(() => {
         const posters = viewer.querySelectorAll('.plane-poster');
         posters.forEach(p => p.classList.add('visible-poster'));
-    }, 100); 
+    }, 150); 
 
     setTimeout(() => {
         viewer.interpolationDecay = 100; 

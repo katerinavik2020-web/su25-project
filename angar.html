@@ -201,6 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         view2d.style.display = 'block';
         view3d.style.display = 'none';
+       const posters = angar.querySelectorAll('.plane-poster');
+            posters.forEach(p => p.classList.remove('visible-poster'));
         if (angar) {
             // Возвращаем камеру "на улицу" для следующего раза
             angar.cameraOrbit = "-223.7deg 77.74deg 150m";
