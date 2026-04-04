@@ -1214,6 +1214,25 @@ function smoothEnterAngar(viewer, targetPos, targetOrbit) {
     viewer.fieldOfView = '45deg'; 
     viewer.cameraTarget = targetPos;
     viewer.cameraOrbit = targetOrbit;
+    // Текст на случай, если файл не сработает
+    const welcomeText = "Добро пожаловать в учебный авиационный ангар МАИ. Здесь представлены легендарные крылатые машины.";
+    // Запускаем всё через 2 секунды после начала залёта
+    setTimeout(() => {
+        if (isAudioEnabled) {
+            const welcomeSound = new Audio('welcome.mp3');
+            welcomeSound.volume = 0.8;
+
+            // Попытка сыграть твой голос
+            welcomeSound.play().catch(error => {
+                // ЕСЛИ ФАЙЛ НЕ НАЙДЕН ИЛИ ОШИБКА — ГОВОРИТ ПАВЕЛ
+                console.warn("Файл welcome.mp3 не сработал, включаю Павла");
+                speakAnnotation(welcomeText); 
+            });
+        }
+        // Проявляем постеры самолетов
+        const posters = viewer.querySelectorAll('.plane-poster');
+        posters.forEach(p => p.classList.add('visible-poster'));
+    }, 2000);
     // ---: Проявление постеров внутри ---    
     setTimeout(() => {
         const posters = viewer.querySelectorAll('.plane-poster');
