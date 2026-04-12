@@ -4,7 +4,8 @@ const viewerConfig = {
     'yak40': { vId: 'modyak40', bId: 'viewToggleButton', mId: 'modelModal' },
     'su25':  { vId: 'modsu25',  bId: 'bagage-trigger',   mId: 'modelModal' },
     'su33':  { vId: 'modsu33',  bId: 'cabin-trigger',    mId: 'modelModal' },
-    'mi2':   { vId: 'modmi2',   bId: 'viewToggleButtonrMi',    mId: 'modelModal' }
+    'mi2':   { vId: 'modmi2',   bId: 'viewToggleButtonrMi',    mId: 'modelModal' },
+    'kvant': { vId: 'modkvant',   bId: 'viewToggleButtonrК',    mId: 'modelModal' }
 };
 let currentActivePlane = null;
 let currentOpenModalId = null;
@@ -256,6 +257,18 @@ const modelTemplates = {
         Заглянуть внутрь
     </div>    
 
+    <div class="modal-btn" onclick="closeModelViewer()"
+         style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
+        Закрыть
+    </div>`,
+    kvant: `<model-viewer id="modkvant" 
+        src="model_kvant.glb" 
+        poster="poster_kvant.webp"
+        camera-controls 
+        interaction-prompt="none"
+        style="width:100%; height:100%;">
+        <div slot="progress-bar" class="custom-loader"><div class="update-bar"></div></div>
+    </model-viewer>
     <div class="modal-btn" onclick="closeModelViewer()"
          style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
         Закрыть
@@ -610,6 +623,13 @@ function openModelViewer(planeKey) {
     
     const v = document.getElementById(config.vId);
     if (v) {
+    	// --- ПРОВЕРКА НАЛИЧИЯ ФАЙЛА ---
+        v.addEventListener('error', () => {
+            closeModelViewer(); // Закрываем пустое окно 3D
+            if (typeof playBeep === 'function') playBeep();
+            showServiceMessage(`${data[planeKey].title} на техобслуживании. Инженеры готовят модель!`);
+            openModal(planeKey); // Открываем текстовую карточку
+        }, { once: true });
         // 2. СРАЗУ ПОСЛЕ ЗАГРУЗКИ МОДЕЛИ ДЕЛАЕМ ЕЁ СЕРОЙ
         v.addEventListener('load', () => {
             const loader = v.querySelector('.custom-loader');
@@ -1360,6 +1380,28 @@ function toggleMi2View() {
     }
 }
 
+function showServiceMessage(text) {
+    // Создаем элемент, если его еще нет
+    let msg = document.getElementById('service-msg');
+    if (!msg) {
+        msg = document.createElement('div');
+        msg.id = 'service-msg';
+        playBeep();
+        msg.style.cssText = `
+            position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 123, 255, 0.9); color: white; padding: 15px 25px;
+            border-radius: 30px; z-index: 10000; font-family: sans-serif;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: opacity 0.5s; opacity: 0;
+        `;
+        document.body.appendChild(msg);
+    }
+    
+    msg.innerText = text;
+    msg.style.opacity = '1';
+    
+    // Скрыть через 4 секунды
+    setTimeout(() => { msg.style.opacity = '0'; }, 4000);
+}
 Video = startEjectVideo;
 window.openModelViewer = openModelViewer;
 window.closeModelViewer = closeModelViewer;
