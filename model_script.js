@@ -233,7 +233,7 @@ const modelTemplates = {
            data-position="-5.3m -1m 0.21m" 
            data-normal="0 0 1"
             onclick="handleMi2Action('cabin')">
-            <div class="annotation">Экипаж 3 человека</div>
+            <div class="annotation">Экипаж 1 человек (на самом деле 1 пилот, но в учебных часто 2)</div>
         </button>
         <button class="hotspot_a" slot="hotspot-4" 
             data-position="1.0m 0m -0.2m" 
@@ -242,7 +242,7 @@ const modelTemplates = {
             <div class="annotation">
                 Ми-2: Многоцелевой вертолет<br> 
                 Макс. взлётная масса: 3,5 тонны<br>
-                Дальность полёта: до 580 км<br>
+                Дальность полёта: обычная около 340-400 км,с доп. баками  до 580 км<br>
                 Максимальная скорость: 210 км/ч
             </div>
         </button>            
@@ -252,6 +252,12 @@ const modelTemplates = {
             <div class="update-bar"></div>
         </div>
     </model-viewer>
+    <div class="control-panel">      
+      <label class="switch">       
+        <input type="checkbox" id="rotor-switch">
+        <span class="slider"></span>
+      </label>
+    </div>     
     <div id="viewToggleButtonMi" class="modal-btn" onclick="toggleMi2View()" 
          style="position: absolute; bottom: 30px; right: 250px; z-index: 10; cursor: pointer;">
         Заглянуть внутрь
@@ -581,6 +587,8 @@ function exitModel(vId, bId, eId = null) {
     }
     resetRocketsState(vId);
     v.resetTurntableRotation();
+    const rotorSwitch = document.querySelector('#rotor-switch');
+    if (rotorSwitch) rotorSwitch.checked = false;
     if (vId === 'modmi2' && b) {
         b.innerText = "Заглянуть внутрь";
         b.style.background = "";
@@ -678,7 +686,15 @@ function openModelViewer(planeKey) {
             });
         }
     }
-
+    if (planeKey === 'mi2') {
+        const rs = document.getElementById('rotor-switch');
+        if (rs) {
+            rs.addEventListener('change', (e) => {
+                // Вызываем ту же функцию, что и на хотспоте
+                handleMi2Action('vint');
+            });
+        }
+    }
     // Запуск аннотаций, если модель уже была проявлена (эту часть можно оставить или убрать, если хочешь ВСЕГДА проявление)
     if (states[config.vId] && states[config.vId].isTextured) {
         stopAllAnnotations();
@@ -1405,29 +1421,28 @@ function handleMi2Action(action) {
 }
     // 3. ВИНТ (Логика ВКЛ/ВЫКЛ)
     if (action === 'vint') {
-        const isRotorPlaying = !mv.paused && mv.animationName && 
-            (mv.animationName.includes('vint') || mv.animationName.includes('blade') || mv.animationName.includes('fly'));
+    const isRotorPlaying = !mv.paused && mv.animationName && 
+        (mv.animationName.includes('vint') || mv.animationName.includes('blade'));
 
-        if (isRotorPlaying) {
-            mv.pause();
-            console.log("Винты остановлены");
-            isUserInteracting = false; 
-            mv.autoRotate = true;
-            startAnnotationCycle('modmi2');
-        } else {
-            const rotorAnim = mv.availableAnimations.find(a => 
-                a.toLowerCase().includes('vint') || 
-                a.toLowerCase().includes('blade') || 
-                a.toLowerCase().includes('fly')
-            );
-            
-            if (rotorAnim) {
-                mv.animationName = rotorAnim;
-                mv.play();
-                console.log("Запущен винт:", rotorAnim);
-            }
+    const rs = document.getElementById('rotor-switch'); // Находим наш слайдер
+
+    if (isRotorPlaying) {
+        mv.pause();
+        if (rs) rs.checked = false; // Выключаем слайдер визуально
+        isUserInteracting = false; 
+        mv.autoRotate = true;
+        startAnnotationCycle('modmi2');
+    } else {
+        const rotorAnim = mv.availableAnimations.find(a => 
+            a.toLowerCase().includes('vint') || a.toLowerCase().includes('blade')
+        );
+        if (rotorAnim) {
+            mv.animationName = rotorAnim;
+            mv.play();
+            if (rs) rs.checked = true; // Включаем слайдер визуально
         }
     }
+}
 }
 function toggleMi2View() {
     const vId = 'modmi2';
