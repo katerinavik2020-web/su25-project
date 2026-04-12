@@ -5,7 +5,8 @@ const viewerConfig = {
     'su25':  { vId: 'modsu25',  bId: 'bagage-trigger',   mId: 'modelModal' },
     'su33':  { vId: 'modsu33',  bId: 'cabin-trigger',    mId: 'modelModal' },
     'mi2':   { vId: 'modmi2',   bId: 'viewToggleButtonrMi',    mId: 'modelModal' },
-    'kvant': { vId: 'modkvant',   bId: 'viewToggleButtonrК',    mId: 'modelModal' }
+    'kvant': { vId: 'modkvant',   bId: 'viewToggleButtonrК',    mId: 'modelModal' },
+    'mojaysky': { vId: 'modmoj',bId: 'viewToggleButtonmoj', mId: 'modelModal'}
 };
 let currentActivePlane = null;
 let currentOpenModalId = null;
@@ -158,7 +159,7 @@ const modelTemplates = {
         ar-modes="webxr scene-viewer quick-look"         
         alt="3D модель с поддержкой AR">    
   <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
-    👋 Посмотреть в AR
+    👋  Посмотреть в AR
   </button>
         <button slot="hotspot-su331" id="cabin-trigger" class="cabin-area" 
         data-position="7.2m 3.6m 0.2m" data-normal="0.1 0.6 0.8" 
@@ -193,7 +194,7 @@ const modelTemplates = {
 <div id="video-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; justify-content: center; align-items: center;">
     <!-- Кнопка пропуска -->
     <button id="skip-video" style="position: absolute; bottom: 30px; right: 30px; padding: 10px 20px; background: rgba(255, 120, 0, 0.2); color: white; border: 1px solid white; cursor: pointer; border-radius: 5px; z-index: 10000;">
-        Пропустить →
+        Пропустить  →>
     </button>    
     <video id="eject-video" style="max-width: 100%; max-height: 100%;">
         <source type="video/mp4">
@@ -233,7 +234,7 @@ const modelTemplates = {
            data-position="-5.3m -1m 0.21m" 
            data-normal="0 0 1"
             onclick="handleMi2Action('cabin')">
-            <div class="annotation">Экипаж 1 человек (на самом деле 1 пилот, но в учебных часто 2)</div>
+            <div class="annotation">Экипаж 1 человек -на самом деле 1 пилот, но в учебных часто 2</div>
         </button>
         <button class="hotspot_a" slot="hotspot-4" 
             data-position="1.0m 0m -0.2m" 
@@ -270,15 +271,86 @@ const modelTemplates = {
     kvant: `<model-viewer id="modkvant" 
         src="model_kvant.glb" 
         poster="poster_kvant.webp"
-        camera-controls 
-        interaction-prompt="none"
-        style="width:100%; height:100%;">
+        skybox-image="nebo1.jpg"   
+        environment-image="neutral"
+        exposure="1.3"
+        shadow-intensity="0.5"
+        shadow-softness="1" 
+        auto-rotate-delay="10000"
+        auto-rotate        
+        camera-controls
+        shadow-intensity="1"
+        touch-action="none"
+        camera-orbit="52.32deg 52.35deg 44.54m" 
+        field-of-view="30deg"
+        interaction-prompt="none">
         <div slot="progress-bar" class="custom-loader"><div class="update-bar"></div></div>
     </model-viewer>
     <div class="modal-btn" onclick="closeModelViewer()"
          style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
         Закрыть
-    </div>`
+    </div>`,
+    mojaysky: `<model-viewer id="modmoj" 
+        src="model_mojaysky.glb" 
+        poster="poster_mojaysky.webp"
+        skybox-image="nebo1.jpg"   
+        environment-image="neutral"
+        exposure="1.3"
+        shadow-intensity="1"
+        shadow-softness="1" 
+        auto-rotate-delay="10000"
+        auto-rotate        
+        camera-controls
+        touch-action="none"
+        camera-orbit="48.8deg 79.65deg 22.85m" 
+        field-of-view="30deg"
+        interaction-prompt="none"
+        ar        
+        ar-modes="webxr scene-viewer quick-look"         
+        alt="3D модель с поддержкой AR">    
+    
+    <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
+        👋 Посмотреть в AR
+    </button>
+
+    <button class="hotspot_a" slot="hotspot-1" 
+            data-position="1.8m 0.15m -1.3m" 
+            data-normal="0 1 0"
+            data-visibility-attribute="visible">
+        <div class="annotation">Пружинный двигатель и три винта</div>
+    </button>
+
+    <button class="hotspot_a" slot="hotspot-2" 
+            data-position="0.2m 0.15m -1.5m" 
+            data-normal="0 1 0"
+            data-visibility-attribute="visible">
+        <div class="annotation">Прямоугольное неподвижное крыло</div>
+    </button>
+
+    <button class="hotspot_a" slot="hotspot-3" 
+            data-position="-3.09m 0.14m -1.02m"    
+            data-normal="0 0 1"
+            data-visibility-attribute="visible">
+        <div class="annotation">Хвостовое оперение и рули управления</div>
+    </button>
+    <button class="hotspot_a" slot="hotspot-4" 
+            data-position="-0.03m -1.084m -0.42m" 
+            data-normal="0 -1 0"
+            data-visibility-attribute="visible">
+        <div class="annotation">Четырехколесное шасси для разбега</div>
+    </button>
+    <button class="hotspot_a" slot="hotspot-5" 
+            data-position="-0.40m 0.32m 3.4m " 
+            data-normal="1 0 0"
+            data-visibility-attribute="visible">
+        <div class="annotation">В учебных ангарах МАИ представлен макет консоли крыла этого исторического аппарата.</div>
+    </button> 
+
+</model-viewer>
+<div class="modal-btn" onclick="closeModelViewer()"
+     style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
+    Закрыть
+</div>`
 };
 
 const activeAnnotationTimers = {};
@@ -312,7 +384,13 @@ const data={
     text: 'Легкий многоцелевой самолет-биплан, разработанный в ОСКБЭС МАИ.',
     history: 'Проектирование началось в 1987 году. Самолет создавался как очень простая, надежная и маневренная машина. Он уникален тем, что при малых размерах обладает полноценным управлением и прочностью взрослого самолета. МАИ-890 прошел сертификацию и выпускался серийно.',
     exhibit: 'Натурный образец находится в ангаре кафедры 101 и на учебном аэродроме МАИ.'
-  }
+  },
+  mojaysky: {
+    title: 'Самолёт Можайского - модель«Летунья» (образца 1876–1877 гг.)',
+    text: 'Первый в мире самолёт в натуральную величину, предпринявший попытку взлёта с человеком на борту (1882 г.).',
+    history: 'Создан морским офицером Александром Фёдоровичем Можайским. Создана в 1876 году для проверки аэродинамических расчетов. В 1877 году демонстрировалась Главным инженерным управлением и подтвердила возможность полета тяжелее воздуха.',
+    exhibit: 'В учебных ангарах МАИ представлен макет консоли крыла этого исторического аппарата.'
+}
 };
 
 let globalResumeTimeout = null;
@@ -365,7 +443,16 @@ function openModal(k){
     <tr><th>📏 Размах крыла</th><td>6,7 м</td></tr>
     <tr><th>⚖️ Макс. взлётная масса</th><td>540 кг</td></tr>
     <tr><th>⚔️ Особенность</th><td>Короткий разбег и посадка на неподготовленные площадки</td></tr>
-  </table>`
+  </table>`,
+  mojaysky: `<table class="spec-table">
+      <tr><th>👤 Экипаж</th><td>Беспилотная модель</td></tr>
+      <tr><th>🚀 Максимальная скорость</th><td>≈ 15 км/ч (5 м/с)</td></tr>
+      <tr><th>⚖️ Пустой вес</th><td>Несколько килограммов</td></tr>
+      <tr><th>📏 Тип конструкции</th><td>Летающий моноплан</td></tr>
+      <tr><th>⚙️ Двигатели</th><td>Стальная пружина или резиновый жгут</td></tr>
+      <tr><th>⚖️ Грузоподъемность</th><td>Способна нести вес офицерского кортика</td></tr>
+      <tr><th>🎯 Назначение</th><td>Аэродинамические испытания</td></tr>
+    </table>`
 };
 const pStyle = `style="text-align: justify; text-indent: 25px; hyphens: auto; margin-bottom: 10px;"`;
   modalContent.innerHTML=`
@@ -397,7 +484,8 @@ const states = {
     modyak40: { isInside: false, isTextured: false, orbit: '180deg 75deg auto' },
     modsu25: { isInside: false, isTextured: false, orbit: '490.4deg 73.01deg 22.14m' },
     modmi2:   { isInside: false , isTextured: true, orbit: '-22.26deg 78.51deg 30.21m' },
-    modkvant: { isInside: false, isTextured: false, orbit: '180deg 75deg 10m' }
+    modkvant: { isInside: false, isTextured: false, orbit: '180deg 75deg 10m' },
+    modmoj: { isInside: false, isTextured: false, orbit: '48.8deg 79.65deg 22.85m' }
 };
 const autoFadeTimers = {};
 // --- 2. ПОДГОТОВКА ВСЕХ МОДЕЛЕЙ (ПРОЗРАЧНОСТЬ И СЕРЫЙ ЦВЕТ) ---

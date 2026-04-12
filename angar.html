@@ -159,7 +159,17 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
           <span style="font-size: 12px; font-weight: 400; opacity: 0.8;">Легкий многоцелевой</span>
         </div>
       </button>   
-      
+<!-- Точка над моделью Можайского («Летунья») -->
+<button class="hotspot_a" 
+        onclick="openModal('mojaysky_model')" 
+        onmouseenter="speakAnnotation('Модель Можайского Летунья')" 
+        onmouseleave="stopSpeak()"
+        style="top: 65%; left: 10%; background-color: #007bff !important; border: 2px solid white !important; box-shadow: 0 0 10px rgba(0,0,0,0.8) !important; width: 16px; height: 16px;">
+  <div class="annotation">
+    Модель «Летунья»<br>
+    <span style="font-size: 12px; font-weight: 400; opacity: 0.8;">Первая в России летающая модель с деревянным каркасом</span>
+  </div>
+</button>      
     </div>
 
     <!-- РЕЖИМ 3D  -->
@@ -195,6 +205,13 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
           onclick="handlePosterClick(event,'mi2')">
       <img src="poster_mi2.webp" style="width: 450px; height: auto;">
       <div class="annotation">Ми-2</div>
+  </button>
+  <!-- Модель Можайского (слева) -->
+  <button slot="hotspot-mojaysky" class="plane-poster hidden-poster" 
+          data-position="-2m 4m -2m" data-normal="0 1 0" 
+          onclick="handlePosterClick(event,'mojaysky')">
+      <img src="poster_mojaysky.webp" style="width: 300px; height: auto;">
+      <div class="annotation">Модель «Летунья»</div>
   </button>
     </model-viewer>
     </div>
