@@ -691,32 +691,31 @@ function openModelViewer(planeKey) {
     history.pushState({ modalOpen: true, id: 'modelModal' }, "");
 }
 function closeModelViewer() {
-    const mId = currentOpenModalId; 
-    if (!mId) return;
-
-    const config = viewerConfig[mId];
-    const modal = document.getElementById(mId);
-
-    // 1. Сначала выполняем сброс (exitModel), пока кнопки еще есть в HTML!
+    // 1. Ищем по КЛЮЧУ МОДЕЛИ (например, 'mi2'), а не по ID модалки
+    const planeKey = currentActivePlane; 
+    if (!planeKey) return;
+    const config = viewerConfig[planeKey];
+    const modal = document.getElementById('modelModal'); // Прямое обращение к ID модалки
+                                                                                              // 2. Теперь exitModel СРАБОТАЕТ, так как config найден
     if (config) {
         exitModel(config.vId, config.bId);
     }
-    // 2. И только ПОТОМ очищаем всё и закрываем
+    // 3. Закрываем визуально
     if (modal) modal.style.display = 'none';
     document.body.style.overflow = 'auto';
-    //Object.values(activeAnnotationTimers).forEach(t => clearInterval(t));    
+    // 4. Очистка таймеров
     Object.keys(activeAnnotationTimers).forEach(id => {
-      clearTimeout(activeAnnotationTimers[id]); // Меняем на clearTimeout
+      clearTimeout(activeAnnotationTimers[id]);
       delete activeAnnotationTimers[id];
-    });
+    });    
     stopAllAnnotations();
-    // Очистка в самом конце
+    // 5. Очистка контейнера
     const container = document.getElementById('modelModalContent');
-    if (container) container.innerHTML = '';
-    
+    if (container) container.innerHTML = '';    
+    // Сбрасываем ключи
     currentOpenModalId = null;
+    currentActivePlane = null;
 }
-
 function toggleView() {
     const v = document.getElementById('modyak40');
     if (!v) return;
