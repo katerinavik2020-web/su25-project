@@ -206,7 +206,7 @@ const modelTemplates = {
         ar ar-modes="webxr scene-viewer quick-look" 
         camera-controls 
         poster="poster_mi2.webp"         
-        camera-orbit="-34.41deg 65.99deg 27.33m" 
+        camera-orbit="-22.26deg 78.51deg 30.21m" 
         field-of-view="19.24deg"
         skybox-image="cloud_layers_1k.hdr"
         environment-image="neutral"
@@ -390,7 +390,7 @@ const states = {
     modsu33: { isInside: false, isTextured: false, orbit: '52.32deg 52.35deg 44.54m' },
     modyak40: { isInside: false, isTextured: false, orbit: '180deg 75deg auto' },
     modsu25: { isInside: false, isTextured: false, orbit: '490.4deg 73.01deg 22.14m' },
-    modmi2:   { isInside: false , isTextured: true, orbit: '-34.41deg 65.99deg 27.33m' },
+    modmi2:   { isInside: false , isTextured: true, orbit: '-22.26deg 78.51deg 30.21m' },
     modkvant: { isInside: false, isTextured: false, orbit: '180deg 75deg 10m' }
 };
 const autoFadeTimers = {};
