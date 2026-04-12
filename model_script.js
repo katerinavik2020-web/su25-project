@@ -1037,7 +1037,8 @@ function startAnnotationCycle(viewerId) {
             
             // 4. ПРИНУДИТЕЛЬНО ВКЛЮЧАЕМ авторотацию обратно
             viewer.autoRotate = true; 
-            //viewer.play(); 
+            //viewer.play();
+             showNext();  
         }, 10000); 
     });
 }
