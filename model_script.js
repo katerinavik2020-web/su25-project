@@ -3,7 +3,8 @@
 const viewerConfig = {
     'yak40': { vId: 'modyak40', bId: 'viewToggleButton', mId: 'modelModal' },
     'su25':  { vId: 'modsu25',  bId: 'bagage-trigger',   mId: 'modelModal' },
-    'su33':  { vId: 'modsu33',  bId: 'cabin-trigger',    mId: 'modelModal' }
+    'su33':  { vId: 'modsu33',  bId: 'cabin-trigger',    mId: 'modelModal' },
+    'mi2':   { vId: 'modmi2',   bId: 'viewToggleButtonrMi',    mId: 'modelModal' }
 };
 let currentActivePlane = null;
 let currentOpenModalId = null;
@@ -49,7 +50,7 @@ const modelTemplates = {
            <div class="annotation">Размах крыла:	25 м</div>
          </button>  
           <button class="hotspot_a" slot="hotspot-a3" data-position="-2.16m 2.85m 7.09m" data-normal="-0.22 0.97 0.13">
-           <div class="annotation">Региональные пассажирские перевозки<br> Макс. взлётная масса: 16т <br>Дальность полёта	до 1800 км </div>
+           <div class="annotation">Региональные пассажирские перевозки<br> Макс. взлётная масса: 16 тонн <br>Дальность полёта	до 1800 км </div>
          </button>
          <button slot="hotspot-light-left" class="nav-light red" data-position="-7.16m 0.65m 1.5m" data-normal="0.14m 0.98m 0.15m"></button>  
          <button slot="hotspot-light-right" class="nav-light green" data-position="7.16m 0.65m 1.5m" data-normal="-0.03m 0.1m -0.01m"></button>
@@ -118,7 +119,7 @@ const modelTemplates = {
           <div class="annotation">Размах крыла: 14.4 м</div>
         </button>
         <button class="hotspot_a" slot="hotspot-a5" data-position="1.52m 1.03m 3.66m" data-normal="-0.06 1.00 0.01" >
-          <div class="annotation">Штурмовик поддержки войск<br>Макс. взлётная масса: 17.6 т<br>Практический потолок: 7000 м</div>
+          <div class="annotation">Штурмовик поддержки войск<br>Макс. взлётная масса: 17,6 тонн<br>Практический потолок: 7000 м</div>
         </button>        
         <div id="t1" slot="hotspot-t1" class="rocket-trail" data-position="1.50m 0.21m -1.20m" data-normal="0.90m 0.37m -0.23m"></div>
         <div id="t2" slot="hotspot-t2" class="rocket-trail" data-position="2.02m 0.19m -0.82m" data-normal="0.67m 0.67m -0.31m"></div>
@@ -144,7 +145,7 @@ const modelTemplates = {
         exposure="1.3"
         shadow-intensity="0.5"
         shadow-softness="1" 
-        autorotate-delay="10000"
+        auto-rotate-delay="10000"
         auto-rotate        
         camera-controls
         shadow-intensity="1"
@@ -170,17 +171,17 @@ const modelTemplates = {
         style="display: none;">
 </button>
         <button class="hotspot_a" slot="hotspot-a2" data-position="-5.99m 2.64m -0.93m" data-normal="-0.04 0.98 0.21">
-          <div class="annotation">2 двигателя АЛ-31Ф-3<br>Макс. скорость: 2300 км/ч (M=2.17)</div>
+          <div class="annotation">2 двигателя АЛ-31Ф-3<br>Макс. скорость: 2300 км/ч </div>
         </button>
         <button class="hotspot_a" slot="hotspot-a3" data-position="-5.98m 2.13m 0.37m" data-normal="-0.00 -1.00 0.04">
           <div class="annotation">Тормозной гак для посадки<br>на авианосец «Адмирал Кузнецов»<br>Система дозаправки в воздухе</div>
         </button>
         <button class="hotspot_a" slot="hotspot-a4" data-position="-2.72m 2.65m 3.55m" data-normal="0.01 0.81 -0.59">
-          <div class="annotation">Размах крыла: 14.7 м<br>Крылья складываются для хранения</div>
+          <div class="annotation">Размах крыла: 14,7 м <br>Крылья складываются для хранения</div>
         </button>
         <button class="hotspot_a" slot="hotspot-a5" data-position="-6.48m 1.93m -3.79m" data-normal="0.07 1.00 -0.07">
-          <div class="annotation">Многоцелевой палубный истребитель<br>Переднее горизонтальное оперение (ПГО)<br>Дальность: до 3000 км<br>
-          Практический потолок: около 17 000 м</div>
+          <div class="annotation">Многоцелевой палубный истребитель<br>Переднее горизонтальное оперение <br>Дальность: до 3000 км<br>
+          Практический потолок: около 17000 м <br> Макс. взлётная масса: 33 тонны </div>
         </button>  
         <!-- Индикатор загрузки -->
         <div slot="progress-bar" class="custom-loader">
@@ -197,7 +198,68 @@ const modelTemplates = {
         <source type="video/mp4">
     </video>
 </div>
- <div class='modal-btn' onclick="closeModelViewer()" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div>`
+ <div class='modal-btn' onclick="closeModelViewer()" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div>`,
+  
+   mi2: `<model-viewer id="modmi2" 
+        src="model_mi2.glb" 
+        ar ar-modes="webxr scene-viewer quick-look" 
+        camera-controls 
+        poster="poster_mi2.webp"         
+        camera-orbit="-34.41deg 65.99deg 27.33m" 
+        field-of-view="19.24deg"
+        skybox-image="cloud_layers_1k.hdr"
+        environment-image="neutral"
+        exposure="1.0"
+        shadow-intensity="1"
+        shadow-softness="1" 
+        auto-rotate-delay="10000"
+        auto-rotate                
+        touch-action="none"
+        interaction-prompt="none">
+        <button slot="hotspot-1" class="cabin-hotspot" 
+            data-position="-1.0m -0.5m 0.8m" 
+            data-normal="1 0 0"
+            onclick="handleMi2Action('salon')">
+            <div class="annotation">Пассажиров до 8</div>
+        </button>
+        <button slot="hotspot-2" class="cabin-hotspot" 
+            data-position="-2.9m 1.85m 0.0m" 
+            data-normal="1 0 0"
+            onclick="handleMi2Action('vint')">
+            <div class="annotation">Диаметр несущего винта 14,5 м</div>
+        </button>
+        <button slot="hotspot-3" class="cabin-hotspot"             
+           data-position="-5.3m -1m 0.21m" 
+           data-normal="0 0 1"
+            onclick="handleMi2Action('cabin')">
+            <div class="annotation">Экипаж 3 человека</div>
+        </button>
+        <button class="hotspot_a" slot="hotspot-4" 
+            data-position="1.0m 0m -0.2m" 
+            data-normal="1 0 0"
+            data-visibility-attribute="visible">
+            <div class="annotation">
+                Ми-2: Многоцелевой вертолет<br> 
+                Макс. взлётная масса: 3,5 тонны<br>
+                Дальность полёта: до 580 км<br>
+                Максимальная скорость: 210 км/ч
+            </div>
+        </button>            
+
+        <div slot="progress-bar" class="custom-loader">
+            <div class="loader-text">Загрузка модели...</div>
+            <div class="update-bar"></div>
+        </div>
+    </model-viewer>
+    <div id="viewToggleButtonMi" class="modal-btn" onclick="toggleMi2View()" 
+         style="position: absolute; bottom: 30px; right: 250px; z-index: 10; cursor: pointer;">
+        Заглянуть внутрь
+    </div>    
+
+    <div class="modal-btn" onclick="closeModelViewer()"
+         style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
+        Закрыть
+    </div>`
 };
 
 const activeAnnotationTimers = {};
@@ -315,10 +377,10 @@ const states = {
     modsu33: { isInside: false, isTextured: false, orbit: '52.32deg 52.35deg 44.54m' },
     modyak40: { isInside: false, isTextured: false, orbit: '180deg 75deg auto' },
     modsu25: { isInside: false, isTextured: false, orbit: '490.4deg 73.01deg 22.14m' },
-    modmi2:   { isInside: false, isTextured: false, orbit: '90deg 80deg 15m' },
+    modmi2:   { isInside: false , isTextured: true, orbit: '-34.41deg 65.99deg 27.33m' },
     modkvant: { isInside: false, isTextured: false, orbit: '180deg 75deg 10m' }
 };
-
+const autoFadeTimers = {};
 // --- 2. ПОДГОТОВКА ВСЕХ МОДЕЛЕЙ (ПРОЗРАЧНОСТЬ И СЕРЫЙ ЦВЕТ) ---
 function setupModelLoad(id) {
     const v = document.getElementById(id);
@@ -334,7 +396,6 @@ function setupModelLoad(id) {
         });
     });
 }
-//['modsu33', 'modsu25', 'modyak40', 'modmi2', 'modkvant'].forEach(setupModelLoad);
 
 // --- 3. ПЛАВНОЕ ПРОЯВЛЕНИЕ ТЕКСТУР (3 СЕК) ---
 function smoothFadeIn(viewerId, btnId) {
@@ -395,34 +456,6 @@ materials.forEach(m => {
     }
     requestAnimationFrame(step);
 }
-
-// Привязка проявления к клику
-// Объект для хранения таймеров (чтобы можно было отменить их при клике)
-const autoFadeTimers = {};
-//['modsu33', 'modsu25', 'modyak40'].forEach(id => {
-//    const v = document.getElementById(id);
-//    if (!v) return;
-//    // --- ФУНКЦИЯ ПРОЯВЛЕНИЯ ---
-//    const runFade = () => {
-//        // Если таймер еще тикает — отменяем его (так как проявление уже пошло)
-//        if (autoFadeTimers[id]) {
-//            clearTimeout(autoFadeTimers[id]);
-//            delete autoFadeTimers[id];
-//        }        
-//        const btnId = (id === 'modsu33') ? 'cabin-trigger' : (id === 'modsu25') ? 'bagage-trigger' : 'viewToggleButton';
-//        smoothFadeIn(id, btnId);
-//    };
-//    // 1. АВТО-ПРОЯВЛЕНИЕ: запускаем таймер на 5 секунд после загрузки модели
-//    v.addEventListener('load', () => {
-//        autoFadeTimers[id] = setTimeout(runFade, 5000); // 5000 мс = 5 сек
-//    });
-//    // 2. РУЧНОЕ ПРОЯВЛЕНИЕ (твой текущий код)
-//    v.addEventListener('click', (e) => {
-//        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;        
-//        // Если пользователь кликнул сам — отменяем авто-таймер
-//        runFade(); 
-//    });
-//});
 
 
 
@@ -538,6 +571,10 @@ function exitModel(vId, bId, eId = null) {
     }
     resetRocketsState(vId);
     v.resetTurntableRotation();
+    if (vId === 'modmi2' && b) {
+    b.innerText = "Заглянуть внутрь";
+    b.style.background = ""; // Сброс цвета
+}
     v.minCameraOrbit = 'auto auto 0m';
     v.maxCameraOrbit = 'auto auto auto';
     v.cameraTarget = 'auto auto auto';
@@ -558,6 +595,7 @@ function openModelViewer(planeKey) {
     const modal = document.getElementById('modelModal'); 
     const container = document.getElementById('modelModalContent');
     const config = viewerConfig[planeKey]; 
+    const is3DMode = document.getElementById('three-d-mode-toggle')?.checked;
     if (!modal || !container || !config) return;
 
     // --- НОВОЕ: Сбрасываем статус текстур для этой модели перед открытием ---
@@ -576,20 +614,32 @@ function openModelViewer(planeKey) {
         v.addEventListener('load', () => {
             const loader = v.querySelector('.custom-loader');
             if (loader) loader.style.setProperty('display', 'none', 'important');
-
-            const materials = v.model.materials;
-            materials.forEach(material => {
-                const texture = material.pbrMetallicRoughness.baseColorTexture;
-                material.userData = { originalTexture: texture ? texture.texture : null };
-                material.setAlphaMode('BLEND'); 
-                material.pbrMetallicRoughness.baseColorTexture.setTexture(null); 
-                material.pbrMetallicRoughness.setBaseColorFactor([0.9, 0.9, 0.9, 0.5]);
-            });
-
-            // 3. АВТО-ПРОЯВЛЕНИЕ ЧЕРЕЗ 5 СЕКУНД
-            autoFadeTimers[config.vId] = setTimeout(() => {
-                smoothFadeIn(config.vId, config.bId);
-            }, 5000);
+            console.log (planeKey );
+              if ((!is3DMode && planeKey !== 'mi2'))  {
+               const materials = v.model.materials;
+               materials.forEach(material => {
+                   const texture = material.pbrMetallicRoughness.baseColorTexture;
+                   material.userData = { originalTexture: texture ? texture.texture : null };
+                   material.setAlphaMode('BLEND'); 
+                   material.pbrMetallicRoughness.baseColorTexture.setTexture(null); 
+                   material.pbrMetallicRoughness.setBaseColorFactor([0.9, 0.9, 0.9, 0.5]);
+               });
+              
+               // 3. АВТО-ПРОЯВЛЕНИЕ ЧЕРЕЗ 5 СЕКУНД
+               autoFadeTimers[config.vId] = setTimeout(() => {
+                   smoothFadeIn(config.vId, config.bId);
+               }, 5000);
+               } else {               	                 
+                   // ОСТАНОВКА ВИНТА
+                   v.pause(); 
+                   v.currentTime = 0;
+                   // РЕЖИМ АНГАР — текстуры сразу!
+                   if (states[config.vId]) {
+                       states[config.vId].isTextured = true;
+                   }
+                   // Можно добавить небольшую задержку для красоты появления
+                   setTimeout(() => startAnnotationCycle(config.vId), 500);
+              }
         }, { once: true });
 
         // 4. РУЧНОЕ ПРОЯВЛЕНИЕ ПО КЛИКУ
@@ -631,14 +681,15 @@ function closeModelViewer() {
     if (config) {
         exitModel(config.vId, config.bId);
     }
-
     // 2. И только ПОТОМ очищаем всё и закрываем
     if (modal) modal.style.display = 'none';
     document.body.style.overflow = 'auto';
-
-    Object.values(activeAnnotationTimers).forEach(t => clearInterval(t));
+    //Object.values(activeAnnotationTimers).forEach(t => clearInterval(t));    
+    Object.keys(activeAnnotationTimers).forEach(id => {
+      clearTimeout(activeAnnotationTimers[id]); // Меняем на clearTimeout
+      delete activeAnnotationTimers[id];
+    });
     stopAllAnnotations();
-
     // Очистка в самом конце
     const container = document.getElementById('modelModalContent');
     if (container) container.innerHTML = '';
@@ -712,11 +763,7 @@ document.querySelectorAll('model-viewer').forEach(viewer => {
         }
     });
 });
-  
-
 // Объект для хранения таймеров аннотаций (чтобы можно было остановить)
-
-
 // --- 2. ЛОГИКА АВТО-АННОТАЦИЙ ---
 function startAnnotationCycle(viewerId) {
     const viewer = document.getElementById(viewerId);
@@ -725,7 +772,7 @@ function startAnnotationCycle(viewerId) {
         
     if (!viewer || !infoPanel) return;
 
-    if (activeAnnotationTimers[viewerId]) clearInterval(activeAnnotationTimers[viewerId]);
+    if (activeAnnotationTimers[viewerId]) clearTimeout(activeAnnotationTimers[viewerId]);
 
     let currentIndex = 0;
     let isUserInteracting = false;
@@ -754,20 +801,30 @@ function startAnnotationCycle(viewerId) {
 
         const current = hotspots[currentIndex];
         const annotation = current.querySelector('.annotation');
-
+        let displayDuration = 5000; 
         if (annotation && infoContent) {
             current.classList.add('active');
             infoPanel.classList.add('visible');
-            const textToRead = annotation.innerText; 
+            //const textToRead = annotation.innerText; 
+            const textToRead = annotation.innerHTML
+        .replace(/<br\s*\/?>/gi, ". . . ") // Заменяем <br> на многоточие
+        .replace(/<\/?[^>]+(>|$)/g, ""); // Чистим остальные теги (типа <span> или <div>)
             infoContent.innerHTML = annotation.innerHTML;
             viewer.classList.add('autocycle-active');
             speakAnnotation(textToRead);
+            // --- РАСЧЕТ ВРЕМЕНИ ПОД ТЕКСТ ---
+            // Примерно 80 мс на символ + 2 секунды запаса
+            displayDuration = (textToRead.length * 200) + 2000;
+            // Ставим границы: не меньше 4 сек и не больше 20 сек
+            displayDuration = Math.min(Math.max(displayDuration, 4000), 20000);
         }
         currentIndex = (currentIndex + 1) % hotspots.length;
+        activeAnnotationTimers[viewerId] = setTimeout(showNext, displayDuration);
     };
 
-    activeAnnotationTimers[viewerId] = setInterval(showNext, 8000);
-
+    //activeAnnotationTimers[viewerId] = setInterval(showNext, 8000);
+     
+     showNext();
    viewer.addEventListener('pointerdown', () => {
         if (isFireMode) return; 
         isUserInteracting = true;
@@ -789,19 +846,18 @@ function startAnnotationCycle(viewerId) {
             
             // 4. ПРИНУДИТЕЛЬНО ВКЛЮЧАЕМ авторотацию обратно
             viewer.autoRotate = true; 
-            
-            // Можно даже чуть "подтолкнуть" модель, чтобы она сразу начала вращаться
-            viewer.play(); 
+            //viewer.play(); 
         }, 10000); 
     });
 }
 function stopAllAnnotations() {
     // 1. Останавливаем все запущенные интервалы
     Object.keys(activeAnnotationTimers).forEach(id => {
-        clearInterval(activeAnnotationTimers[id]);
+        //clearInterval(activeAnnotationTimers[id]);
+        clearTimeout(activeAnnotationTimers[id]);
         delete activeAnnotationTimers[id];
     });
-
+    stopSpeak();
     // 2. Прячем саму панель
     const infoPanel = document.querySelector('#info-panel');
     if (infoPanel) {
@@ -812,36 +868,7 @@ function stopAllAnnotations() {
     document.querySelectorAll('.active').forEach(h => h.classList.remove('active'));
     document.querySelectorAll('model-viewer').forEach(v => v.classList.remove('autocycle-active'));
 }
-//// День-Ночь
-//const nightSwitch = document.querySelector('#night-checkbox');
-//if (nightSwitch) {
-//nightSwitch.addEventListener('change', (event) => {
-//  const viewer = document.getElementById('modyak40');
-//  
-//  // 1. ПРОВЕРКА: Если мы внутри (isInside === true), отменяем переключение
-//  if (states['modyak40'] && states['modyak40'].isInside) {
-//    event.target.checked = false; // Возвращаем тумблер обратно в "выкл"    
-//    return;
-//  }
-//
-//  const isNight = event.target.checked;
-//  setGearVisibility(!isNight); 
-//  const windowMaterial = viewer.model.materials.find(m => m.name === 'Material.001');
-//  
-//  if (isNight) {
-//    viewer.classList.add('night-mode');
-//    viewer.exposure = 0.2;
-//    if (windowMaterial) {
-//      windowMaterial.setEmissiveFactor([2.5, 2.0, 1.0]);
-//    }
-//  } else {
-//    viewer.classList.remove('night-mode');
-//    viewer.exposure = 1.3; // Возвращаем вашу стандартную яркость
-//    if (windowMaterial) {
-//      windowMaterial.setEmissiveFactor();
-//    }
-//  }
-//})};
+
 function toggleNightMode(isNight) {
     const viewer = document.getElementById('modyak40');
     if (!viewer || !viewer.model) return;
@@ -1115,7 +1142,14 @@ function speakCard(element) {
 function speakAnnotation(text) {
     if (!isAudioEnabled) return; // Озвучка сработает, только если включен звук кнопкой
     window.speechSynthesis.cancel(); // Прерываем старую речь
-    const utterance = new SpeechSynthesisUtterance(text);    
+ 
+    let speechText = text;    
+    // Заменяем сокращения и исправляем ударения
+    speechText = speechText.replace(/Макс\./g, "МаксимАльная");
+    speechText = speechText.replace(/крыла/gi, "крылаа"); // "i" — чтобы работало и с большой буквы 
+    
+    //const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(speechText); // Передаем исправленный текст
     const voices = window.speechSynthesis.getVoices();    
     const maleVoice = voices.find(v => v.lang.includes('ru') && (v.name.includes('Pavel') || v.name.includes('Dmitry')));    
     if (maleVoice) {
@@ -1128,6 +1162,7 @@ function speakAnnotation(text) {
     utterance.rate = 1.25; 
     window.speechSynthesis.speak(utterance);
 }
+
 function stopSpeak() {
     window.speechSynthesis.cancel();
 }
@@ -1187,25 +1222,7 @@ function startEjectVideo() {
         if (skp) skp.onclick = stopVid; // Закроется при нажатии "Пропустить"
     }
 }
-document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.getElementById('three-d-mode-toggle');
-    const view2d = document.getElementById('view-2d');
-    const view3d = document.getElementById('view-3d');
 
-    if (toggle) {
-        toggle.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                view2d.style.display = 'none';
-                view3d.style.display = 'block';
-                console.log("Включен 3D режим ангара");
-            } else {
-                view2d.style.display = 'block';
-                view3d.style.display = 'none';
-                console.log("Возврат к фото-режиму");
-            }
-        });
-    }
-});
 // Специальная плавная версия для ангара (без двойных прыжков)
 function smoothEnterAngar(viewer, targetPos, targetOrbit) {
     viewer.autoRotate = false;
@@ -1243,6 +1260,106 @@ function smoothEnterAngar(viewer, targetPos, targetOrbit) {
         viewer.interpolationDecay = 100; 
     }, 4000);
 }
+function handleMi2Action(action) {
+    const mv = document.querySelector('#modmi2');
+    if (!mv) return;
+
+    // 1. САЛОН (Залет внутрь + Открытие двери)
+    if (action === 'salon') {
+        const targetPos = "-1.5m -0.5m 0.26m";
+        const targetOrbit = "65deg 80deg 1.5m";
+
+        // НОВОЕ: Если мы УЖЕ в кабине, просто плавно переплываем назад в салон
+        if (states.modmi2.isInside) {
+            mv.cameraTarget = targetPos;
+            mv.cameraOrbit = targetOrbit;
+            mv.autoRotate = false; // На всякий случай гасим вращение
+            return; 
+        }
+        // 1.1. Дверь открывается (только если мы снаружи)
+        const doorAnim = mv.availableAnimations.find(a => a.toLowerCase().includes('door'));
+        if (doorAnim) {
+            mv.animationName = doorAnim;
+            mv.play();
+            setTimeout(() => { mv.pause(); }, 1800); 
+        }
+        // 1.2. Летим ВНУТРЬ через 1.2 сек
+        setTimeout(() => {
+            cinematicFly(mv, targetPos, targetOrbit, 1.3, () => {
+                states.modmi2.isInside = true; 
+                mv.autoRotate = false; 
+                const btn = document.getElementById('viewToggleButtonMi');
+                if(btn) {
+                    btn.innerText = "Выйти наружу";
+                    btn.style.background = "#ff4757";
+                }
+            });
+        }, 1200);
+    } 
+
+    // 2. КАБИНА (Используем координаты из Блендера)
+    if (action === 'cabin') {    
+    const targetPos = "-4.5m -0.5m 0.26m";
+    const targetOrbit = "65deg 80deg 1.5m";
+    // Если мы УЖЕ внутри (в салоне), просто перекатываем камеру по прямой
+    if (states.modmi2.isInside) {
+        mv.cameraTarget = targetPos;
+        mv.cameraOrbit =  targetOrbit;
+        mv.autoRotate = false;
+        // Не используем cinematicFly, чтобы избежать лишних анимаций
+        return; 
+    }
+    cinematicFly(mv, targetPos, targetOrbit, 2.5, () => {
+        states.modmi2.isInside = true;
+        mv.autoRotate = false;
+        const btn = document.getElementById('viewToggleButtonMi');
+        if(btn) { btn.innerText = "Выйти наружу"; btn.style.background = "#ff4757"; }
+    });
+}
+    // 3. ВИНТ (Логика ВКЛ/ВЫКЛ)
+    if (action === 'vint') {
+        const isRotorPlaying = !mv.paused && mv.animationName && 
+            (mv.animationName.includes('vint') || mv.animationName.includes('blade') || mv.animationName.includes('fly'));
+
+        if (isRotorPlaying) {
+            mv.pause();
+            console.log("Винты остановлены");
+            isUserInteracting = false; 
+            mv.autoRotate = true;
+            startAnnotationCycle('modmi2');
+        } else {
+            const rotorAnim = mv.availableAnimations.find(a => 
+                a.toLowerCase().includes('vint') || 
+                a.toLowerCase().includes('blade') || 
+                a.toLowerCase().includes('fly')
+            );
+            
+            if (rotorAnim) {
+                mv.animationName = rotorAnim;
+                mv.play();
+                console.log("Запущен винт:", rotorAnim);
+            }
+        }
+    }
+}
+function toggleMi2View() {
+    const vId = 'modmi2';
+    const bId = 'viewToggleButtonMi'; 
+
+    if (!states[vId].isInside) {
+        // Если мы снаружи — летим в салон
+        handleMi2Action('salon');
+    } else {
+    	  if (states[vId]) {
+        states[vId].isInside = false;  }
+        // Если внутри — вызываем универсальную функцию выхода
+        exitModel(vId, bId);
+        const mv = document.getElementById(vId);
+        mv.currentTime = 0; // Сбрасываем все анимации в начало
+        mv.pause();
+    }
+}
+
 Video = startEjectVideo;
 window.openModelViewer = openModelViewer;
 window.closeModelViewer = closeModelViewer;
