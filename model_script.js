@@ -556,7 +556,6 @@ function enterbagage() {
 function exitModel(vId, bId, eId = null) {
     const v = document.getElementById(vId);
     const b = document.getElementById(bId);
-    // ПРОВЕРКА: Если вьюер не найден, выходим сразу, чтобы не упасть на v.classList или v.model
     if (!v) return; 
     const ejectBtn = document.getElementById('eject-button');
     states[vId].isInside = false;    
@@ -565,29 +564,27 @@ function exitModel(vId, bId, eId = null) {
     }
     if(b) { b.classList.remove('is-inside'); b.innerHTML = (vId === 'modyak40') ? "Заглянуть внутрь" : ""; b.style.background = ""; }
     if(eId) { const e = document.getElementById(eId); if(e) e.style.display = "none"; }
-        // Когда окно закрывается, принудительно возвращаем шасси  
+    
     setGearVisibility(true); 
-    // Сбрасываем статус ночи, если он был включен
     const nightSwitch = document.querySelector('#night-checkbox');
-    if (nightSwitch) nightSwitch.checked = false; // Выключаем тумблер визуально    
-    v.classList.remove('night-mode'); // Гасим габариты в CSS    
-    // Гасим свет в окнах
- //if (!v.model || !v.model.materials) return; 
-    const winMat = v.model.materials.find(m => m.name === 'Material.001');
-    if (winMat) winMat.setEmissiveFactor();
-    const rocketMat = v.model.materials.find(m => m.name === 'Spo15Rhaw1Mtl.001');
-    if (rocketMat) {
-        // Возвращаем видимость и выключаем свечение
-        rocketMat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]);
-        rocketMat.setAlphaMode('OPAQUE');
-        rocketMat.setEmissiveFactor([0, 0, 0]);
+    if (nightSwitch) nightSwitch.checked = false;
+    v.classList.remove('night-mode');
+    if (v.model && v.model.materials) { 
+        const winMat = v.model.materials.find(m => m.name === 'Material.001');
+        if (winMat) winMat.setEmissiveFactor();
+        const rocketMat = v.model.materials.find(m => m.name === 'Spo15Rhaw1Mtl.001');
+        if (rocketMat) {
+            rocketMat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]);
+            rocketMat.setAlphaMode('OPAQUE');
+            rocketMat.setEmissiveFactor([0, 0, 0]);
+        }
     }
     resetRocketsState(vId);
     v.resetTurntableRotation();
     if (vId === 'modmi2' && b) {
-    b.innerText = "Заглянуть внутрь";
-    b.style.background = ""; // Сброс цвета
-}
+        b.innerText = "Заглянуть внутрь";
+        b.style.background = "";
+    }
     v.minCameraOrbit = 'auto auto 0m';
     v.maxCameraOrbit = 'auto auto auto';
     v.cameraTarget = 'auto auto auto';
@@ -694,24 +691,95 @@ function closeModelViewer() {
     // 1. Ищем по КЛЮЧУ МОДЕЛИ (например, 'mi2'), а не по ID модалки
     const planeKey = currentActivePlane; 
     if (!planeKey) return;
+
     const config = viewerConfig[planeKey];
     const modal = document.getElementById('modelModal'); // Прямое обращение к ID модалки
-                                                                                              // 2. Теперь exitModel СРАБОТАЕТ, так как config найден
+
+    // 2. Теперь exitModel СРАБОТАЕТ, так как config найден
     if (config) {
         exitModel(config.vId, config.bId);
     }
+
     // 3. Закрываем визуально
     if (modal) modal.style.display = 'none';
     document.body.style.overflow = 'auto';
+
     // 4. Очистка таймеров
     Object.keys(activeAnnotationTimers).forEach(id => {
       clearTimeout(activeAnnotationTimers[id]);
       delete activeAnnotationTimers[id];
-    });    
+    });
+    
     stopAllAnnotations();
+
     // 5. Очистка контейнера
     const container = document.getElementById('modelModalContent');
-    if (container) container.innerHTML = '';    
+    if (container) container.innerHTML = '';
+    
+    // Сбрасываем ключи
+    currentOpenModalId = null;
+    currentActivePlane = null;
+}function closeModelViewer() {
+    // 1. Ищем по КЛЮЧУ МОДЕЛИ (например, 'mi2'), а не по ID модалки
+    const planeKey = currentActivePlane; 
+    if (!planeKey) return;
+
+    const config = viewerConfig[planeKey];
+    const modal = document.getElementById('modelModal'); // Прямое обращение к ID модалки
+
+    // 2. Теперь exitModel СРАБОТАЕТ, так как config найден
+    if (config) {
+        exitModel(config.vId, config.bId);
+    }
+
+    // 3. Закрываем визуально
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+
+    // 4. Очистка таймеров
+    Object.keys(activeAnnotationTimers).forEach(id => {
+      clearTimeout(activeAnnotationTimers[id]);
+      delete activeAnnotationTimers[id];
+    });
+    
+    stopAllAnnotations();
+
+    // 5. Очистка контейнера
+    const container = document.getElementById('modelModalContent');
+    if (container) container.innerHTML = '';
+    
+    // Сбрасываем ключи
+    currentOpenModalId = null;
+    currentActivePlane = null;
+}function closeModelViewer() {
+    // 1. Ищем по КЛЮЧУ МОДЕЛИ (например, 'mi2'), а не по ID модалки
+    const planeKey = currentActivePlane; 
+    if (!planeKey) return;
+
+    const config = viewerConfig[planeKey];
+    const modal = document.getElementById('modelModal'); // Прямое обращение к ID модалки
+
+    // 2. Теперь exitModel СРАБОТАЕТ, так как config найден
+    if (config) {
+        exitModel(config.vId, config.bId);
+    }
+
+    // 3. Закрываем визуально
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+
+    // 4. Очистка таймеров
+    Object.keys(activeAnnotationTimers).forEach(id => {
+      clearTimeout(activeAnnotationTimers[id]);
+      delete activeAnnotationTimers[id];
+    });
+    
+    stopAllAnnotations();
+
+    // 5. Очистка контейнера
+    const container = document.getElementById('modelModalContent');
+    if (container) container.innerHTML = '';
+    
     // Сбрасываем ключи
     currentOpenModalId = null;
     currentActivePlane = null;
