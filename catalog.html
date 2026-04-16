@@ -69,6 +69,12 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
     <span id="speaker-icon">🔇</span>
     <span id="speaker-text">Звук выкл.</span>
 </div>
+<div class="search-box" id="searchBox">
+    <div class="search-btn">🔍</div>
+    <input type="text" class="search-txt" id="modelSearch" placeholder="Найти модель..." oninput="filterModels()">
+    <div class="clear-btn" id="clearBtn" onclick="clearSearch()">✖</div>
+</div>
+
 <section>
 <h2 class="section-title"><a name="_Коллекция_самолётов"></a>Коллекция самолётов</h2>
 <div class="gallery">
@@ -92,6 +98,71 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
 </div>
  
 </body>
+<script>
+function filterModels() {
+    const inputField = document.getElementById('modelSearch'); // Берем само поле
+    const searchBox = document.getElementById('searchBox');
+    const clearBtn = document.getElementById('clearBtn');
+    
+    // Вот здесь мы один раз делаем всё: и берем значение, и в нижний регистр, и убираем пробелы
+    const query = inputField.value.toLowerCase().trim(); 
+
+    let foundAny = false;
+
+    // Дальше работаем с переменной query
+    if (query.length > 0) {
+        searchBox.classList.add('active');
+        clearBtn.style.display = "block";
+    } else {
+        searchBox.classList.remove('active');
+        clearBtn.style.display = "none";
+    }
+
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        const title = card.querySelector('h3').innerText.toLowerCase();
+        if (title.includes(query)) { // Ищем наш очищенный текст query
+            card.style.display = "";
+            foundAny = true;
+        } else {
+            card.style.display = "none";
+        }
+    });
+    // 3. Если ничего не нашли — выводим сообщение 
+    const gallery = document.querySelector('.gallery');
+    let noResults = document.getElementById('noResultsMessage');
+    
+    if (!foundAny) {
+        if (!noResults) {
+            noResults = document.createElement('div');
+            noResults.id = 'noResultsMessage';
+            noResults.style.gridColumn = "1 / -1"; // РАСТЯГИВАЕМ НА ВСЮ ШИРИНУ
+            noResults.style.textAlign = "center";
+            noResults.style.padding = "60px 20px";
+            noResults.style.color = "#4da3ff";            
+            noResults.innerHTML = `
+                <div style="font-size: 3rem; margin-bottom: 20px;">✈️</div>
+                <div style="font-size: 2rem; font-weight: 700; margin-bottom: 15px; text-shadow: 0 0 15px rgba(77,163,255,0.4);">
+                    Модель не найдена
+                </div>
+                <div style="font-size: 1.2rem; color: #e6ecff; opacity: 0.8; max-width: 600px; margin: 0 auto; line-height: 1.5;">
+                    Попробуйте изменить запрос или проверить раскладку клавиатуры
+                </div>
+            `;
+            gallery.appendChild(noResults);
+        }
+    } else if (noResults) {
+        noResults.remove();
+    }
+}
+
+// Функция для крестика «Очистить»
+function clearSearch() {
+    const input = document.getElementById('modelSearch');
+    input.value = '';
+    filterModels(); // Сбрасываем фильтр
+}
+</script>
 </html>
 
 
