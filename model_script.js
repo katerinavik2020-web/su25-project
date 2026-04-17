@@ -144,7 +144,7 @@ const modelTemplates = {
         src="model_su33.glb"
         skybox-image="nebo1.jpg"   
         environment-image="neutral"
-        exposure="1.3"
+        exposure="1.3"        
         shadow-intensity="0.5"
         shadow-softness="1" 
         auto-rotate-delay="10000"
@@ -517,6 +517,11 @@ function smoothFadeIn(viewerId, btnId) {
     if (states[viewerId].isTextured) {
         stopAllAnnotations();
         startAnnotationCycle(viewerId);
+        viewer.querySelectorAll('.cabin-hotspot, .cabin-area').forEach(h => {
+                h.style.display = 'block';
+                h.style.opacity = '1';
+                h.style.pointerEvents = 'auto';
+            });
         return; 
     }    
     states[viewerId].isTextured = true;
@@ -823,70 +828,6 @@ function closeModelViewer() {
     // Сбрасываем ключи
     currentOpenModalId = null;
     currentActivePlane = null;
-}function closeModelViewer() {
-    // 1. Ищем по КЛЮЧУ МОДЕЛИ (например, 'mi2'), а не по ID модалки
-    const planeKey = currentActivePlane; 
-    if (!planeKey) return;
-
-    const config = viewerConfig[planeKey];
-    const modal = document.getElementById('modelModal'); // Прямое обращение к ID модалки
-
-    // 2. Теперь exitModel СРАБОТАЕТ, так как config найден
-    if (config) {
-        exitModel(config.vId, config.bId);
-    }
-
-    // 3. Закрываем визуально
-    if (modal) modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-
-    // 4. Очистка таймеров
-    Object.keys(activeAnnotationTimers).forEach(id => {
-      clearTimeout(activeAnnotationTimers[id]);
-      delete activeAnnotationTimers[id];
-    });
-    
-    stopAllAnnotations();
-
-    // 5. Очистка контейнера
-    const container = document.getElementById('modelModalContent');
-    if (container) container.innerHTML = '';
-    
-    // Сбрасываем ключи
-    currentOpenModalId = null;
-    currentActivePlane = null;
-}function closeModelViewer() {
-    // 1. Ищем по КЛЮЧУ МОДЕЛИ (например, 'mi2'), а не по ID модалки
-    const planeKey = currentActivePlane; 
-    if (!planeKey) return;
-
-    const config = viewerConfig[planeKey];
-    const modal = document.getElementById('modelModal'); // Прямое обращение к ID модалки
-
-    // 2. Теперь exitModel СРАБОТАЕТ, так как config найден
-    if (config) {
-        exitModel(config.vId, config.bId);
-    }
-
-    // 3. Закрываем визуально
-    if (modal) modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-
-    // 4. Очистка таймеров
-    Object.keys(activeAnnotationTimers).forEach(id => {
-      clearTimeout(activeAnnotationTimers[id]);
-      delete activeAnnotationTimers[id];
-    });
-    
-    stopAllAnnotations();
-
-    // 5. Очистка контейнера
-    const container = document.getElementById('modelModalContent');
-    if (container) container.innerHTML = '';
-    
-    // Сбрасываем ключи
-    currentOpenModalId = null;
-    currentActivePlane = null;
 }
 function toggleView() {
     const v = document.getElementById('modyak40');
@@ -960,7 +901,7 @@ function startAnnotationCycle(viewerId) {
     const viewer = document.getElementById(viewerId);
     const infoPanel = document.querySelector('#info-panel');
     const infoContent = infoPanel ? infoPanel.querySelector('.info-panel-content') : null;
-        
+     stopAllAnnotations();    
     if (!viewer || !infoPanel) return;
 
     if (activeAnnotationTimers[viewerId]) clearTimeout(activeAnnotationTimers[viewerId]);
@@ -970,6 +911,9 @@ function startAnnotationCycle(viewerId) {
    // let resumeTimeout = null;
 
     const showNext = () => {
+        if (activeAnnotationTimers[viewerId]) {
+            clearTimeout(activeAnnotationTimers[viewerId]);
+        }
         if (viewer.offsetParent === null) { 
             stopAllAnnotations();
             return;
@@ -1019,7 +963,7 @@ function startAnnotationCycle(viewerId) {
    viewer.addEventListener('pointerdown', () => {
         if (isFireMode) return; 
         isUserInteracting = true;
-        
+        stopAllAnnotations(); 
         // 1. ПРИНУДИТЕЛЬНО ВЫКЛЮЧАЕМ авторотацию самой модели
         viewer.autoRotate = false; 
         
@@ -1038,8 +982,9 @@ function startAnnotationCycle(viewerId) {
             // 4. ПРИНУДИТЕЛЬНО ВКЛЮЧАЕМ авторотацию обратно
             viewer.autoRotate = true; 
             //viewer.play();
-             showNext();  
-        }, 10000); 
+            // showNext();  
+            startAnnotationCycle(viewerId); 
+        }, 8000); 
     });
 }
 function stopAllAnnotations() {
@@ -1388,30 +1333,55 @@ function speakDetailedInfo(k) {
 }
 
 function startEjectVideo() {
-    // Ищем элементы внутри открытого модального окна
     const ov = document.getElementById('video-overlay');
     const vid = document.getElementById('eject-video');
     const skp = document.getElementById('skip-video');
-
+    const viewersu33 = document.getElementById('modsu33');
+    stopAllAnnotations();
+    // --- Функция 2: Запуск 3D анимации (после видео) ---
+    const run3DSequence = () => {
+        if (!viewersu33) return;
+        exitModel('modsu33', 'cabin-trigger', 'eject-button');
+        viewersu33.cameraOrbit = "25.77deg 72.23deg 58.37m";
+        viewersu33.jumpCameraToGoal(); 
+        viewersu33.updateFraming(); 
+        // Запускаем анимацию с задержкой, чтобы камера успела вылететь
+        setTimeout(() => {
+            console.log("Запуск анимации катапультирования...");
+            viewersu33.animationName = 'eject_f'; 
+            viewersu33.currentTime = 0;
+            viewersu33.loopMode = "none";
+            viewersu33.play();
+            //  Через 3 секунды (когда всё улетело и исчезло) — сброс модели
+            setTimeout(() => {
+                viewersu33.pause();
+                viewersu33.currentTime = 0;
+            }, 3000); 
+        }, 200); 
+    };
+    // --- Функция 1: Логика видео (запускается первой) ---
     if (ov && vid) {
-        ov.style.display = 'flex'; // Показываем черный фон
-        vid.src = "eject.mp4";     // Указываем файл
-        vid.muted = !isAudioEnabled; // Звук зависит от твоей кнопки
-        
-        vid.load(); // Подгружаем файл
-        vid.play().catch(err => console.log("Ошибка воспроизведения:", err));
-
-        // Функция закрытия видео
-        const stopVid = () => {
+        ov.style.display = 'flex';
+        vid.src = "eject.mp4";
+        vid.muted = !isAudioEnabled;
+        vid.load();
+        vid.play().catch(err => {
+            console.log("Ошибка видео, переходим к 3D:", err);
+            ov.style.display = 'none';
+            run3DSequence();
+        });
+        // Функция-стоппер для видео
+        const stopVidAndStart3D = () => {
             ov.style.display = 'none';
             vid.pause();
             vid.currentTime = 0;
-            // Возвращаем камеру Су-33 в исходное состояние
-            exitModel('modsu33', 'cabin-trigger', 'eject-button');
+            run3DSequence(); // Как только видео закрыли — пошла анимация
         };
-
-        vid.onended = stopVid; // Само закроется в конце
-        if (skp) skp.onclick = stopVid; // Закроется при нажатии "Пропустить"
+        vid.onended = stopVidAndStart3D;
+        if (skp) skp.onclick = stopVidAndStart3D;
+    } else {
+        // Если видео нет — сразу запускаем 3D
+        run3DSequence();
     }
 }
 
