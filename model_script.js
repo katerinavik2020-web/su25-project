@@ -640,7 +640,10 @@ function toggleView_su33() {
     }
 }
 
-function enterSalon() {
+function enterSalon() {	
+    // Обновляем сам чекбокс визуально
+    const ns = document.getElementById('night-checkbox');
+    if (ns) ns.checked = false;
     const v = document.getElementById('modyak40');
     const b = document.getElementById('viewToggleButton');
     stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
@@ -651,6 +654,8 @@ function enterSalon() {
 }
 
 function enterCabin() {
+    const ns = document.getElementById('night-checkbox');
+    if (ns) ns.checked = false;
     const v = document.getElementById('modyak40');
     const b = document.getElementById('viewToggleButton');
     stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
@@ -691,7 +696,7 @@ function exitModel(vId, bId, eId = null) {
     v.classList.remove('night-mode');
     if (v.model && v.model.materials) { 
         const winMat = v.model.materials.find(m => m.name === 'Material.001');
-        if (winMat) winMat.setEmissiveFactor();
+        if (winMat) winMat.setEmissiveFactor([0, 0, 0]);
         const rocketMat = v.model.materials.find(m => m.name === 'Spo15Rhaw1Mtl.001');
         if (rocketMat) {
             rocketMat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]);
@@ -1035,8 +1040,9 @@ function stopAllAnnotations() {
 
 function toggleNightMode(isNight) {
     const viewer = document.getElementById('modyak40');
+    const nightCheckbox = document.getElementById('night-checkbox');
     if (!viewer || !viewer.model) return;
-
+    if (states.modyak40.isInside) { if (nightCheckbox) nightCheckbox.checked = !isNight; return;  }
     setGearVisibility(!isNight); 
     const windowMaterial = viewer.model.materials.find(m => m.name === 'Material.001');
     
