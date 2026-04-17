@@ -4,8 +4,8 @@ const viewerConfig = {
     'yak40': { vId: 'modyak40', bId: 'viewToggleButton', mId: 'modelModal' },
     'su25':  { vId: 'modsu25',  bId: 'bagage-trigger',   mId: 'modelModal' },
     'su33':  { vId: 'modsu33',  bId: 'cabin-trigger',    mId: 'modelModal' },
-    'mi2':   { vId: 'modmi2',   bId: 'viewToggleButtonrMi',    mId: 'modelModal' },
-    'kvant': { vId: 'modkvant',   bId: 'viewToggleButtonrК',    mId: 'modelModal' },
+    'mi2':   { vId: 'modmi2',   bId: 'viewToggleButtonMi',    mId: 'modelModal' },
+    'kvant': { vId: 'modkvant',   bId: 'viewToggleButtonK',    mId: 'modelModal' },
     'mojaysky': { vId: 'modmoj',bId: 'viewToggleButtonmoj', mId: 'modelModal'}
 };
 let currentActivePlane = null;
@@ -548,7 +548,7 @@ materials.forEach(m => {
         } else {
             materials.forEach(m => {
                 m.setAlphaMode('OPAQUE');
-                m.pbrMetallicRoughness.setBaseColorFactor(); 
+                m.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]); 
             });
 
             // Показываем кнопки управления
@@ -736,10 +736,18 @@ function openModelViewer(planeKey) {
               if ((!is3DMode && planeKey !== 'mi2'))  {
                const materials = v.model.materials;
                materials.forEach(material => {
-                   const texture = material.pbrMetallicRoughness.baseColorTexture;
-                   material.userData = { originalTexture: texture ? texture.texture : null };
+                      // Сначала сохраняем ссылку на текстуру
+                   const pbr = material.pbrMetallicRoughness;
+                   const texture = pbr.baseColorTexture;
+                 // КРИТИЧЕСКАЯ ПРАВКА: сохраняем и обнуляем только если текстура СУЩЕСТВУЕТ
+                 if (texture) {
+                   material.userData = { originalTexture: texture.texture };
+                   texture.setTexture(null); 
+                 } else {
+                    material.userData = { originalTexture: null };
+                 }                   
                    material.setAlphaMode('BLEND'); 
-                   material.pbrMetallicRoughness.baseColorTexture.setTexture(null); 
+                  // material.pbrMetallicRoughness.baseColorTexture.setTexture(null); 
                    material.pbrMetallicRoughness.setBaseColorFactor([0.9, 0.9, 0.9, 0.5]);
                });
               
@@ -899,16 +907,19 @@ document.querySelectorAll('model-viewer').forEach(viewer => {
 // --- 2. ЛОГИКА АВТО-АННОТАЦИЙ ---
 function startAnnotationCycle(viewerId) {
     const viewer = document.getElementById(viewerId);
+    if (!viewer) return;
+
     const infoPanel = document.querySelector('#info-panel');
     const infoContent = infoPanel ? infoPanel.querySelector('.info-panel-content') : null;
-     stopAllAnnotations();    
-    if (!viewer || !infoPanel) return;
+    
+    // Очищаем старые процессы перед запуском
+    stopAllAnnotations();    
+    if (!infoPanel) return;
 
     if (activeAnnotationTimers[viewerId]) clearTimeout(activeAnnotationTimers[viewerId]);
 
     let currentIndex = 0;
     let isUserInteracting = false;
-   // let resumeTimeout = null;
 
     const showNext = () => {
         if (activeAnnotationTimers[viewerId]) {
@@ -918,17 +929,18 @@ function startAnnotationCycle(viewerId) {
             stopAllAnnotations();
             return;
         }          
-        // --- ГЛАВНАЯ ПРАВКА ДЛЯ ГИТХАБА ---
+        
         if (states[viewerId].isInside) {
-            viewer.autoRotate = false; // Принудительно выключаем вращение внутри
+            viewer.autoRotate = false; 
             infoPanel.classList.remove('visible'); 
             return;
         }
-        // Если юзер трогает модель или она не должна крутиться — пропускаем аннотации
+
         if (isUserInteracting || !viewer.autoRotate) {
             infoPanel.classList.remove('visible'); 
             return;
         }
+
         const hotspots = viewer.querySelectorAll('.hotspot_a, .cabin-hotspot, .cabin-area');        
         if (hotspots.length === 0) return;
 
@@ -940,52 +952,47 @@ function startAnnotationCycle(viewerId) {
         if (annotation && infoContent) {
             current.classList.add('active');
             infoPanel.classList.add('visible');
-            //const textToRead = annotation.innerText; 
             const textToRead = annotation.innerHTML
-        .replace(/<br\s*\/?>/gi, ". . . ") // Заменяем <br> на многоточие
-        .replace(/<\/?[^>]+(>|$)/g, ""); // Чистим остальные теги (типа <span> или <div>)
+                .replace(/<br\s*\/?>/gi, ". . . ")
+                .replace(/<\/?[^>]+(>|$)/g, ""); 
             infoContent.innerHTML = annotation.innerHTML;
             viewer.classList.add('autocycle-active');
             speakAnnotation(textToRead);
-            // --- РАСЧЕТ ВРЕМЕНИ ПОД ТЕКСТ ---
-            // Примерно 80 мс на символ + 2 секунды запаса
+            
+            // Твой расчет времени
             displayDuration = (textToRead.length * 200) + 2000;
-            // Ставим границы: не меньше 4 сек и не больше 20 сек
             displayDuration = Math.min(Math.max(displayDuration, 4000), 20000);
         }
         currentIndex = (currentIndex + 1) % hotspots.length;
         activeAnnotationTimers[viewerId] = setTimeout(showNext, displayDuration);
     };
 
-    //activeAnnotationTimers[viewerId] = setInterval(showNext, 8000);
-     
-     showNext();
-   viewer.addEventListener('pointerdown', () => {
-        if (isFireMode) return; 
-        isUserInteracting = true;
-        stopAllAnnotations(); 
-        // 1. ПРИНУДИТЕЛЬНО ВЫКЛЮЧАЕМ авторотацию самой модели
-        viewer.autoRotate = false; 
-        
-        // 2. Прячем все панели и активные точки
-        infoPanel.classList.remove('visible');
-        viewer.classList.remove('autocycle-active');
-        document.querySelectorAll('.active').forEach(h => h.classList.remove('active'));
+    // ЗАПУСК ЦИКЛА (теперь он сработает всегда)
+    showNext();
 
-        clearTimeout(globalResumeTimeout);
-        
-        // 3. Ждем ровно 10 секунд тишины
-        globalResumeTimeout = setTimeout(() => {
+    // ПРОВЕРКА СЛУШАТЕЛЯ (вешаем клик только один раз за все время)
+    if (!viewer.dataset.hasListener) {
+        viewer.dataset.hasListener = "true";
+        viewer.addEventListener('pointerdown', () => {
             if (isFireMode) return; 
-            isUserInteracting = false;
+            isUserInteracting = true;
+            stopAllAnnotations(); 
+            viewer.autoRotate = false; 
             
-            // 4. ПРИНУДИТЕЛЬНО ВКЛЮЧАЕМ авторотацию обратно
-            viewer.autoRotate = true; 
-            //viewer.play();
-            // showNext();  
-            startAnnotationCycle(viewerId); 
-        }, 8000); 
-    });
+            infoPanel.classList.remove('visible');
+            viewer.classList.remove('autocycle-active');
+            document.querySelectorAll('.active').forEach(h => h.classList.remove('active'));
+
+            clearTimeout(globalResumeTimeout);
+            
+            globalResumeTimeout = setTimeout(() => {
+                if (isFireMode) return; 
+                isUserInteracting = false;
+                viewer.autoRotate = true; 
+                startAnnotationCycle(viewerId); 
+            }, 8000); 
+        });
+    }
 }
 function stopAllAnnotations() {
     // 1. Останавливаем все запущенные интервалы
@@ -1488,7 +1495,7 @@ function handleMi2Action(action) {
     if (isRotorPlaying) {
         mv.pause();
         if (rs) rs.checked = false; // Выключаем слайдер визуально
-        isUserInteracting = false; 
+        //isUserInteracting = false; 
         mv.autoRotate = true;
         startAnnotationCycle('modmi2');
     } else {
@@ -1551,3 +1558,7 @@ window.enterbagage = enterbagage;
 window.handleFireClick = handleFireClick;
 window.enterSalon = enterSalon;
 window.enterCabin = enterCabin;
+window.speechSynthesis.onvoiceschanged = () => {
+    window.speechSynthesis.getVoices();
+    console.log("Голоса синтезатора обновлены");
+};
