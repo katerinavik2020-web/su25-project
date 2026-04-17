@@ -506,7 +506,7 @@ function setupModelLoad(id) {
 
 // --- 3. ПЛАВНОЕ ПРОЯВЛЕНИЕ ТЕКСТУР (3 СЕК) ---
 function smoothFadeIn(viewerId, btnId) {
-    const viewer = document.getElementById(viewerId);
+    const viewer = document.getElementById(viewerId);    
     if (!viewer) return;
     // КРИТИЧЕСКАЯ ПРАВКА: Ждем, пока модель загрузится, если её еще нет
     if (!viewer.model) {
@@ -545,26 +545,47 @@ materials.forEach(m => {
         
         if (progress < 1) {
             requestAnimationFrame(step);
-        } else {
-            materials.forEach(m => {
-                m.setAlphaMode('OPAQUE');
-                m.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]); 
-            });
+        } else { 
+    materials.forEach(m => {
+        const pbr = m.pbrMetallicRoughness;
+        const data = m.userData;
+        const name = m.name.toLowerCase();
 
-            // Показываем кнопки управления
-            const btn = document.getElementById(btnId);
-            if(btn) btn.style.display = 'block';
-
-            // Показываем скрытые хотспоты
-            viewer.querySelectorAll('.cabin-hotspot, .cabin-area').forEach(h => {
-                h.style.display = 'block';
-                h.style.opacity = '1';
-                h.style.pointerEvents = 'auto';
-            });
-
-            // ЗАПУСКАЕМ АВТО-АННОТАЦИИ ПОСЛЕ ПРОЯВЛЕНИЯ ТЕКСТУР
-            startAnnotationCycle(viewerId);
+        // 1. Возвращаем оригинальный цвет (синяя полоса)
+        if (data && data.originalColor) {
+            pbr.setBaseColorFactor(data.originalColor);
         }
+
+        // 2. ВОЗВРАЩАЕМ РОДНОЙ РЕЖИМ (Стекла vs Корпус)
+        // Принудительно проверяем на прозрачность по имени, если в модели OPAQUE
+        if (name.includes('transp') || name.includes('glass') || name.includes('vitres')) {
+            m.setAlphaMode('BLEND');
+        } else if (data && data.originalAlpha) {
+            m.setAlphaMode(data.originalAlpha);
+        } else {
+            m.setAlphaMode('OPAQUE');
+        }
+
+        // 3. Возвращаем текстуру
+        if (data && data.originalTexture && pbr.baseColorTexture) {
+            pbr.baseColorTexture.setTexture(data.originalTexture);
+        }
+    });
+
+    // 4. Показываем кнопки управления (твои строки на месте!)
+    const btn = document.getElementById(btnId);
+    if(btn) btn.style.display = 'block';
+
+    // 5. Показываем скрытые хотспоты (все типы разом)
+    viewer.querySelectorAll('.cabin-hotspot, .cabin-area, .hotspot_a').forEach(h => {
+        h.style.setProperty('display', 'block', 'important');
+        h.style.setProperty('opacity', '1', 'important');
+        h.style.setProperty('pointer-events', 'auto', 'important');
+        h.style.setProperty('visibility', 'visible', 'important');
+    });
+    // ЗАПУСКАЕМ АВТО-АННОТАЦИИ
+    startAnnotationCycle(viewerId);
+}
     }
     requestAnimationFrame(step);
 }
@@ -733,29 +754,28 @@ function openModelViewer(planeKey) {
             const loader = v.querySelector('.custom-loader');
             if (loader) loader.style.setProperty('display', 'none', 'important');
             console.log (planeKey );
-              if ((!is3DMode && planeKey !== 'mi2'))  {
-               const materials = v.model.materials;
-               materials.forEach(material => {
-                      // Сначала сохраняем ссылку на текстуру
-                   const pbr = material.pbrMetallicRoughness;
-                   const texture = pbr.baseColorTexture;
-                 // КРИТИЧЕСКАЯ ПРАВКА: сохраняем и обнуляем только если текстура СУЩЕСТВУЕТ
-                 if (texture) {
-                   material.userData = { originalTexture: texture.texture };
-                   texture.setTexture(null); 
-                 } else {
-                    material.userData = { originalTexture: null };
-                 }                   
-                   material.setAlphaMode('BLEND'); 
-                  // material.pbrMetallicRoughness.baseColorTexture.setTexture(null); 
-                   material.pbrMetallicRoughness.setBaseColorFactor([0.9, 0.9, 0.9, 0.5]);
-               });
-              
-               // 3. АВТО-ПРОЯВЛЕНИЕ ЧЕРЕЗ 5 СЕКУНД
-               autoFadeTimers[config.vId] = setTimeout(() => {
-                   smoothFadeIn(config.vId, config.bId);
-               }, 5000);
-               } else {               	                 
+              if ((!is3DMode && planeKey !== 'mi2')) {
+        const materials = v.model.materials;
+        materials.forEach(material => {
+            const pbr = material.pbrMetallicRoughness;
+            
+            // СОХРАНЯЕМ ОРИГИНАЛЫ
+            material.userData = {
+                originalTexture: pbr.baseColorTexture ? pbr.baseColorTexture.texture : null,
+                originalColor: pbr.baseColorFactor,
+                originalAlpha: material.alphaMode // Важно: сохраняем OPAQUE или BLEND
+            };
+
+            // ДЕЛАЕМ СЕРЫМ И ПОЛУПРОЗРАЧНЫМ ДЛЯ АНИМАЦИИ
+            material.setAlphaMode('BLEND'); 
+            if (pbr.baseColorTexture) pbr.baseColorTexture.setTexture(null);
+            pbr.setBaseColorFactor([0.9, 0.9, 0.9, 0.5]);
+        });
+
+        autoFadeTimers[config.vId] = setTimeout(() => {
+            smoothFadeIn(config.vId, config.bId);
+        }, 5000);
+    }  else {               	                 
                    // ОСТАНОВКА ВИНТА
                    v.pause(); 
                    v.currentTime = 0;
@@ -1023,11 +1043,20 @@ function toggleNightMode(isNight) {
     if (isNight) {
         viewer.classList.add('night-mode');
         viewer.exposure = 0.2;
+        // Включаем свечение (теплый желтый свет)
         if (windowMaterial) windowMaterial.setEmissiveFactor([2.5, 2.0, 1.0]);
     } else {
         viewer.classList.remove('night-mode');
         viewer.exposure = 1.3;
-        if (windowMaterial) windowMaterial.setEmissiveFactor();
+        if (windowMaterial) {
+            // ВАЖНО: Устанавливаем черный цвет свечения (выключаем "лампочку")
+            windowMaterial.setEmissiveFactor([0, 0, 0]); 
+            
+            // На всякий случай возвращаем оригинальный базовый цвет из памяти
+            if (windowMaterial.userData && windowMaterial.userData.originalColor) {
+                windowMaterial.pbrMetallicRoughness.setBaseColorFactor(windowMaterial.userData.originalColor);
+            }
+        }
     }
 }
 /**
