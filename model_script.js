@@ -597,7 +597,7 @@ materials.forEach(m => {
         }
     });
 
-    // 4. Показываем кнопки управления (твои строки на месте!)
+    // 4. Показываем кнопки управления 
     const btn = document.getElementById(btnId);
     if(btn) btn.style.display = 'block';
 
@@ -608,8 +608,8 @@ materials.forEach(m => {
         h.style.setProperty('pointer-events', 'auto', 'important');
         h.style.setProperty('visibility', 'visible', 'important');
     });
-    // ЗАПУСКАЕМ АВТО-АННОТАЦИИ
-    startAnnotationCycle(viewerId);
+    // ЗАПУСКАЕМ АВТО-АННОТАЦИИ 
+     if (!document.getElementById('kvant-flight-switch')?.checked)   startAnnotationCycle(viewerId);
 }
     }
     requestAnimationFrame(step);
@@ -821,11 +821,11 @@ function openModelViewer(planeKey) {
         // 4. РУЧНОЕ ПРОЯВЛЕНИЕ ПО КЛИКУ
         v.addEventListener('click', (e) => {
             if (planeKey === 'kvant' && document.getElementById('kvant-flight-switch')?.checked) {
-        e.preventDefault();
-        e.stopPropagation(); // Останавливаем всплытие события
-        console.log("Клик в полете заблокирован!");
-        return; 
-    }	
+              e.preventDefault();
+              e.stopPropagation(); // Останавливаем всплытие события
+              console.log("Клик в полете заблокирован!");
+              return; 
+            }	
             if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
             if (autoFadeTimers[config.vId]) clearTimeout(autoFadeTimers[config.vId]);
             smoothFadeIn(config.vId, config.bId);
@@ -1472,7 +1472,7 @@ function smoothEnterAngar(viewer, targetPos, targetOrbit) {
             const welcomeSound = new Audio('welcome.mp3');
             welcomeSound.volume = 0.8;
 
-            // Попытка сыграть твой голос
+            // Попытка сыграть  голос
             welcomeSound.play().catch(error => {
                 // ЕСЛИ ФАЙЛ НЕ НАЙДЕН ИЛИ ОШИБКА — ГОВОРИТ ПАВЕЛ
                 console.warn("Файл welcome.mp3 не сработал, включаю Павла");
@@ -1644,9 +1644,11 @@ function toggleKvantView() {
         if (document.getElementById('kvant-flight-switch')?.checked)          
           {handleKvantFlight(); 
            const winMat = v.model.materials.find(m => m.name === 'Material.001');
-            winMat.setEmissiveFactor([0, 0, 0])
-            winMat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]);
-            winMat.setAlphaMode('OPAQUE');            
+            if (winMat) {
+                winMat.setAlphaMode('OPAQUE');            
+                winMat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]);
+                winMat.setEmissiveFactor([0, 0, 0]);
+            }            
            	}
         const btn = document.getElementById(bId);
         if(btn) {
@@ -1720,8 +1722,8 @@ function handleKvantFlight() {
         if (!document.getElementById('kvant-flight-switch').checked) {
             console.log("Возвращаем аннотации Кванта...");
             startAnnotationCycle('modkvant'); 
-        }
-    }, 2500);
+         }
+        }, 2500);
     }
 }
 
