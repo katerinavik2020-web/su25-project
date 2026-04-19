@@ -676,6 +676,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     padding: 20px 40px;
     position: sticky; /*  нопка будет "плыть" при скролле сверху */
     top: 0;
+    z-index: 1;
     background: linear-gradient(180deg, var(--mai-blue-dark), transparent);
 }
 

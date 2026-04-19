@@ -173,7 +173,7 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
     </div>
 
     <!-- РЕЖИМ 3D  -->
-    <div id="view-3d" style="display: none; width: 100%; height: 600px; background: #000; border-radius: 15px; overflow: hidden; position: relative;">
+    <div id="view-3d" style="display: none; z-index: 2; width: 100%; height: 600px; background: #000; border-radius: 15px; overflow: hidden; position: relative;">
     <model-viewer src="model_angar.glb" id="modangar" camera-controls tone-mapping="neutral" shadow-intensity="1"  interaction-prompt="none" disable-zoom 
      camera-orbit="-223.7deg 77.74deg 167.2m" min-camera-orbit="auto auto 0m"  min-field-of-view="10deg" field-of-view="29.19deg" >
 <!-- Су-25 (Слева от центра) -->
@@ -230,7 +230,7 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
 <audio id="ambient-sound">
     <source src="samolety_1.mp3" type="audio/mpeg">
 </audio>
-<div class="modal" id="modelModal">
+<div class="modal" id="modelModal"  style="z-index:3;">
    <div class="modal-content" id="modelModalContent" style="max-width:90%; max-height:90%; padding:0; overflow:hidden; display:flex; flex-direction:column; ">
      </div>
 </div>
