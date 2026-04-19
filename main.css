@@ -872,5 +872,92 @@ model-viewer:not([poster-dismissed]) .custom-loader {
 }
 
 
+#sky-scroller {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    display: none;
+    overflow: hidden;
+    background-color: #87CEEB; /* Небесный цвет на случай дырок в текстуре */
 }
 
+#sky-scroller.active { display: block !important; }
+
+.sky-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 5000px; /* Фиксированная большая ширина */
+    height: 100%;
+    background-image: url('nebo12.jpg');
+    background-repeat: repeat-x;
+    background-size: auto 100%; /* ВАЖНО: картинка впишется по высоте, не искажаясь */
+    background-position: left center;
+}
+
+@keyframes sky-scrolling {
+    from { background-position: 0 0; }
+    to { background-position: -2000px 0; } /* Движем саму текстуру */
+}
+
+.sky-layer.moving {
+    animation: sky-scrolling 10s linear infinite !important;
+}
+
+#modkvant.flight-mode-on {
+    pointer-events: none !important; /* Клики пройдут СКВОЗЬ модель на фон */
+}
+/* БЛОКИРОВКА КЛИКОВ ПО МОДЕЛИ В ПОЛЕТЕ */
+#modkvant.flight-mode-on {
+    pointer-events: none !important; /* Модель нельзя потрогать */
+}
+
+/* Но переключатель должен работать! */
+.control-panel {
+    z-index: 2000 !important;
+    pointer-events: auto !important;
+}
+
+/* Убираем синюю рамку и блик при клике в браузере */
+#modkvant:focus, #modkvant:active {
+    outline: none !important;
+    background-color: transparent !important;
+}
+
+
+/* Слой поверх 3D модели */
+#clouds-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.cloud {
+    position: absolute;
+    right: -400px; /* Начальная позиция за экраном справа */
+    width: 300px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 100px;
+    filter: blur(40px); /* Делает красную точку "облаком" */
+    opacity: 0;
+}
+
+/* Класс анимации, который добавляет JS */
+.cloud.fly {
+    animation: moveCloud linear infinite;
+}
+
+@keyframes moveCloud {
+    0% { transform: translateX(0); opacity: 0; }
+    20% { opacity: 0.7; }
+    80% { opacity: 0.7; }
+    100% { transform: translateX(-150vw); opacity: 0; }
+}
+
+/* Разная скорость и высота для каждого облака */
+.cloud:nth-child(1) { top: 10%; animation-duration: 3s; }
+.cloud:nth-child(2) { top: 40%; animation-duration: 5s; animation-delay: 1s; }
+.cloud:nth-child(3) { top: 60%; animation-duration: 4s; animation-delay: 0.5s; }
+.cloud:nth-child(4) { top: 85%; animation-duration: 6s; animation-delay: 2s; }

@@ -137,8 +137,7 @@ const modelTemplates = {
          </div>
       </model-viewer>
       <div id="fire-control" onclick="handleFireClick(event)"></div>
- <div class='modal-btn' onclick="closeModelViewer()" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div>`,
-    
+      <div class='modal-btn' onclick="closeModelViewer()" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div>`,
     su33: `<model-viewer
         id="modsu33" 
         src="model_su33.glb"
@@ -158,20 +157,20 @@ const modelTemplates = {
         ar        
         ar-modes="webxr scene-viewer quick-look"         
         alt="3D модель с поддержкой AR">    
-  <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
-    👋  Посмотреть в AR
-  </button>
+        <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
+          👋  Посмотреть в AR
+        </button>
         <button slot="hotspot-su331" id="cabin-trigger" class="cabin-area" 
         data-position="7.2m 3.6m 0.2m" data-normal="0.1 0.6 0.8" 
         style="opacity: 0; pointer-events: none;"
         onclick="toggleView_su33()"> 
         <div class="annotation">Экипаж: 1 человек</div>
         </button>
-<button id="eject-button" class="hotspot" slot="hotspot-eject" 
-        data-position="7.31m 3.16m 0.18m" 
-        onclick="event.stopPropagation(); startEjectVideo();" 
-        style="display: none;">
-</button>
+        <button id="eject-button" class="hotspot" slot="hotspot-eject" 
+                data-position="7.31m 3.16m 0.18m" 
+                onclick="event.stopPropagation(); startEjectVideo();" 
+                style="display: none;">
+        </button>
         <button class="hotspot_a" slot="hotspot-a2" data-position="-5.99m 2.64m -0.93m" data-normal="-0.04 0.98 0.21">
           <div class="annotation">2 двигателя АЛ-31Ф-3<br>Макс. скорость: 2300 км/ч </div>
         </button>
@@ -190,18 +189,17 @@ const modelTemplates = {
            <div class="loader-text">Загрузка модели...</div>
            <div class="update-bar"></div>
          </div>        
-</model-viewer>
-<div id="video-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; justify-content: center; align-items: center;">
-    <!-- Кнопка пропуска -->
-    <button id="skip-video" style="position: absolute; bottom: 30px; right: 30px; padding: 10px 20px; background: rgba(255, 120, 0, 0.2); color: white; border: 1px solid white; cursor: pointer; border-radius: 5px; z-index: 10000;">
-        Пропустить  →>
-    </button>    
-    <video id="eject-video" style="max-width: 100%; max-height: 100%;">
-        <source type="video/mp4">
-    </video>
-</div>
- <div class='modal-btn' onclick="closeModelViewer()" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div>`,
-  
+     </model-viewer>
+     <div id="video-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; justify-content: center; align-items: center;">
+         <!-- Кнопка пропуска -->
+         <button id="skip-video" style="position: absolute; bottom: 30px; right: 30px; padding: 10px 20px; background: rgba(255, 120, 0, 0.2); color: white; border: 1px solid white; cursor: pointer; border-radius: 5px; z-index: 10000;">
+             Пропустить  →>
+         </button>    
+         <video id="eject-video" style="max-width: 100%; max-height: 100%;">
+             <source type="video/mp4">
+         </video>
+     </div>
+      <div class='modal-btn' onclick="closeModelViewer()" style="position: absolute; bottom: 30px; left: 0; right: 0; margin: 0 auto; width: fit-content; z-index: 10; cursor: pointer;">Закрыть</div>`,
    mi2: `<model-viewer id="modmi2" 
         src="model_mi2.glb" 
         ar ar-modes="webxr scene-viewer quick-look" 
@@ -246,50 +244,83 @@ const modelTemplates = {
                 Дальность полёта: обычная около 340-400 км,с доп. баками  до 580 км<br>
                 Максимальная скорость: 210 км/ч
             </div>
-        </button>            
-
+        </button>  
         <div slot="progress-bar" class="custom-loader">
             <div class="loader-text">Загрузка модели...</div>
             <div class="update-bar"></div>
         </div>
-    </model-viewer>
-    <div class="control-panel">      
-      <label class="switch">       
-        <input type="checkbox" id="rotor-switch">
-        <span class="slider"></span>
-      </label>
-    </div>     
-    <div id="viewToggleButtonMi" class="modal-btn" onclick="toggleMi2View()" 
-         style="position: absolute; bottom: 30px; right: 250px; z-index: 10; cursor: pointer;">
-        Заглянуть внутрь
-    </div>    
-
-    <div class="modal-btn" onclick="closeModelViewer()"
-         style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
-        Закрыть
-    </div>`,
-    kvant: `<model-viewer id="modkvant" 
-        src="model_kvant.glb" 
-        poster="poster_kvant.webp"
-        skybox-image="nebo1.jpg"   
-        environment-image="neutral"
-        exposure="1.3"
-        shadow-intensity="0.5"
-        shadow-softness="1" 
-        auto-rotate-delay="10000"
-        auto-rotate        
-        camera-controls
-        shadow-intensity="1"
-        touch-action="none"
-        camera-orbit="52.32deg 52.35deg 44.54m" 
-        field-of-view="30deg"
-        interaction-prompt="none">
-        <div slot="progress-bar" class="custom-loader"><div class="update-bar"></div></div>
-    </model-viewer>
-    <div class="modal-btn" onclick="closeModelViewer()"
-         style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
-        Закрыть
-    </div>`,
+      </model-viewer>
+      <div class="control-panel">      
+        <label class="switch">       
+          <input type="checkbox" id="rotor-switch">
+          <span class="slider"></span>
+        </label>
+      </div>     
+      <div id="viewToggleButtonMi" class="modal-btn" onclick="toggleMi2View()" 
+           style="position: absolute; bottom: 30px; right: 250px; z-index: 10; cursor: pointer;">
+          Заглянуть внутрь
+      </div>      
+      <div class="modal-btn" onclick="closeModelViewer()"
+           style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
+          Закрыть
+      </div>`,
+  kvant: `<model-viewer id="modkvant" 
+          src="model_kvant.glb" 
+          poster="poster_kvant.webp"
+          skybox-image="nebo11.jpg"   
+          environment-image="neutral"
+          exposure="1.3"
+          shadow-intensity="1"
+          shadow-softness="1" 
+          auto-rotate-delay="10000"
+          auto-rotate        
+          camera-controls
+          ar        
+          ar-modes="webxr scene-viewer quick-look"         
+          alt="3D модель с поддержкой AR"
+          touch-action="none"
+          camera-orbit="-49.98deg 74.61deg 27.44m" 
+          field-of-view="20deg"
+          interaction-prompt="none">       
+          <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
+              👋 Посмотреть в AR  </Button>      
+          <button class="hotspot_a" slot="hotspot-2" data-position="-0.23m 0.438m 4.99m" data-normal="-0.79m 0.36m 0.48m">
+              <div class="annotation">Двигатель Rotax-912ULS <br> Трехлопастный тянущий винт</div>
+          </button>             
+          <button class="cabin-hotspot" slot="hotspot-3" data-position="-0.62m 0.92m 0.32m" data-normal="-0.89m 0.43m 0.09m" onclick="toggleKvantView()">
+              <div class="annotation">Экипаж: 1 человек </div>
+          </button>           
+          <button class="hotspot_a" slot="hotspot-4" data-position="-4.358m -0.566m 1.26m" data-normal="0.04779m 1m -0.08m">
+              <div class="annotation">Размах крыла: 6,7 м <br> Короткий разбег и посадка <br> Максимальная скорость: 160 км/ч</div>
+          </button>           
+          <button class="hotspot_a" slot="hotspot-5" data-position="-0.15m 0.12m -4.40m" data-normal="-0.50m 0.85m -0.17m">
+              <div class="annotation">Легкий многоцелевой самолет-биплан, разработанный в ОСКБЭС МАИ <br> Дальность полёта: до 400 км <br> Макс. взлётная масса: 540 кг</div>
+          </button>            
+          <div slot="progress-bar" class="custom-loader"><div class="update-bar"></div></div>
+          <div id="sky-scroller">
+            <div class="sky-layer"></div>
+           </div>
+           <div id="clouds-overlay" style="display: none;">
+      <div class="cloud"></div>
+      <div class="cloud"></div>
+      <div class="cloud"></div>
+      <div class="cloud"></div>
+  </div>
+      </model-viewer>      
+      <div class="control-panel" style="z-index: 2000 !important;">      
+        <label class="switch">       
+          <input type="checkbox" id="kvant-flight-switch" onclick="handleKvantFlight()">
+          <span class="slider"></span>
+        </label>
+      </div>     
+      <div id="viewToggleButtonK" class="modal-btn" onclick="toggleKvantView()" 
+           style="position: absolute; bottom: 30px; right: 250px; z-index: 10; cursor: pointer;">
+          Заглянуть внутрь
+      </div>       
+      <div class="modal-btn" onclick="closeModelViewer()"
+           style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
+          Закрыть
+      </div>`,
     mojaysky: `<model-viewer id="modmoj" 
         src="model_mojaysky.glb" 
         poster="poster_mojaysky.webp"
@@ -307,52 +338,46 @@ const modelTemplates = {
         interaction-prompt="none"
         ar        
         ar-modes="webxr scene-viewer quick-look"         
-        alt="3D модель с поддержкой AR">    
-    
-    <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
-        👋 Посмотреть в AR
-    </button>
-
-    <button class="hotspot_a" slot="hotspot-1" 
-            data-position="1.8m 0.15m -1.3m" 
-            data-normal="0 1 0"
-            data-visibility-attribute="visible">
-        <div class="annotation">Пружинный двигатель и три винта</div>
-    </button>
-
-    <button class="hotspot_a" slot="hotspot-2" 
-            data-position="0.2m 0.15m -1.5m" 
-            data-normal="0 1 0"
-            data-visibility-attribute="visible">
-        <div class="annotation">Прямоугольное неподвижное крыло</div>
-    </button>
-
-    <button class="hotspot_a" slot="hotspot-3" 
-            data-position="-3.09m 0.14m -1.02m"    
-            data-normal="0 0 1"
-            data-visibility-attribute="visible">
-        <div class="annotation">Хвостовое оперение и рули управления</div>
-    </button>
-    <button class="hotspot_a" slot="hotspot-4" 
-            data-position="-0.03m -1.084m -0.42m" 
-            data-normal="0 -1 0"
-            data-visibility-attribute="visible">
-        <div class="annotation">Четырехколесное шасси для разбега</div>
-    </button>
-    <button class="hotspot_a" slot="hotspot-5" 
-            data-position="-0.40m 0.32m 3.4m " 
-            data-normal="1 0 0"
-            data-visibility-attribute="visible">
-        <div class="annotation">В учебных ангарах МАИ представлен макет консоли крыла этого исторического аппарата.</div>
-    </button> 
-
-</model-viewer>
-<div class="modal-btn" onclick="closeModelViewer()"
-     style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
-    Закрыть
-</div>`
-};
-
+        alt="3D модель с поддержкой AR">       
+        <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
+            👋 Посмотреть в AR
+        </Button>       
+        <button class="hotspot_a" slot="hotspot-1" 
+                data-position="1.8m 0.15m -1.3m" 
+                data-normal="0 1 0"
+                data-visibility-attribute="visible">
+            <div class="annotation">Пружинный двигатель и три винта</div>
+        </Button>       
+        <button class="hotspot_a" slot="hotspot-2" 
+                data-position="0.2m 0.15m -1.5m" 
+                data-normal="0 1 0"
+                data-visibility-attribute="visible">
+            <div class="annotation">Прямоугольное неподвижное крыло</div>
+        </Button>       
+        <button class="hotspot_a" slot="hotspot-3" 
+                data-position="-3.09m 0.14m -1.02m"    
+                data-normal="0 0 1"
+                data-visibility-attribute="visible">
+            <div class="annotation">Хвостовое оперение и рули управления</div>
+        </button>
+        <button class="hotspot_a" slot="hotspot-4" 
+                data-position="-0.03m -1.084m -0.42m" 
+                data-normal="0 -1 0"
+                data-visibility-attribute="visible">
+            <div class="annotation">Четырехколесное шасси для разбега</div>
+        </button>
+        <button class="hotspot_a" slot="hotspot-5" 
+                data-position="-0.40m 0.32m 3.4m " 
+                data-normal="1 0 0"
+                data-visibility-attribute="visible">
+            <div class="annotation">В учебных ангарах МАИ представлен макет консоли крыла этого исторического аппарата.</div>
+        </button> 
+     </model-viewer>
+     <div class="modal-btn" onclick="closeModelViewer()"
+          style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
+         Закрыть
+     </div>`
+     };
 const activeAnnotationTimers = {};
 const data={
   yak40:{
@@ -484,7 +509,7 @@ const states = {
     modyak40: { isInside: false, isTextured: false, orbit: '180deg 75deg auto' },
     modsu25: { isInside: false, isTextured: false, orbit: '490.4deg 73.01deg 22.14m' },
     modmi2:   { isInside: false , isTextured: true, orbit: '-22.26deg 78.51deg 30.21m' },
-    modkvant: { isInside: false, isTextured: false, orbit: '180deg 75deg 10m' },
+    modkvant: { isInside: false, isTextured: false, orbit: '-49.98deg 74.61deg 27.44m' },
     modmoj: { isInside: false, isTextured: false, orbit: '48.8deg 79.65deg 22.85m' }
 };
 const autoFadeTimers = {};
@@ -947,6 +972,7 @@ function startAnnotationCycle(viewerId) {
     let isUserInteracting = false;
 
     const showNext = () => {
+    	  if (document.getElementById('kvant-flight-switch')?.checked) return; 
         if (activeAnnotationTimers[viewerId]) {
             clearTimeout(activeAnnotationTimers[viewerId]);
         }
@@ -1585,6 +1611,94 @@ function showServiceMessage(text) {
     // Скрыть через 4 секунды
     setTimeout(() => { msg.style.opacity = '0'; }, 4000);
 }
+
+function toggleKvantView() {
+    const vId = 'modkvant';
+    const bId = 'viewToggleButtonK'; 
+    const v = document.getElementById(vId);
+
+    if (!states[vId].isInside) {
+        states[vId].isInside = true;
+        stopAllAnnotations();        
+        cinematicFly(v, '0.1m 0.92m -0.5m', '180deg 85deg 0.2m', 2.0, () => {
+            const btn = document.getElementById(bId);
+            if(btn) {
+                btn.innerText = "Выйти наружу";
+                btn.style.background = "#ff4757";
+            }
+        });
+    } else {
+        exitModel(vId, bId);
+        const btn = document.getElementById(bId);
+        if(btn) {
+            btn.innerText = "Заглянуть внутрь";
+            btn.style.background = "";
+        }
+    }
+}
+// exitModel('modkvant', 'viewToggleButtonK');
+function handleKvantFlight() {
+    const v = document.getElementById('modkvant');
+    const sw = document.getElementById('kvant-flight-switch');
+    const sky = document.getElementById('sky-scroller');
+    const infoPanel = document.querySelector('#info-panel');
+    const clouds = document.getElementById('clouds-overlay');     
+    if (!v || !sw) return;
+
+    if (sw.checked) {
+        // 1. ЧИСТИМ ЭКРАН (сразу)
+        window.speechSynthesis.cancel(); 
+        clearTimeout(globalResumeTimeout); 
+        Object.values(activeAnnotationTimers).forEach(t => clearTimeout(t));    
+        stopAllAnnotations();
+        exitModel('modkvant', 'viewToggleButtonK');
+        if (infoPanel) infoPanel.classList.remove('visible'); 
+
+        // ДОБАВЛЯЕМ ТАЙМЕР ПЕРЕД ВЗЛЕТОМ
+        setTimeout(() => {
+            v.classList.add('flight-mode-on'); 
+            v.autoRotate = false;
+            v.removeAttribute('auto-rotate');
+         clouds.style.display = 'block';                
+        // Запускаем анимацию для каждого облака
+        clouds.querySelectorAll('.cloud').forEach(c => c.classList.add('fly'));
+        
+            // 2. НЕБО
+            v.style.setProperty('background-color', 'transparent', 'important');
+            v.removeAttribute('skybox-image');
+
+            if (sky) {
+                sky.classList.add('active');
+                sky.querySelector('.sky-layer').classList.add('moving');
+            }
+
+            // 3. ПОЗИЦИЯ
+            v.cameraOrbit = "-75.75deg 73.05deg 35.27m"; 
+            v.jumpCameraToGoal();
+
+            // 4. ВИНТ
+            const anim = v.availableAnimations.find(a => a.toLowerCase().includes('vint'));
+            if (anim) { v.animationName = anim; v.play(); }
+        }, 500); // Задержка 200 миллисекунд
+
+    } else {
+        // ВОЗВРАТ В АНГАР (без изменений)
+        v.classList.remove('flight-mode-on');
+        if (sky) {
+            sky.classList.remove('active');
+            sky.querySelector('.sky-layer').classList.remove('moving');
+        }
+        clouds.style.display = 'none';          
+        clouds.querySelectorAll('.cloud').forEach(c => c.classList.remove('fly'));        
+        v.pause();
+        v.setAttribute('skybox-image', 'nebo1.jpg');
+        v.style.backgroundColor = "";
+        v.setAttribute('auto-rotate', '');
+        v.autoRotate = true;
+        v.cameraOrbit = "-49.98deg 74.61deg 27.44m";
+    }
+}
+
 Video = startEjectVideo;
 window.openModelViewer = openModelViewer;
 window.closeModelViewer = closeModelViewer;

@@ -145,7 +145,7 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
               style="top: 27%; left: 25%; background-color: #007bff !important; border: 2px solid white !important; box-shadow: 0 0 10px rgba(0,0,0,0.8) !important; width: 16px; height: 16px;">
         <div class="annotation">
           МАИ-890 «Квант»  )<br>
-          <span style="font-size: 12px; font-weight: 400; opacity: 0.8;">Учебный биплан (В ангаре на техобслуживании )</span>
+          <span style="font-size: 12px; font-weight: 400; opacity: 0.8;">Учебный биплан </span>
         </div>
       </button>
       <!-- Точка над Ми-2 -->
@@ -212,6 +212,13 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
           onclick="handlePosterClick(event,'mojaysky')">
       <img src="poster_mojaysky.webp" style="width: 450px; height: auto;">
       <div class="annotation">Модель «Летунья»</div>
+  </button>
+    <!-- Квант (МАИ-890) -->
+  <button slot="hotspot-kvant" class="plane-poster hidden-poster" 
+        data-position="7m 5m -4m" data-normal="0 1 0" 
+        onclick="handlePosterClick(event,'kvant')">
+    <img src="poster_kvant.webp" style="width: 250px; height: auto;">
+    <div class="annotation">Квант (МАИ-890)</div>
   </button>
     </model-viewer>
     </div>
