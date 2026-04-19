@@ -1627,7 +1627,7 @@ function toggleKvantView() {
          {v.setAttribute('skybox-image', 'nebo1.jpg');        
            const winMat = v.model.materials.find(m => m.name === 'Material.001');
            if (winMat)
-            { winMat.setEmissiveFactor([0, 0, 0]);
+            { 
             winMat.setAlphaMode('BLEND');
             // Устанавливаем прозрачность: [R, G, B, Alpha] -> 0.3 это 30% видимости
             winMat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 0.3]);}
@@ -1640,8 +1640,14 @@ function toggleKvantView() {
             }
         });
     } else {
-        exitModel(vId, bId);
-        if (document.getElementById('kvant-flight-switch')?.checked) handleKvantFlight(); 
+        exitModel(vId, bId);        
+        if (document.getElementById('kvant-flight-switch')?.checked)          
+          {handleKvantFlight(); 
+           const winMat = v.model.materials.find(m => m.name === 'Material.001');
+            winMat.setEmissiveFactor([0, 0, 0])
+            winMat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 1]);
+            winMat.setAlphaMode('OPAQUE');            
+           	}
         const btn = document.getElementById(bId);
         if(btn) {
             btn.innerText = "Заглянуть внутрь";
