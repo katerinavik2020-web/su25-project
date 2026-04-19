@@ -296,7 +296,11 @@ const modelTemplates = {
           <button class="hotspot_a" slot="hotspot-5" data-position="-0.15m 0.12m -4.40m" data-normal="-0.50m 0.85m -0.17m">
               <div class="annotation">Легкий многоцелевой самолет-биплан, разработанный в ОСКБЭС МАИ <br> Дальность полёта: до 400 км <br> Макс. взлётная масса: 540 кг</div>
           </button>            
-          <div slot="progress-bar" class="custom-loader"><div class="update-bar"></div></div>
+          <!-- Индикатор загрузки -->
+        <div slot="progress-bar" class="custom-loader">
+           <div class="loader-text">Загрузка модели...</div>
+           <div class="update-bar"></div>
+         </div>
           <div id="sky-scroller">
             <div class="sky-layer"></div>
            </div>
@@ -372,6 +376,11 @@ const modelTemplates = {
                 data-visibility-attribute="visible">
             <div class="annotation">В учебных ангарах МАИ представлен макет консоли крыла этого исторического аппарата.</div>
         </button> 
+        <!-- Индикатор загрузки -->
+        <div slot="progress-bar" class="custom-loader">
+           <div class="loader-text">Загрузка модели...</div>
+           <div class="update-bar"></div>
+         </div>
      </model-viewer>
      <div class="modal-btn" onclick="closeModelViewer()"
           style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
