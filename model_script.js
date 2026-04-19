@@ -269,7 +269,7 @@ const modelTemplates = {
           poster="poster_kvant.webp"
           skybox-image="nebo11.jpg"   
           environment-image="neutral"
-          exposure="1.3"
+          exposure="1.6"
           shadow-intensity="1"
           shadow-softness="1" 
           auto-rotate-delay="10000"
@@ -673,7 +673,7 @@ function enterSalon() {
     const b = document.getElementById('viewToggleButton');
     stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
     states.modyak40.isInside = true;
-    cinematicFly(v, '-0.1m 0.90m -1.45m', '180deg 90deg 0.1m', 2.0, () => {
+    cinematicFly(v, '-0.1m 0.90m -1.45m', '180deg 90deg 0.1m', 2.2, () => {
         b.innerHTML = "Выйти из самолета"; b.style.background = "#ff4757";
     });
 }
@@ -685,7 +685,7 @@ function enterCabin() {
     const b = document.getElementById('viewToggleButton');
     stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
     states.modyak40.isInside = true;
-    cinematicFly(v, '-0.3m 0.8m -3.0m', '10deg 80deg 0.2m', 2.5, () => {
+    cinematicFly(v, '-0.1m 0.8m -3.0m', '10deg 80deg 0.2m', 2.5, () => {
         b.innerHTML = "Выйти из самолета"; b.style.background = "#ff4757";
     });
 }
@@ -820,6 +820,12 @@ function openModelViewer(planeKey) {
 
         // 4. РУЧНОЕ ПРОЯВЛЕНИЕ ПО КЛИКУ
         v.addEventListener('click', (e) => {
+            if (planeKey === 'kvant' && document.getElementById('kvant-flight-switch')?.checked) {
+        e.preventDefault();
+        e.stopPropagation(); // Останавливаем всплытие события
+        console.log("Клик в полете заблокирован!");
+        return; 
+    }	
             if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
             if (autoFadeTimers[config.vId]) clearTimeout(autoFadeTimers[config.vId]);
             smoothFadeIn(config.vId, config.bId);
@@ -958,16 +964,13 @@ document.querySelectorAll('model-viewer').forEach(viewer => {
 function startAnnotationCycle(viewerId) {
     const viewer = document.getElementById(viewerId);
     if (!viewer) return;
-
+    //if (document.getElementById('kvant-flight-switch')?.checked) return; 
     const infoPanel = document.querySelector('#info-panel');
-    const infoContent = infoPanel ? infoPanel.querySelector('.info-panel-content') : null;
-    
+    const infoContent = infoPanel ? infoPanel.querySelector('.info-panel-content') : null;    
     // Очищаем старые процессы перед запуском
     stopAllAnnotations();    
     if (!infoPanel) return;
-
     if (activeAnnotationTimers[viewerId]) clearTimeout(activeAnnotationTimers[viewerId]);
-
     let currentIndex = 0;
     let isUserInteracting = false;
 
@@ -1025,7 +1028,7 @@ function startAnnotationCycle(viewerId) {
     if (!viewer.dataset.hasListener) {
         viewer.dataset.hasListener = "true";
         viewer.addEventListener('pointerdown', () => {
-            if (isFireMode) return; 
+            if  (isFireMode || document.getElementById('kvant-flight-switch')?.checked)  return; 
             isUserInteracting = true;
             stopAllAnnotations(); 
             viewer.autoRotate = false; 
@@ -1619,7 +1622,16 @@ function toggleKvantView() {
 
     if (!states[vId].isInside) {
         states[vId].isInside = true;
-        stopAllAnnotations();        
+        stopAllAnnotations(); 
+        if (document.getElementById('kvant-flight-switch')?.checked) 
+         {v.setAttribute('skybox-image', 'nebo1.jpg');        
+           const winMat = v.model.materials.find(m => m.name === 'Material.001');
+           if (winMat)
+            { winMat.setEmissiveFactor([0, 0, 0]);
+            winMat.setAlphaMode('BLEND');
+            // Устанавливаем прозрачность: [R, G, B, Alpha] -> 0.3 это 30% видимости
+            winMat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 0.3]);}
+            }
         cinematicFly(v, '0.1m 0.92m -0.5m', '180deg 85deg 0.2m', 2.0, () => {
             const btn = document.getElementById(bId);
             if(btn) {
@@ -1629,6 +1641,7 @@ function toggleKvantView() {
         });
     } else {
         exitModel(vId, bId);
+        if (document.getElementById('kvant-flight-switch')?.checked) handleKvantFlight(); 
         const btn = document.getElementById(bId);
         if(btn) {
             btn.innerText = "Заглянуть внутрь";
@@ -1646,7 +1659,7 @@ function handleKvantFlight() {
     if (!v || !sw) return;
 
     if (sw.checked) {
-        // 1. ЧИСТИМ ЭКРАН (сразу)
+    	 //1. ЧИСТИМ ЭКРАН (сразу)
         window.speechSynthesis.cancel(); 
         clearTimeout(globalResumeTimeout); 
         Object.values(activeAnnotationTimers).forEach(t => clearTimeout(t));    
@@ -1666,7 +1679,7 @@ function handleKvantFlight() {
             // 2. НЕБО
             v.style.setProperty('background-color', 'transparent', 'important');
             v.removeAttribute('skybox-image');
-
+//v.setAttribute('skybox-image', 'nebo12.jpg');
             if (sky) {
                 sky.classList.add('active');
                 sky.querySelector('.sky-layer').classList.add('moving');

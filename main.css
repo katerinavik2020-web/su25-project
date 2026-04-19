@@ -903,9 +903,6 @@ model-viewer:not([poster-dismissed]) .custom-loader {
     animation: sky-scrolling 10s linear infinite !important;
 }
 
-#modkvant.flight-mode-on {
-    pointer-events: none !important; /* Клики пройдут СКВОЗЬ модель на фон */
-}
 /* БЛОКИРОВКА КЛИКОВ ПО МОДЕЛИ В ПОЛЕТЕ */
 #modkvant.flight-mode-on {
     pointer-events: none !important; /* Модель нельзя потрогать */
