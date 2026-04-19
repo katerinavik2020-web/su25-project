@@ -283,7 +283,7 @@ const modelTemplates = {
           field-of-view="20deg"
           interaction-prompt="none">       
           <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
-              👋 Посмотреть в AR  </Button>      
+              👋 Посмотреть в AR  </button>      
           <button class="hotspot_a" slot="hotspot-2" data-position="-0.23m 0.438m 4.99m" data-normal="-0.79m 0.36m 0.48m">
               <div class="annotation">Двигатель Rotax-912ULS <br> Трехлопастный тянущий винт</div>
           </button>             
@@ -733,7 +733,7 @@ function exitModel(vId, bId, eId = null) {
     v.resetTurntableRotation();
     const rotorSwitch = document.querySelector('#rotor-switch');
     if (rotorSwitch) rotorSwitch.checked = false;
-    if (vId === 'modmi2' && b) {
+    if ((vId === 'modmi2' || vId === 'modkvant') && b) {
         b.innerText = "Заглянуть внутрь";
         b.style.background = "";
     }
@@ -1636,7 +1636,7 @@ function toggleKvantView() {
         }
     }
 }
-// exitModel('modkvant', 'viewToggleButtonK');
+
 function handleKvantFlight() {
     const v = document.getElementById('modkvant');
     const sw = document.getElementById('kvant-flight-switch');
@@ -1691,11 +1691,18 @@ function handleKvantFlight() {
         clouds.style.display = 'none';          
         clouds.querySelectorAll('.cloud').forEach(c => c.classList.remove('fly'));        
         v.pause();
-        v.setAttribute('skybox-image', 'nebo1.jpg');
+        v.setAttribute('skybox-image', 'nebo11.jpg');
         v.style.backgroundColor = "";
         v.setAttribute('auto-rotate', '');
         v.autoRotate = true;
         v.cameraOrbit = "-49.98deg 74.61deg 27.44m";
+        setTimeout(() => {
+        // Проверяем, не включил ли пользователь полет снова за эту секунду
+        if (!document.getElementById('kvant-flight-switch').checked) {
+            console.log("Возвращаем аннотации Кванта...");
+            startAnnotationCycle('modkvant'); 
+        }
+    }, 2500);
     }
 }
 
