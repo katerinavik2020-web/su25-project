@@ -617,7 +617,8 @@ materials.forEach(m => {
         h.style.setProperty('pointer-events', 'auto', 'important');
         h.style.setProperty('visibility', 'visible', 'important');
     });
-    // ЗАПУСКАЕМ АВТО-АННОТАЦИИ 
+    // ЗАПУСКАЕМ АВТО-АННОТАЦИИ
+ 
      if (!document.getElementById('kvant-flight-switch')?.checked)   startAnnotationCycle(viewerId);
 }
     }
@@ -905,7 +906,7 @@ function closeModelViewer() {
 function toggleView() {
     const v = document.getElementById('modyak40');
     if (!v) return;
-    if (states.modyak40.isInside) exitModel('modyak40', 'viewToggleButton');
+    if (states.modyak40.isInside) {exitModel('modyak40', 'viewToggleButton');v.setAttribute('skybox-image', 'cloud_layers_1k.hdr');}
     else enterSalon();
 }
 
@@ -1086,11 +1087,15 @@ function toggleNightMode(isNight) {
     
     if (isNight) {
         viewer.classList.add('night-mode');
-        viewer.exposure = 0.2;
+        viewer.setAttribute('skybox-image', 'kloppenheim_06_puresky_1k.hdr');
+        viewer.setAttribute('environment-image', 'cloud_layers_1k.hdr');         
+        viewer.exposure = 0.16;
         // Включаем свечение (теплый желтый свет)
         if (windowMaterial) windowMaterial.setEmissiveFactor([2.5, 2.0, 1.0]);
+        
     } else {
         viewer.classList.remove('night-mode');
+        viewer.setAttribute('skybox-image', 'cloud_layers_1k.hdr');
         viewer.exposure = 1.3;
         if (windowMaterial) {
             // ВАЖНО: Устанавливаем черный цвет свечения (выключаем "лампочку")

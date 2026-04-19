@@ -915,11 +915,7 @@ model-viewer:not([poster-dismissed]) .custom-loader {
     pointer-events: auto !important;
 }
 
-/* Убираем синюю рамку и блик при клике в браузере */
-#modkvant:focus, #modkvant:active {
-    outline: none !important;
-    background-color: transparent !important;
-}
+
 
 
 /* Слой поверх 3D модели */
@@ -959,3 +955,31 @@ model-viewer:not([poster-dismissed]) .custom-loader {
 .cloud:nth-child(2) { top: 40%; animation-duration: 5s; animation-delay: 1s; }
 .cloud:nth-child(3) { top: 60%; animation-duration: 4s; animation-delay: 0.5s; }
 .cloud:nth-child(4) { top: 85%; animation-duration: 6s; animation-delay: 2s; }
+
+
+
+#modelModalContent {
+    background: radial-gradient(circle at center, #022a55 0%, #010b1c 100%);
+    /* Плотный базовый цвет ночи */
+    background-color: #010b1c !important; 
+    
+    /* Слоеный пирог: Глубина -> Большие звезды -> Мелкая пыль */
+    background-image: 
+        /* 1. Глубокий синий центр */
+        radial-gradient(circle at center, #022a55 0%, transparent 70%),
+        /* 2. Крупные яркие звезды (белые с голубым отливом) */
+        radial-gradient(3px 3px at 40px 60px, #fff 100%, transparent),
+        radial-gradient(2px 2px at 150px 250px, #4da3ff 100%, transparent),
+        radial-gradient(3px 3px at 250px 50px, #fff 100%, transparent),
+        /* 3. Мелкая звездная пыль */
+        radial-gradient(1px 1px at 10px 10px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 100px 150px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1.5px 1.5px at 200px 300px, #fff, transparent);
+
+    /* Размножаем звезды по всей площади */
+    background-size: 100% 100%, 350px 350px, 400px 400px, 300px 300px, 200px 200px, 250px 250px, 220px 220px;
+    
+    /* Чтобы звезды "горели" */
+    filter: contrast(1.2) brightness(1.1);
+    position: relative;
+}
