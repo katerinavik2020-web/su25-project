@@ -1638,7 +1638,8 @@ function toggleKvantView() {
         states[vId].isInside = true;
         stopAllAnnotations(); 
         if (document.getElementById('kvant-flight-switch')?.checked) 
-         {v.setAttribute('skybox-image', 'nebo1.jpg');        
+         {v.setAttribute('skybox-image', 'nebo1.jpg');  
+         	v.setAttribute('environment-image', 'cloud_layers_1k.hdr');        
            const winMat = v.model.materials.find(m => m.name === 'Material.001');
            if (winMat)
             { 
@@ -1712,9 +1713,13 @@ function handleKvantFlight() {
             v.jumpCameraToGoal();
 
             // 4. ВИНТ
-            const anim = v.availableAnimations.find(a => a.toLowerCase().includes('vint'));
-            if (anim) { v.animationName = anim; v.play(); }
-        }, 500); // Задержка 200 миллисекунд
+            const anim = v.availableAnimations.find(a => a.toLowerCase().includes('shassi'));
+            if (anim) { v.animationName = anim;  v.play({ repetitions: 1 }); v.pause(); }
+            setTimeout(() => {
+                const animV = v.availableAnimations.find(a => a.toLowerCase().includes('vint'));
+                if (animV) { v.animationName = animV; v.play();  }
+            }, 800);        
+        }, 500); // Задержка 500 миллисекунд
 
     } else {
         // ВОЗВРАТ В АНГАР (без изменений)
@@ -1726,17 +1731,24 @@ function handleKvantFlight() {
         clouds.style.display = 'none';          
         clouds.querySelectorAll('.cloud').forEach(c => c.classList.remove('fly'));        
         v.pause();
+        const animSh = v.availableAnimations.find(a => a.toLowerCase().includes('shassi'));
+        if (animSh) { 
+            v.animationName = animSh; // Переключаемся на анимацию с шасси
+            v.currentTime = 0;        // Ставим на 1-й кадр (где они выпущены)
+        }
         v.setAttribute('skybox-image', 'nebo11.jpg');
         v.style.backgroundColor = "";
         v.setAttribute('auto-rotate', '');
         v.autoRotate = true;
         v.cameraOrbit = "-49.98deg 74.61deg 27.44m";
         setTimeout(() => {
-        // Проверяем, не включил ли пользователь полет снова за эту секунду
-        if (!document.getElementById('kvant-flight-switch').checked) {
-            console.log("Возвращаем аннотации Кванта...");
-            startAnnotationCycle('modkvant'); 
-         }
+            // 1. Сначала ищем сам элемент
+            const swElement = document.getElementById('kvant-flight-switch');            
+            // 2. Проверяем: он вообще существует? И если да, то НЕ нажат ли он?
+            if (swElement && !swElement.checked) {
+                console.log("Возвращаем аннотации Кванта...");
+                startAnnotationCycle('modkvant'); 
+            }
         }, 2500);
     }
 }

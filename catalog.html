@@ -199,13 +199,22 @@ function startKvantPreviewCycle() {
         // Запускаем только если не открыто большое окно
         if (!isModalOpen) {
             // 1. Запуск анимации (винт)
-            kvantPreview.play(); 
-            // Через 6 секунд успокаиваем модель
+           // kvantPreview.play(); 
+            const anim = kvantPreview.availableAnimations.find(a => a.toLowerCase().includes('shassi'));
+            if (anim) { kvantPreview.animationName = anim;  kvantPreview.play(); kvantPreview.pause(); }
+            setTimeout(() => {const animV = kvantPreview.availableAnimations.find(a => a.toLowerCase().includes('vint'));
+            if (animV) { kvantPreview.animationName = animV; kvantPreview.play(); }}, 1000);
+            // Через 7 секунд успокаиваем модель
             setTimeout(() => {
                 if (kvantPreview) {
-                    kvantPreview.pause();                    
+                    kvantPreview.pause();                     
+                    const animSh = kvantPreview.availableAnimations.find(a => a.toLowerCase().includes('shassi'));
+                    if (animSh) { 
+                        kvantPreview.animationName = animSh;
+                        kvantPreview.currentTime = 0;       
+                    }                                      
                 }
-            }, 6000); 
+            }, 7000); 
         }
     }
     // Запускаем каждые 25 секунд (чуть реже, чем Ми-2, чтобы не частить)
