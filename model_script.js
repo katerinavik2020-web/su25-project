@@ -381,7 +381,19 @@ const modelTemplates = {
            <div class="loader-text">Загрузка модели...</div>
            <div class="update-bar"></div>
          </div>
+         <div id="clouds-overlay" style="display: none;">
+      <div class="cloud"></div>
+      <div class="cloud"></div>
+      <div class="cloud"></div>
+      <div class="cloud"></div>
+  </div>
      </model-viewer>
+         <div class="control-panel">      
+        <label class="switch">       
+          <input type="checkbox" id="moj-flight-switch" onclick="handleMojFlight()">
+          <span class="slider"></span>
+        </label>
+    </div>
      <div class="modal-btn" onclick="closeModelViewer()"
           style="position: absolute; bottom: 30px; left: 250px; z-index: 10; cursor: pointer;">
          Закрыть
@@ -1752,6 +1764,48 @@ function handleKvantFlight() {
         }, 2500);
     }
 }
+
+function handleMojFlight() {
+    const v = document.getElementById('modmoj');
+    const sw = document.getElementById('moj-flight-switch');    
+   const clouds = v.querySelector('#clouds-overlay'); 
+    if (!v || !sw) return;
+    // ВОЗВРАТ В АНГАР
+    if (sw.checked) {
+        // 1. ПОДГОТОВКА (Разгон винтов)
+        const animStart = v.availableAnimations.find(a => a === 'polet');
+        // v.cameraOrbit ="48.8deg 79.65deg 22.85m" ;
+          stopAllAnnotations();
+        if (animStart) {
+            v.animationName = animStart;
+            v.play();
+        }
+        // 2. ВЗЛЕТ (через 3 секунды, когда винты раскрутились)
+        setTimeout(() => {
+            if (!sw.checked) return; // Если передумали взлетать 
+            v.classList.add('flight-mode-on');
+            if (clouds) clouds.style.display = 'block';
+            clouds?.querySelectorAll('.cloud').forEach(c => c.classList.add('fly'));
+            // Переключаем на стабильный полет
+            const animFly = v.availableAnimations.find(a => a === 'VentAct');
+            if (animFly) {
+                v.animationName = animFly;
+                v.play();
+            }            
+            //v.cameraOrbit = "90deg 80deg 15m"; // Ракурс полета
+        }, 3800); 
+
+    } else {        
+        v.classList.remove('flight-mode-on');
+        v.pause();
+        v.currentTime = 0;      
+        if (clouds) {
+            clouds.style.display = 'none';
+            clouds.querySelectorAll('.cloud').forEach(c => c.classList.remove('fly'));
+        }                      
+    }
+}
+
 
 Video = startEjectVideo;
 window.openModelViewer = openModelViewer;
