@@ -876,7 +876,7 @@ model-viewer:not([poster-dismissed]) .custom-loader {
 #sky-scroller {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -1;
+    z-index: -2;
     display: none;
     overflow: hidden;
     background-color: #87CEEB; /* Небесный цвет на случай дырок в текстуре */
@@ -889,7 +889,7 @@ model-viewer:not([poster-dismissed]) .custom-loader {
     top: 0; left: 0;
     width: 5000px; /* Фиксированная большая ширина */
     height: 100%;
-    background-image: url('nebo12.jpg');
+    background-image: url('nebo12.jpg');    
     background-repeat: repeat-x;
     background-size: auto 100%; /* ВАЖНО: картинка впишется по высоте, не искажаясь */
     background-position: left center;
@@ -902,6 +902,11 @@ model-viewer:not([poster-dismissed]) .custom-loader {
 
 .sky-layer.moving {
     animation: sky-scrolling 10s linear infinite !important;
+}
+/* КЛАСС ДЛЯ НОЧНОГО НЕБА:
+   Аппаратно перекрашивает и сильно затемняет движущуюся дневную текстуру */
+.sky-layer.night-mode {
+    filter: brightness(0.28) saturate(0.4) contrast(1.1) !important;
 }
 
 /* БЛОКИРОВКА КЛИКОВ ПО МОДЕЛИ В ПОЛЕТЕ */
@@ -916,8 +921,6 @@ model-viewer:not([poster-dismissed]) .custom-loader {
 }
 
 
-
-
 /* Слой поверх 3D модели */
 #clouds-overlay {
     position: absolute;
@@ -925,38 +928,158 @@ model-viewer:not([poster-dismissed]) .custom-loader {
     pointer-events: none;
     z-index: 10;
     overflow: hidden;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 }
 
+#clouds-overlay.visible {
+    opacity: 0.85; /* Общий контейнер полностью видим */
+}
+
+/* КОНТЕЙНЕР ОБЛАКА */
 .cloud {
     position: absolute;
-    right: -400px; /* Начальная позиция за экраном справа */
-    width: 300px;
-    height: 100px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 100px;
-    filter: blur(40px); /* Делает красную точку "облаком" */
-    opacity: 0;
+    right: -450px;
+    width: 300px; 
+    height: 90px; 
+    opacity: 0; /* Начальное состояние до запуска анимации */
+    --cloud-scale: 1;
+    /* opacity: 0.42; -> ЭТУ СТРОКУ УДАЛИЛИ, ТЕПЕРЬ НАПРАВЛЯЕТСЯ ИЗ JS */
 }
 
-/* Класс анимации, который добавляет JS */
+.cloud .base,
+.cloud .hump {
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+}
+
+.cloud .base {
+    width: 80%;
+    height: 70%;
+    top: 15%;
+    left: 10%;
+    border-radius: 50% / 50%; 
+}
+
 .cloud.fly {
-    animation: moveCloud linear infinite;
+    animation-name: moveCloud;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
 }
 
 @keyframes moveCloud {
-    0% { transform: translateX(0); opacity: 0; }
-    20% { opacity: 0.7; }
-    80% { opacity: 0.7; }
-    100% { transform: translateX(-150vw); opacity: 0; }
+    0% { 
+        transform: translateX(0) scale(var(--cloud-scale)); 
+        opacity: 0; 
+    }
+    20% { 
+        /* Используем переменную из JS. Если её нет, по умолчанию будет 0.6 */
+        opacity: var(--cloud-opacity, 0.6); 
+    }
+    80% { 
+        opacity: var(--cloud-opacity, 0.6); 
+    }
+    100% { 
+        transform: translateX(-150vw) scale(var(--cloud-scale)); 
+        opacity: 0; 
+    }
 }
 
-/* Разная скорость и высота для каждого облака */
-.cloud:nth-child(1) { top: 10%; animation-duration: 3s; }
-.cloud:nth-child(2) { top: 40%; animation-duration: 5s; animation-delay: 1s; }
-.cloud:nth-child(3) { top: 60%; animation-duration: 4s; animation-delay: 0.5s; }
-.cloud:nth-child(4) { top: 85%; animation-duration: 6s; animation-delay: 2s; }
+/* КОНТЕЙНЕР ДЛЯ ЗВЕЗД (Добавили медленное движение всего неба) */
+.starfield {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    --star-speed: 40s; 
+    animation: star-drift var(--star-speed) linear infinite !important;
+}
 
+/* АНИМАЦИЯ ДВИЖЕНИЯ НЕБА */
+@keyframes star-drift {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%); 
+    }
+}
 
+/* ОБЩИЙ СТИЛЬ КАЖДОЙ ЗВЕЗДОЧКИ (Ваш оригинальный рабочий код) */
+.starfield .single-star {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: individualTwinkle 3.5s ease-in-out infinite alternate;
+}
+
+/* Белые звёзды */
+.starfield .star-white {
+    background-color: #ffffff;
+}
+
+/* Голубые звёзды */
+.starfield .star-blue {
+    background-color: #bfe0ff;
+}
+
+/* ОБНОВЛЕННАЯ АНИМАЦИЯ ПУЛЬСАЦИИ  */
+@keyframes individualTwinkle {
+    0% {
+        opacity: 0.15;
+        transform: scale(0.7); 
+    }
+    100% {
+        opacity: 0.95;
+        transform: scale(1.3); 
+    }
+}
+
+/* 1. НИЖНИЙ СЛОЙ: Создает белый диск и мощный светящийся ореол */
+.moon {
+    position: absolute;
+    width: 110px;  
+    height: 110px; 
+    border-radius: 50%;
+    background-color: #ffffff; 
+    z-index: 2;
+    overflow: hidden; /* Чтобы пятна не вылетали за края Луны */
+    
+    /* ОРЕОЛ: Свечение распространяется строго наружу */
+    box-shadow: 
+        0 0 20px rgba(255, 254, 242, 0.95),
+        0 0 50px rgba(255, 254, 242, 0.65),
+        0 0 95px rgba(255, 254, 242, 0.35),
+        0 0 160px rgba(255, 254, 242, 0.15);
+}
+
+/* 2. ВЕРХНИЙ СЛОЙ: Натуральные, асимметричные лунные моря  */
+.moon::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    z-index: 3; /* Строго поверх белого диска */
+    
+    /* ХАОТИЧНАЯ ТЕКСТУРА С НЕКРУГЛЫМ НИЖНИМ ПЯТНОМ */
+    background-image: 
+        linear-gradient(45deg, rgba(70, 75, 90, 0.22) 0%, transparent 60%),
+        /* 1-е море: левое верхнее */
+        radial-gradient(circle at 26% 28%, rgba(70, 75, 90, 0.45) 0%, rgba(70, 75, 90, 0.25) 30%, transparent 60%),
+        /* 2-е море: правое среднее */
+        radial-gradient(circle at 74% 46%, rgba(65, 70, 85, 0.40) 0%, rgba(65, 70, 85, 0.20) 25%, transparent 50%),
+        /* 3-е море (ИСПРАВЛЕНИЕ): Заменили 'circle' на 'ellipse (20% 12%)' и расширили шаги.
+           Нижнее пятно теперь станет овальным, вытянутым и слегка неровным по краям */
+        radial-gradient(20% 12% at 48% 80%, rgba(85, 90, 105, 0.50) 0%, rgba(85, 90, 105, 0.25) 45%, transparent 100%);
+
+    filter: none; 
+}
+
+/* 3. ОБЛАКА: Летят на самом верхнем уровне, перекрывая и Луну, и её кратеры */
+.cloud {
+    z-index: 5;
+}
 
 #modelModalContent {
     background: radial-gradient(circle at center, #022a55 0%, #010b1c 100%);

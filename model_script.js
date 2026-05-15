@@ -285,7 +285,7 @@ const modelTemplates = {
           <button slot="ar-button" style="background-color: white; border-radius: 8px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
               👋 Посмотреть в AR  </button>      
           <button class="hotspot_a" slot="hotspot-2" data-position="-0.23m 0.438m 4.99m" data-normal="-0.79m 0.36m 0.48m">
-              <div class="annotation">Двигатель Rotax-912ULS <br> Трехлопастный тянущий винт</div>
+              <div class="annotation">Двигатель Rotax-912ULS <br> Двухлопастный тянущий винт</div>
           </button>             
           <button class="cabin-hotspot" slot="hotspot-3" data-position="-0.62m 0.92m 0.32m" data-normal="-0.89m 0.43m 0.09m" onclick="toggleKvantView()">
               <div class="annotation">Экипаж: 1 человек </div>
@@ -304,12 +304,6 @@ const modelTemplates = {
           <div id="sky-scroller">
             <div class="sky-layer"></div>
            </div>
-           <div id="clouds-overlay" style="display: none;">
-      <div class="cloud"></div>
-      <div class="cloud"></div>
-      <div class="cloud"></div>
-      <div class="cloud"></div>
-  </div>
       </model-viewer>      
       <div class="control-panel" style="z-index: 2000 !important;">      
         <label class="switch">       
@@ -381,12 +375,6 @@ const modelTemplates = {
            <div class="loader-text">Загрузка модели...</div>
            <div class="update-bar"></div>
          </div>
-         <div id="clouds-overlay" style="display: none;">
-      <div class="cloud"></div>
-      <div class="cloud"></div>
-      <div class="cloud"></div>
-      <div class="cloud"></div>
-  </div>
      </model-viewer>
          <div class="control-panel">      
         <label class="switch">       
@@ -694,6 +682,7 @@ function enterSalon() {
     const v = document.getElementById('modyak40');
     const b = document.getElementById('viewToggleButton');
     stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
+    CloudManager.stop('modyak40');
     states.modyak40.isInside = true;
     cinematicFly(v, '-0.1m 0.90m -1.45m', '180deg 90deg 0.1m', 2.2, () => {
         b.innerHTML = "Выйти из самолета"; b.style.background = "#ff4757";
@@ -706,6 +695,7 @@ function enterCabin() {
     const v = document.getElementById('modyak40');
     const b = document.getElementById('viewToggleButton');
     stopAllAnnotations(); // Останавливаем авто-цикл, так как мы "внутри"
+    CloudManager.stop('modyak40');
     states.modyak40.isInside = true;
     cinematicFly(v, '-0.1m 0.8m -3.0m', '10deg 80deg 0.2m', 2.5, () => {
         b.innerHTML = "Выйти из самолета"; b.style.background = "#ff4757";
@@ -1104,11 +1094,20 @@ function toggleNightMode(isNight) {
         viewer.exposure = 0.16;
         // Включаем свечение (теплый желтый свет)
         if (windowMaterial) windowMaterial.setEmissiveFactor([2.5, 2.0, 1.0]);
-        
+                CloudManager.start('modyak40', { 
+    count: 2, 
+    minSpeed: 16, 
+    maxSpeed: 26, 
+    minScale: 1.2, 
+    maxScale: 2 ,
+    moon: true,
+    starSpeed: 40, 
+});
     } else {
         viewer.classList.remove('night-mode');
         viewer.setAttribute('skybox-image', 'cloud_layers_1k.hdr');
         viewer.exposure = 1.3;
+         CloudManager.stop('modyak40'); 
         if (windowMaterial) {
             // ВАЖНО: Устанавливаем черный цвет свечения (выключаем "лампочку")
             windowMaterial.setEmissiveFactor([0, 0, 0]); 
@@ -1659,7 +1658,7 @@ function toggleKvantView() {
             // Устанавливаем прозрачность: [R, G, B, Alpha] -> 0.3 это 30% видимости
             winMat.pbrMetallicRoughness.setBaseColorFactor([1, 1, 1, 0.3]);}
             }
-        cinematicFly(v, '0.1m 0.92m -0.5m', '180deg 85deg 0.2m', 2.0, () => {
+        cinematicFly(v, '0.1m 0.92m -0.5m', '180deg 85deg 0.2m', 2.5, () => {             
             const btn = document.getElementById(bId);
             if(btn) {
                 btn.innerText = "Выйти наружу";
@@ -1667,7 +1666,8 @@ function toggleKvantView() {
             }
         });
     } else {
-        exitModel(vId, bId);        
+        exitModel(vId, bId); 
+        v.setAttribute('environment-image', "neutral");              
         if (document.getElementById('kvant-flight-switch')?.checked)          
           {handleKvantFlight(); 
            const winMat = v.model.materials.find(m => m.name === 'Material.001');
@@ -1685,16 +1685,187 @@ function toggleKvantView() {
     }
 }
 
+const CloudManager = {
+    _timers: new Map(),
+    /**
+     * Запуск анимации облаков с динамическим размером
+     * @param {string} viewerId - ID компонента <model-viewer>
+     * @param {Object} options - Настройки
+     * @param {number} options.count - Количество облаков (default: 4)
+     * @param {number} options.minSpeed - Минимальная базовая скорость в сек (default: 3)
+     * @param {number} options.maxSpeed - Максимальная базовая скорость в сек (default: 6)
+     * @param {number} options.minScale - Минимальный масштаб, где 1 = 300px (default: 0.4)
+     * @param {number} options.maxScale - Максимальный масштаб, где 1 = 300px (default: 1.5)
+     * @param {boolean} options.moon - Включить Луну (default: false)
+     * @param {number} options.starSpeed - Скорость движения звезд в секундах (default: 40)
+     */
+     start(viewerId, options = {}) {
+        const viewer = document.getElementById(viewerId);
+        if (!viewer) return;
+
+        const count = (typeof options.count === 'number') ? options.count : 4;
+        const minSpeed = options.minSpeed || 3;
+        const maxSpeed = options.maxSpeed || 6;
+        const minScale = options.minScale || 0.4;
+        const maxScale = options.maxScale || 1.5;
+        const showMoon = options.moon || false; 
+        const starSpeed = options.starSpeed || 40;
+
+        this.stop(viewerId);
+
+        let cloudsOverlay = viewer.querySelector('#clouds-overlay');
+        if (!cloudsOverlay) {
+            cloudsOverlay = document.createElement('div');
+            cloudsOverlay.id = 'clouds-overlay';
+            viewer.appendChild(cloudsOverlay);
+        } else {
+            cloudsOverlay.innerHTML = '';
+        }
+
+        // ДОБАВЛЕНИЕ ЛУНЫ И ЗВЕЗД (Строго перед генерацией облаков, чтобы они летели поверх)
+        if (showMoon) {
+            // 1. ЗВЁЗДЫ: Создаем контейнер для звездного неба
+            const starfield = document.createElement('div');
+            starfield.className = 'starfield';
+            
+            // Связываем параметр starSpeed с CSS-переменной для индивидуального дрейфа
+            starfield.style.setProperty('--star-speed', `${starSpeed}s`);
+            
+            let starsHTML = '';
+            const starsCount = 45; // Оптимальное количество звезд
+            
+            for (let s = 0; s < starsCount; s++) {
+                const x = Math.floor(Math.random() * 100); 
+                const y = Math.floor(Math.random() * 100);             
+                
+                // РАЗПРЕДЕЛЕНИЕ РАЗМЕРОВ: Мелкие, средние и крупные планеты
+                let size = 1.5;
+                const sizeRand = Math.random();
+                if (sizeRand > 0.85) {
+                    size = 4.5; // Крупные яркие звезды / планеты (15% от всех)
+                } else if (sizeRand > 0.5) {
+                    size = 2.8; // Средние заметные звезды (35% от всех)
+                } else {
+                    size = 1.2; // Мелкая звездная пыль на заднем фоне (50% от всех)
+                }            
+                
+                const delay = (Math.random() * 6).toFixed(1); // Задержка мерцания до 6 секунд            
+                
+                // Случайный оттенок: белые или голубые
+                const isBlue = Math.random() > 0.75;
+                const colorClass = isBlue ? 'star-blue' : 'star-white';            
+                
+                // Кастомное динамическое свечение box-shadow в зависимости от размера звезды
+                const shadowRadius = (size * 1.5).toFixed(1);
+                const shadowColor = isBlue ? '#4da3ff' : '#ffffff';
+                const shadowStyle = `box-shadow: 0 0 ${shadowRadius}px ${shadowColor};`;
+                
+                starsHTML += `<div class="single-star ${colorClass}" style="top: ${y}%; left: ${x}%; width: ${size}px; height: ${size}px; animation-delay: ${delay}s; ${shadowStyle}"></div>`;
+            }
+            
+            starfield.innerHTML = starsHTML;
+            cloudsOverlay.appendChild(starfield);
+
+            // Создаем саму Луну
+            const moon = document.createElement('div');
+            moon.className = 'moon';
+            moon.style.top = '8%';   
+            moon.style.left = '80%';
+            cloudsOverlay.appendChild(moon);
+        }
+
+        // БЛОК ГЕНЕРАЦИИ ОБЛАКОВ
+        const currentTimers = [];
+
+        for (let i = 0; i < count; i++) {
+            const cloud = document.createElement('div');
+            cloud.className = 'cloud';
+            
+            // Базовое ядро облака
+            let cloudHTML = '<div class="base"></div>';            
+            
+            // Случайное число дополнительных куполов (от 3 до 6)
+            const humpsCount = Math.floor(Math.random() * 4) + 3; 
+
+            for (let h = 0; h < humpsCount; h++) {
+                const w = Math.floor(Math.random() * 15) + 35; 
+                const hg = w;                 
+                const left = Math.floor(Math.random() * 50) + 10;                
+                const isTopHump = h % 2 === 0;
+                const top = isTopHump 
+                    ? Math.floor(Math.random() * -15) - 20  
+                    : Math.floor(Math.random() * 15) + 5;                
+                cloudHTML += `<div class="hump" style="width:${w}%; height:${hg}%; top:${top}%; left:${left}%;"></div>`;
+            }
+
+            cloud.innerHTML = cloudHTML;
+
+            const scale = (Math.random() * (maxScale - minScale) + minScale).toFixed(2);
+            const baseDuration = Math.random() * (maxSpeed - minSpeed) + minSpeed;
+            const dynamicDuration = (baseDuration / scale).toFixed(1);
+            cloud.style.animationDuration = `${Math.max(1, dynamicDuration)}s`;
+            
+            const blurSize = Math.round(25 * scale * scale); 
+            cloud.style.filter = `blur(${Math.max(6, blurSize)}px)`;            
+            
+            // Формула прозрачности
+            const dynamicOpacity = (0.10 + (scale * 0.35)).toFixed(2);
+            
+            // Передаем обновленное значение прозрачности в CSS-переменную
+            cloud.style.setProperty('--cloud-opacity', dynamicOpacity);
+            
+            const baseTop = (100 / count) * i;
+            const randomShift = Math.floor(Math.random() * 14) - 7;
+            const topPosition = Math.max(5, Math.min(85, baseTop + randomShift));
+            cloud.style.top = `${topPosition}%`;
+            
+            cloud.style.setProperty('--cloud-scale', scale);
+            cloudsOverlay.appendChild(cloud);
+
+            const randomDelay = Math.random() * (maxSpeed * 0.8) * 1000; 
+            const timer = setTimeout(() => {
+                cloud.classList.add('fly');
+            }, randomDelay);
+            
+            currentTimers.push(timer);
+        }
+
+        this._timers.set(viewerId, currentTimers);
+
+        cloudsOverlay.style.display = 'block';
+        void cloudsOverlay.offsetWidth;
+        cloudsOverlay.classList.add('visible');
+    },
+
+    stop(viewerId) {
+        const viewer = document.getElementById(viewerId);
+        if (this._timers.has(viewerId)) {
+            this._timers.get(viewerId).forEach(timer => clearTimeout(timer));
+            this._timers.delete(viewerId);
+        }
+        if (!viewer) return;
+        const cloudsOverlay = viewer.querySelector('#clouds-overlay');
+        if (cloudsOverlay) {
+            cloudsOverlay.classList.remove('visible');
+            setTimeout(() => {
+                if (!cloudsOverlay.classList.contains('visible')) {
+                    cloudsOverlay.style.display = 'none';
+                    cloudsOverlay.innerHTML = '';
+                }
+            }, 1000);
+        }
+    }
+};
+
 function handleKvantFlight() {
     const v = document.getElementById('modkvant');
     const sw = document.getElementById('kvant-flight-switch');
     const sky = document.getElementById('sky-scroller');
-    const infoPanel = document.querySelector('#info-panel');
-    const clouds = document.getElementById('clouds-overlay');     
+    const infoPanel = document.querySelector('#info-panel');        
     if (!v || !sw) return;
 
     if (sw.checked) {
-    	 //1. ЧИСТИМ ЭКРАН (сразу)
+        // 1. ЧИСТИМ ЭКРАН (сразу)
         window.speechSynthesis.cancel(); 
         clearTimeout(globalResumeTimeout); 
         Object.values(activeAnnotationTimers).forEach(t => clearTimeout(t));    
@@ -1702,22 +1873,43 @@ function handleKvantFlight() {
         exitModel('modkvant', 'viewToggleButtonK');
         if (infoPanel) infoPanel.classList.remove('visible'); 
 
+        // ОПРЕДЕЛЯЕМ ВРЕМЯ СУТОК: 50% вероятность дня или ночи при каждом включении
+        const isNight = Math.random() > 0.5;
+
         // ДОБАВЛЯЕМ ТАЙМЕР ПЕРЕД ВЗЛЕТОМ
         setTimeout(() => {
             v.classList.add('flight-mode-on'); 
             v.autoRotate = false;
             v.removeAttribute('auto-rotate');
-         clouds.style.display = 'block';                
-        // Запускаем анимацию для каждого облака
-        clouds.querySelectorAll('.cloud').forEach(c => c.classList.add('fly'));
+         
+            // Запускаем анимацию облаков (параметр moon зависит от времени суток)
+            CloudManager.start('modkvant', { 
+                count: 6, 
+                minSpeed: 3, 
+                maxSpeed: 8, 
+                minScale: 0.3, 
+                maxScale: 1.8,                
+                moon: isNight, 
+                starSpeed: 25 
+            });
         
-            // 2. НЕБО
+            // 2. НЕБО И ЭКСПОЗИЦИЯ
             v.style.setProperty('background-color', 'transparent', 'important');
             v.removeAttribute('skybox-image');
-//v.setAttribute('skybox-image', 'nebo12.jpg');
+
             if (sky) {
                 sky.classList.add('active');
-                sky.querySelector('.sky-layer').classList.add('moving');
+                const skyLayer = sky.querySelector('.sky-layer');
+                skyLayer.classList.add('moving');                  
+                
+                // В зависимости от случайного выбора настраиваем окружение
+                if (isNight) {
+                    skyLayer.classList.add('night-mode'); // Затемняем панораму неба
+                    v.exposure = 0.46;                    // Снижаем яркость 3D-модели для ночи
+                } else {
+                    skyLayer.classList.remove('night-mode'); // Оставляем панораму светлой
+                    v.exposure = 1.6;                       // Стандартная дневная яркость
+                }
             }
 
             // 3. ПОЗИЦИЯ
@@ -1738,10 +1930,12 @@ function handleKvantFlight() {
         v.classList.remove('flight-mode-on');
         if (sky) {
             sky.classList.remove('active');
-            sky.querySelector('.sky-layer').classList.remove('moving');
+            const skyLayer = sky.querySelector('.sky-layer');
+            skyLayer.classList.remove('moving');
+            skyLayer.classList.remove('night-mode'); // ОБЯЗАТЕЛЬНО очищаем ночной режим при посадке 
+            v.exposure = 1.6; 
         }
-        clouds.style.display = 'none';          
-        clouds.querySelectorAll('.cloud').forEach(c => c.classList.remove('fly'));        
+        CloudManager.stop('modkvant');       
         v.pause();
         const animSh = v.availableAnimations.find(a => a.toLowerCase().includes('shassi'));
         if (animSh) { 
@@ -1754,9 +1948,7 @@ function handleKvantFlight() {
         v.autoRotate = true;
         v.cameraOrbit = "-49.98deg 74.61deg 27.44m";
         setTimeout(() => {
-            // 1. Сначала ищем сам элемент
             const swElement = document.getElementById('kvant-flight-switch');            
-            // 2. Проверяем: он вообще существует? И если да, то НЕ нажат ли он?
             if (swElement && !swElement.checked) {
                 console.log("Возвращаем аннотации Кванта...");
                 startAnnotationCycle('modkvant'); 
@@ -1767,8 +1959,7 @@ function handleKvantFlight() {
 
 function handleMojFlight() {
     const v = document.getElementById('modmoj');
-    const sw = document.getElementById('moj-flight-switch');    
-   const clouds = v.querySelector('#clouds-overlay'); 
+    const sw = document.getElementById('moj-flight-switch');       
     if (!v || !sw) return;
     // ВОЗВРАТ В АНГАР
     if (sw.checked) {
@@ -1784,8 +1975,13 @@ function handleMojFlight() {
         setTimeout(() => {
             if (!sw.checked) return; // Если передумали взлетать 
             v.classList.add('flight-mode-on');
-            if (clouds) clouds.style.display = 'block';
-            clouds?.querySelectorAll('.cloud').forEach(c => c.classList.add('fly'));
+            CloudManager.start('modmoj', { 
+                count: 4, 
+                minSpeed: 6, 
+                maxSpeed: 8, 
+                minScale: 0.7, 
+                maxScale: 1.2 
+            });
             // Переключаем на стабильный полет
             const animFly = v.availableAnimations.find(a => a === 'VentAct');
             if (animFly) {
@@ -1799,10 +1995,7 @@ function handleMojFlight() {
         v.classList.remove('flight-mode-on');
         v.pause();
         v.currentTime = 0;      
-        if (clouds) {
-            clouds.style.display = 'none';
-            clouds.querySelectorAll('.cloud').forEach(c => c.classList.remove('fly'));
-        }                      
+        CloudManager.stop('modmoj');                      
     }
 }
 

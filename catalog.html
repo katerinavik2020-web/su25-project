@@ -103,7 +103,7 @@ header::after{right:0;background:radial-gradient(ellipse at right center, rgba(7
 <div id="info-panel" class="info-panel-hidden">
   <div class="info-panel-content"></div>
 </div>
- 
+
 </body>
 <script>
 function filterModels() {
@@ -172,95 +172,57 @@ function clearSearch() {
 
 
 
-// Запуск "живого" превью для Ми-2
-function startMi2PreviewCycle() {
-    const mi2Preview = document.querySelector('.card model-viewer[src*="mi2"]');
-    if (!mi2Preview) return;
+function initModelPreviews() {
+    // Список настроек для каждой модели
+    const configs = [
+        { selector: 'mi2', duration: 5000, interval: 20000 },
+        { selector: 'kvant', duration: 7000, interval: 25000, isKvant: true },
+        { selector: 'mojaysky', duration: 6000, interval: 10000, animName: 'VentAct' }
+    ];
 
-    function cycle() {
-        // Проверяем, не открыто ли сейчас большое окно (модалка)
-        const modal = document.getElementById('modelModal');
-        const isModalOpen = modal && modal.style.display === 'flex';
+    configs.forEach(config => {
+        const viewer = document.querySelector(`.card model-viewer[src*="${config.selector}"]`);
+        if (!viewer) return;
 
-        if (!isModalOpen) {
-            mi2Preview.play(); // Запуск винтов
-            
-            // Через 7 секунд останавливаем, чтобы не рябило
-            setTimeout(() => {
-                if (mi2Preview) mi2Preview.pause();
-            }, 5000); 
-        }
-    }
-    // Запускаем цикл каждые 20 секунд
-    setInterval(cycle, 20000);
-    // И один раз при загрузке
-    cycle();
-}
-function startKvantPreviewCycle() {
-    // Ищем вьювер в карточке, у которого в src есть "kvant"
-    const kvantPreview = document.querySelector('.card model-viewer[src*="kvant"]');
-    if (!kvantPreview) return;
-    function cycle() {
-        const modal = document.getElementById('modelModal');
-        const isModalOpen = modal && modal.style.display === 'flex';
-        // Запускаем только если не открыто большое окно
-        if (!isModalOpen) {
-            // 1. Запуск анимации (винт)
-           // kvantPreview.play(); 
-            const anim = kvantPreview.availableAnimations.find(a => a.toLowerCase().includes('shassi'));
-            if (anim) { kvantPreview.animationName = anim;  kvantPreview.play(); kvantPreview.pause(); }
-            setTimeout(() => {const animV = kvantPreview.availableAnimations.find(a => a.toLowerCase().includes('vint'));
-            if (animV) { kvantPreview.animationName = animV; kvantPreview.play(); }}, 1000);
-            // Через 7 секунд успокаиваем модель
-            setTimeout(() => {
-                if (kvantPreview) {
-                    kvantPreview.pause();                     
-                    const animSh = kvantPreview.availableAnimations.find(a => a.toLowerCase().includes('shassi'));
-                    if (animSh) { 
-                        kvantPreview.animationName = animSh;
-                        kvantPreview.currentTime = 0;       
-                    }                                      
-                }
-            }, 7000); 
-        }
-    }
-    // Запускаем каждые 25 секунд (чуть реже, чем Ми-2, чтобы не частить)
-    setInterval(cycle, 25000);
-    // Первый запуск
-    cycle();
-}
+        const cycle = () => {
+            const modal = document.getElementById('modelModal');
+            if (modal && modal.style.display === 'flex') return;
 
-// Запуск "живого" превью для Можайского
-function startMojayskyPreviewCycle() {
-    const mojPreview = document.querySelector('.card model-viewer[src*="mojaysky"]');
-    if (!mojPreview) return;
-    function cycle() {
-        const modal = document.getElementById('modelModal');
-        const isModalOpen = modal && modal.style.display === 'flex';
-
-        if (!isModalOpen) {
-            // Просто запускаем разгон VentAct
-            const anim = mojPreview.availableAnimations.find(a => a === 'VentAct');
-            if (anim) {
-                mojPreview.animationName = anim;
-                mojPreview.play();
+            // Логика для Кванта (специфическая последовательность)
+            if (config.isKvant) {
+                const animSh = viewer.availableAnimations.find(a => a.toLowerCase().includes('shassi'));
+                if (animSh) { viewer.animationName = animSh; viewer.play(); viewer.pause(); }
+                
+                setTimeout(() => {
+                    const animV = viewer.availableAnimations.find(a => a.toLowerCase().includes('vint'));
+                    if (animV) { viewer.animationName = animV; viewer.play(); }
+                }, 1000);
+            } 
+            // Логика для Можайского и остальных
+            else {
+                if (config.animName) viewer.animationName = config.animName;
+                viewer.play();
             }
-            // Через 6 секунд останавливаем и сбрасываем в начало
+
+            // Общая остановка для всех
             setTimeout(() => {
-                if (mojPreview) {
-                    mojPreview.pause();
-                    mojPreview.currentTime = 0; // Возвращаем винты в покой
+                if (viewer) {
+                    viewer.pause();                    
+                    if (config.isKvant) {
+                        const animSh = viewer.availableAnimations.find(a => a.toLowerCase().includes('shassi'));
+                        if (animSh) viewer.animationName = animSh;
+                    }
+                    viewer.currentTime = 0; // Сброс в начальное положение
                 }
-            }, 6000); 
-        }
-    }    
-    setInterval(cycle, 10000);
-    cycle();
+            }, config.duration);
+        };
+
+        setInterval(cycle, config.interval);
+        cycle(); // Первый запуск
+    });
 }
 
-window.addEventListener('load', startMi2PreviewCycle);
-window.addEventListener('load', startKvantPreviewCycle);
-window.addEventListener('load', startMojayskyPreviewCycle);
+window.addEventListener('load', initModelPreviews);
 </script>
 </html>
 
