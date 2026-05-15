@@ -1884,7 +1884,7 @@ function handleKvantFlight() {
          
             // Запускаем анимацию облаков (параметр moon зависит от времени суток)
             CloudManager.start('modkvant', { 
-                count: 6, 
+                count: isNight ? 0 : 6,  
                 minSpeed: 3, 
                 maxSpeed: 8, 
                 minScale: 0.3, 

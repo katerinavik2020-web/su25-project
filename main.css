@@ -992,6 +992,8 @@ model-viewer:not([poster-dismissed]) .custom-loader {
     inset: 0;
     z-index: -1;
     pointer-events: none;
+    width: 200%; 
+    height: 100%;
     --star-speed: 40s; 
     animation: star-drift var(--star-speed) linear infinite !important;
 }
